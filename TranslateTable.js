@@ -18,6 +18,7 @@ class TranslateTable {
 
     getAllMultiLine() {
         if (this.multilineList.length == 0){
+           console.log("dictionary",  dictionary);
             for (let key of Object.keys(dictionary)) { // iterate through dictionary
                 if (dictionary[key]["type"] == "multiline"){
                     this.multilineList.push(key);

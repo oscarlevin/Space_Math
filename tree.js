@@ -25,23 +25,31 @@ Symbol notations:
 #2@-1 everything except the first character of 2nd argument
 */
 class TreeNode {
-  constructor(position, value, key = null, parent = null) {
+/*
+  constructor(position, value, key = null, parent = null, conversiontype) {
+*/
+  constructor(position, value, key, parent, conversiontype) {
     this.position = position; // position of its brothers, 0 if is root
     this.value = value;
     this.key = key;
     this.parent = parent;
+    this.conversiontype = conversiontype;
     this.children = [];
     this.pair = [];
     this.noPriority = false;
     this.exPriority = false;
+console.log("in TreeNode, this.conversiontype", this.conversiontype);
   }
 
   insert(value, key = value) {
-    this.children.push(new TreeNode(this.children.length,value, key, this));
+  console.log("TreNode 1 conversiontype", this.conversiontype);
+    this.children.push(new TreeNode(this.children.length,value, key, this.parent, this.conversiontype,  this));
     return true;
   }
 
   insertNode(node) {
+  console.log("TreNode 2 conversiontype", this.conversiontype);
+
     node.parent = this;
     node.position = this.children.length;
     this.children.push(node);
@@ -49,6 +57,7 @@ class TreeNode {
   }
 
   combine(params){
+  console.log("TreNode 3 conversiontype", this.conversiontype);
       for (let i of this.children){
           if (!i){
               continue;
@@ -85,7 +94,19 @@ class TreeNode {
                 newValue = this.children[1].value;
               }
           } else {
-              newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
+console.log("about to use conversiontype", this.conversiontype);
+              try {
+                if(this.conversiontype == "SpaceMath2MathML") {
+console.log("               trying to extract from", dictionary[key]);
+                  newValue = dictionary[key].ruleML[(position+1)+","+(numberOfSiblings)];
+console.log("               attempted       SpaceMath2MathML conversion: ", newValue);
+                } else {
+                  newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
+                }
+              } catch(error) {
+                newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
+console.log("                      SpaceMath2MathML conversion failed on", newValue);
+              }
               if (newValue.includes("#comma?")){
                   if (this.key && dictionary[this.key].type == "operator" && dictionary[this.key].priority < 0){ // comma group
                       newValue = newValue.replace(/#comma\?\[(\S*)\&(\S*)\]$/, "$1");
@@ -172,8 +193,9 @@ class TreeNode {
 }
 
 class Tree {
-  constructor(id,value, key) {
-    this.root = new TreeNode(id, value, key);
+  constructor(id,value, key, conversiontype) {
+    this.root = new TreeNode(id, value, key, null, conversiontype);
+  console.log("       Tree 0 conversiontype", conversiontype);
   }
 
   *preOrderTraversal(node = this.root) {
@@ -195,9 +217,14 @@ class Tree {
   }
 
   insert(parentNodevalue, value, key = value) {
+  console.log("       Tree 1 conversiontype", this.conversiontype);
+
     for (let node of this.preOrderTraversal()) {
       if (node.value === parentNodevalue) {
-        node.children.push(new TreeNode(value, key, node));
+/*
+        node.children.push(new TreeNode(value, key, node, conversiontype));
+*/
+        node.children.push(new TreeNode(0,value, key, node, conversiontype));
         return true;
       }
     }

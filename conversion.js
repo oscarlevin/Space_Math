@@ -1,4 +1,5 @@
 function convert(str) {
+  console.log("called the little convert");
   return trimSpaces(str);
   let splitedLine = str.split('\n');
   let newLineStr = "";

@@ -1,19 +1,19 @@
 /*
-Input: the user input, type of conversion: Latex, MathJax
+Input: the user input, conversiontype of conversion: Latex, MathJax
 Output: the corresponding Latex string of the user input
 Description: the major abstract function which takes the user input and return the supposed output
 
 2022.10.07 created
 2022.10.25 refined to support MathJax
-2022.10.26 add type to support both cases
+2022.10.26 add conversiontype to support both cases
 */
-function convert(str,type) {
+function convert(str,conversiontype) {
   str = str.replaceAll('\\$', '%24%'); //replacement on all special characters, Using HTML UTF conversion here (see https://www.w3schools.com/tags/ref_urlencode.ASP)
   str = trimSpaces(str); //trim down all multiple spaces into one space
-  if (type == "LaTeX2MathJax"){
+  if (conversiontype == "LaTeX2MathJax"){
        str = convertLaTeX2MathJax(str,0);
   } else {
-      str = convert2(str,0); // use BNF grammar to split text and math, then combine them
+      str = convert2(str,0, conversiontype); // use BNF grammar to split text and math, then combine them
   }
   
   str = str.replaceAll('%24%', '\\$'); //put the special characters back
@@ -35,7 +35,10 @@ Description: use BNF grammar to split user input into text and math part, call M
 2022.10.26 modified to support none-symmetry shape.
 2022.10.28 modified to support case when user types one half of deliminator
 */
-function convert2(str,p) {
+function convert2(str,p, conversiontype) {
+/*
+  console.log("starting conversiontype", conversiontype);
+*/
   let splitStr = [];
   let newStr = "";
   let deliminators = [["\\[","\\]"],["$$","$$"],["\\(","\\)"],["$","$"]]; //all tokens that will be seen as math mode, in priority (left to right)
@@ -50,7 +53,7 @@ function convert2(str,p) {
   }
   if (str.substring(counter,counter + d[0].length) != d[0]){
       p += 1;
-      return convert2(str,p);
+      return convert2(str,p,conversiontype);
   } else {
       let right = findPositionOfRightPairConvert(str, counter, d[0],d[1]);
       if (right > 0){
@@ -59,13 +62,13 @@ function convert2(str,p) {
             convertedStr = convertedStr.replaceAll(deliminators[j][0], ''); 
             convertedStr = convertedStr.replaceAll(deliminators[j][1], ''); // removed all lower priority deliminators
           }
-          convertedStr = M2LConvert(convertedStr,d[0],d[1]);
+          convertedStr = M2LConvert(convertedStr,d[0],d[1], conversiontype);
           convertedStr = d[0] + convertedStr + d[1];
           convertedStr = convertedStr.replaceAll(d[0]+d[1],"");
-          return convert2(str.substring(0,counter),p+1) + convertedStr + convert2(str.substring(right+d[1].length),p);
+          return convert2(str.substring(0,counter),p+1, conversiontype) + convertedStr + convert2(str.substring(right+d[1].length),p, conversiontype);
       } else {
           p += 1;
-          return convert2(str,p);
+          return convert2(str,p, conversiontype);
       }
       
   }

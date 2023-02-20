@@ -855,6 +855,12 @@
     },
     "rule": {
       "1,2": "|#2|"
+    },
+    "ruleMLfake": {
+      "1,2": "mrow #2 mrow"
+    },
+    "ruleML": {
+      "1,2": "<mrow intent=\"absolute-value($x)\"><mo>|</mo><mi arg=\"x\">#2</mi><mo>|</mo></mrow>"
     }
   },
   "floor": {
@@ -1017,12 +1023,20 @@
     }
   },
   "notin": {
-    "alternative": [],
+    "alternative": ["!in"],
     "type": "relation",
     "priority": 0,
     "rule": {
       "2,3": "#1 \\notin #3"
     }
+  },
+  "neq": {
+    "alternative": ["!="],
+    "type": "relation",
+    "priority": 0,
+    "rule": {
+      "2,3": "#1 \\not= #3"
+    } 
   },
   "and": {
     "alternative": [],
