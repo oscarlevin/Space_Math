@@ -32,7 +32,8 @@ if (sourceTextArea.addEventListener) {
   sourceTextArea.addEventListener('input', function() {
       echosourceTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
       mathmlTextArea.value = convert(sourceTextArea.value,"SpaceMath2MathML");
-      spokenTextArea.value = '"' + convert(sourceTextArea.value,"SpaceMath2spoken") + '"';
+      mathmlDisplayArea.innerHTML = convert(sourceTextArea.value,"SpaceMath2MathML");
+      spokenTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"SpaceMath2spoken") + ' "';
       mathJaxArea.innerHTML = convert(echosourceTextArea.value,"LaTeX2MathJax");
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathJaxArea"]);
   }, false);

@@ -100,6 +100,8 @@ console.log("about to use conversiontype", this.conversiontype);
 console.log("               trying to extract from", dictionary[key]);
                   newValue = dictionary[key].ruleML[(position+1)+","+(numberOfSiblings)];
 console.log("               attempted       SpaceMath2MathML conversion: ", newValue);
+                } else if(this.conversiontype == "SpaceMath2spoken") {
+                  newValue = dictionary[key].speech[(position+1)+","+(numberOfSiblings)];
                 } else {
                   newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                 }
@@ -221,10 +223,10 @@ class Tree {
 
     for (let node of this.preOrderTraversal()) {
       if (node.value === parentNodevalue) {
-/*
         node.children.push(new TreeNode(value, key, node, conversiontype));
-*/
+/*
         node.children.push(new TreeNode(0,value, key, node, conversiontype));
+*/
         return true;
       }
     }

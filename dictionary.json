@@ -1,11 +1,11 @@
 {
   "+": {
     "comment": [
-      "加"
+      "录脫"
     ],
     "alternative": [
       "plus",
-      "加"
+      "录脫"
     ],
     "type": "operator",
     "priority": 10,
@@ -15,12 +15,12 @@
   },
   "-": {
     "comment": [
-      "减"
+      "录玫"
     ],
     "alternative": [
       "minus",
       "subtracts",
-      "减"
+      "录玫"
     ],
     "type": "operator",
     "priority": 10,
@@ -31,11 +31,11 @@
   },
   "*": {
     "comment": [
-      "乘"
+      "鲁脣"
     ],
     "alternative": [
       "multiply",
-      "乘"
+      "鲁脣"
     ],
     "type": "operator",
     "priority": 20,
@@ -45,13 +45,13 @@
   },
   "/": {
     "comment": [
-      "除, 除以"
+      "鲁媒, 鲁媒脪脭"
     ],
     "alternative": [
       "divides",
       "divide",
-      "除",
-      "除以"
+      "鲁媒",
+      "鲁媒脪脭"
     ],
     "type": "operator",
     "priority": 20,
@@ -83,11 +83,11 @@
   },
   "=": {
     "comment": [
-      "等于"
+      "碌脠脫脷"
     ],
     "alternative": [
       "equal",
-      "等于"
+      "碌脠脫脷"
     ],
     "type": "relation",
     "priority": 0,
@@ -97,11 +97,11 @@
   },
   ">=": {
     "comment": [
-      "大于等于"
+      "麓贸脫脷碌脠脫脷"
     ],
     "alternative": [
       "geq",
-      "大于等于"
+      "麓贸脫脷碌脠脫脷"
     ],
     "type": "relation",
     "priority": 0,
@@ -111,11 +111,11 @@
   },
   "<=": {
     "comment": [
-      "小于等于"
+      "脨隆脫脷碌脠脫脷"
     ],
     "alternative": [
       "leq",
-      "小于等于"
+      "脨隆脫脷碌脠脫脷"
     ],
     "type": "relation",
     "priority": 0,
@@ -125,17 +125,17 @@
   },
   "^": {
     "comment": [
-      "到",
-      "终止值",
-      "次方",
-      "上标"
+      "碌陆",
+      "脰脮脰鹿脰碌",
+      "麓脦路陆",
+      "脡脧卤锚"
     ],
     "alternative": [
       "to",
-      "到",
-      "终止值",
-      "次方",
-      "上标"
+      "碌陆",
+      "脰脮脰鹿脰碌",
+      "麓脦路陆",
+      "脡脧卤锚"
     ],
     "type": "operator",
     "priority": 30,
@@ -151,15 +151,15 @@
   },
   "_": {
     "comment": [
-      "从",
-      "初始值",
-      "下标"
+      "麓脫",
+      "鲁玫脢录脰碌",
+      "脧脗卤锚"
     ],
     "alternative": [
       "from",
-      "从",
-      "初始值",
-      "下标"
+      "麓脫",
+      "鲁玫脢录脰碌",
+      "脧脗卤锚"
     ],
     "type": "operator",
     "priority": 30,
@@ -203,11 +203,11 @@
   },
   "<": {
     "comment": [
-      "小于"
+      "脨隆脫脷"
     ],
     "alternative": [
       "less than",
-      "小于"
+      "脨隆脫脷"
     ],
     "type": "relation",
     "priority": 0,
@@ -217,11 +217,11 @@
   },
   ">": {
     "comment": [
-      "大于"
+      "麓贸脫脷"
     ],
     "alternative": [
       "greater than",
-      "大于"
+      "麓贸脫脷"
     ],
     "type": "relation",
     "priority": 0,
@@ -271,14 +271,14 @@
   },
   "+-": {
     "comment": [
-      "正负",
-      "加减"
+      "脮媒赂潞",
+      "录脫录玫"
     ],
     "alternative": [
       "plusminus",
       "pm",
-      "加减",
-      "正负"
+      "录脫录玫",
+      "脮媒赂潞"
     ],
     "type": "operator",
     "priority": 10,
@@ -576,11 +576,11 @@
   },
   "del": {
     "comment": [
-      "偏微分"
+      "脝芦脦垄路脰"
     ],
     "alternative": [
       "partial",
-      "偏微分"
+      "脝芦脦垄路脰"
     ],
     "type": "symbol",
     "priority": -1,
@@ -610,18 +610,21 @@
   },
   "inf": {
     "comment": [
-      "无穷大"
+      "脦脼脟卯麓贸"
     ],
     "alternative": [
       "infty",
       "infinity",
       "oo",
-      "无穷大"
+      "脦脼脟卯麓贸"
     ],
     "type": "symbol",
     "priority": -1,
     "rule": {
       "1,1": "\\infty"
+    },
+    "spoken": {
+      "1,1": "infinity"
     }
   },
   "aleph": {
@@ -634,13 +637,13 @@
   },
   ":.": {
     "comment": [
-      "所以"
+      "脣霉脪脭"
     ],
     "alternative": [
       "therefore",
       "thus",
       "hence",
-      "所以"
+      "脣霉脪脭"
     ],
     "type": "symbol",
     "priority": -1,
@@ -650,12 +653,12 @@
   },
   ":'": {
     "comment": [
-      "因为"
+      "脪貌脦陋"
     ],
     "alternative": [
       "because",
       "since",
-      "因为"
+      "脪貌脦陋"
     ],
     "type": "symbol",
     "priority": -1,
@@ -665,10 +668,10 @@
   },
   "...": {
     "comment": [
-      "省略号"
+      "脢隆脗脭潞脜"
     ],
     "alternative": [
-      "省略号"
+      "脢隆脗脭潞脜"
     ],
     "type": "symbol",
     "priority": -1,
@@ -678,10 +681,10 @@
   },
   "ldots": {
     "comment": [
-      "低省略号"
+      "碌脥脢隆脗脭潞脜"
     ],
     "alternative": [
-      "低省略号"
+      "碌脥脢隆脗脭潞脜"
     ],
     "type": "symbol",
     "priority": -1,
@@ -691,12 +694,12 @@
   },
   "cdots": {
     "comment": [
-      "中省略号",
-      "中心省略号"
+      "脰脨脢隆脗脭潞脜",
+      "脰脨脨脛脢隆脗脭潞脜"
     ],
     "alternative": [
-      "中省略号",
-      "中心省略号"
+      "脰脨脢隆脗脭潞脜",
+      "脰脨脨脛脢隆脗脭潞脜"
     ],
     "type": "symbol",
     "priority": -1,
@@ -706,10 +709,10 @@
   },
   "vdots": {
     "comment": [
-      "竖省略号"
+      "脢煤脢隆脗脭潞脜"
     ],
     "alternative": [
-      "竖省略号"
+      "脢煤脢隆脗脭潞脜"
     ],
     "type": "symbol",
     "priority": -1,
@@ -719,10 +722,10 @@
   },
   "ddots": {
     "comment": [
-      "斜省略号"
+      "脨卤脢隆脗脭潞脜"
     ],
     "alternative": [
-      "斜省略号"
+      "脨卤脢隆脗脭潞脜"
     ],
     "type": "symbol",
     "priority": -1,
@@ -740,10 +743,10 @@
   },
   "diamond": {
     "comment": [
-      "菱形"
+      "脕芒脨脦"
     ],
     "alternative": [
-      "菱形"
+      "脕芒脨脦"
     ],
     "type": "symbol",
     "priority": -1,
@@ -753,12 +756,12 @@
   },
   "square": {
     "comment": [
-      "方形",
-      "正方形"
+      "路陆脨脦",
+      "脮媒路陆脨脦"
     ],
     "alternative": [
-      "方形",
-      "正方形"
+      "路陆脨脦",
+      "脮媒路陆脨脦"
     ],
     "type": "symbol",
     "priority": -1,
@@ -821,11 +824,11 @@
   },
   "cardinality": {
     "comment": [
-      "基数"
+      "禄霉脢媒"
     ],
     "alternative": [
       "card",
-      "基数"
+      "禄霉脢媒"
     ],
     "type": "function",
     "priority": 55,
@@ -840,11 +843,11 @@
   },
   "abs": {
     "comment": [
-      "绝对值"
+      "戮酶露脭脰碌"
     ],
     "alternative": [
       "absolute",
-      "绝对值"
+      "戮酶露脭脰碌"
     ],
     "type": "function",
     "priority": 55,
@@ -856,11 +859,35 @@
     "rule": {
       "1,2": "|#2|"
     },
-    "ruleMLfake": {
-      "1,2": "mrow #2 mrow"
+    "speech": {
+      "1,2": "absolute value of #2"
     },
     "ruleML": {
       "1,2": "<mrow intent=\"absolute-value($x)\"><mo>|</mo><mi arg=\"x\">#2</mi><mo>|</mo></mrow>"
+    }
+  },
+  "det": {
+    "comment": [
+      "戮酶露脭脰碌"
+    ],
+    "alternative": [
+      "determinant"
+    ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [
+        2
+      ]
+    },
+    "rule": {
+      "1,2": "|#2|"
+    },
+    "speech": {
+      "1,2": "determinant of #2"
+    },
+    "ruleML": {
+      "1,2": "<mrow intent=\"determinant($x)\"><mo>|</mo><mi arg=\"x\">#2</mi><mo>|</mo></mrow>"
     }
   },
   "floor": {
@@ -945,13 +972,13 @@
   },
   "sum": {
     "comment": [
-      "总和",
-      "求和"
+      "脳脺潞脥",
+      "脟贸潞脥"
     ],
     "alternative": [
       "summation",
-      "总和",
-      "求和"
+      "脳脺潞脥",
+      "脟贸潞脥"
     ],
     "type": "function",
     "priority": 55,
@@ -1092,15 +1119,59 @@
     }
   },
   "prod": {
-    "alternative": [
-      "by",
-      "times",
-      "cross"
-    ],
+    "alternative": [],
     "type": "operator",
     "priority": 10,
     "rule": {
       "2,3": "#1 \\times #3"
+    },
+    "speech": {
+      "2,3": "product of #1 and #3"
+    },
+    "ruleML": {
+      "2,3": "<mrow intent=\"$prod($x,$y)\"><mi arg=\"x\">#1</mi><mo arg=\"prod\" intent=\"direct-product\">脳</mo><mi arg=\"y\">#3</mi></mrow>"
+    }
+  },
+  "times": {
+    "alternative": [],
+    "type": "operator",
+    "priority": 10,
+    "rule": {
+      "2,3": "#1 \\times #3"
+    },
+    "speech": {
+      "2,3": "#1 times #3"
+    },
+    "ruleML": {
+      "2,3": "<mrow><mi>#1</mi><mo intent=\"multiplication\">脳</mo><mi>#3</mi></mrow>"
+    }
+  },
+  "by": {
+    "alternative": [ ],
+    "type": "operator",
+    "priority": 10,
+    "rule": {
+      "2,3": "#1 \\times #3"
+    },
+    "speech": {
+      "2,3": "#1 by #3"
+    },
+    "ruleML": {
+      "2,3": "<mrow><mi>#1</mi><mo intent=\"by\">脳</mo><mi>#3</mi></mrow>"
+    }
+  },
+  "cross": {
+    "alternative": [ ],
+    "type": "operator",
+    "priority": 10,
+    "rule": {
+      "2,3": "#1 \\times #3"
+    },
+    "speech": {
+      "2,3": "#1 cross #3"
+    },
+    "ruleML": {
+      "2,3": "<mrow><mi>#1</mi><mo intent=\"cross\">脳</mo><mi>#3</mi></mrow>"
     }
   },
   "isom": {
