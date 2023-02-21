@@ -385,6 +385,8 @@ function M2TreeConvert(str,params, conversiontype){
         } else {
             if (stackedTreeNode){ //left with some undealt pair
                 if (fullStr.trim()!=""){
+  console.log("388 M2TreeConvert  conversiontype", conversiontype);
+
                     let tempNode = new TreeNode;
                     tempNode.conversiontype = conversiontype;
                     stackedTreeNode.key = "";
@@ -419,6 +421,8 @@ return: the new stackedTreeNode
 */
 function stackNode(stackedTreeNode, pNode, conversiontype){
     if (stackedTreeNode){ //already exists a node in stack, so they should be multiplied/composited
+  console.log("stackNode M2TreeConvert  stackedTreeNode.conversiontype", stackedTreeNode.conversiontype);
+
         let tempNode = new TreeNode;
         tempNode.conversiontype = conversiontype;
         stackedTreeNode.key = "";
@@ -442,6 +446,8 @@ return: the adjusted holding node
 
 function combinePrev(preVal,pNode,  conversiontype){
     if (preVal.trim()!=""){ // there are something before the pair, consider multiplication
+  console.log("combinePrev M2TreeConvert  conversiontype", conversiontype, "xx", pNode.conversiontype);
+
         let tempNode = new TreeNode;
         tempNode.conversiontype = conversiontype;
         pNode.key = "";
@@ -449,6 +455,7 @@ function combinePrev(preVal,pNode,  conversiontype){
         tempNode.insert("","");
         tempNode.insertNode(pNode);
         pNode = tempNode;
+  console.log("pNode.conversiontype", pNode.conversiontype);
     }
     return pNode;
 }
@@ -461,6 +468,7 @@ return: the adjusted holding node
 */
 
 function combinePrevNode(preNode,pNode){
+  console.log("combinePrevNode preNode.conversiontype", preNode.conversiontype);
     preNode.insert("","");
     preNode.insertNode(pNode);
     return preNode;
@@ -476,6 +484,8 @@ return: the adjusted holding node
 
 function combineAfter(followingVal,pNode, conversiontype){
     if (followingVal.trim()!=""){ // there are something before the pair, consider multiplication
+  console.log("combineAfter M2TreeConvert  conversiontype", conversiontype);
+
         let tempNode = new TreeNode;
         tempNode.conversiontype = conversiontype;
         pNode.key = "";
@@ -758,6 +768,7 @@ Return true is a key in approachable path with same name is detected.
 */
 
 function checkScriptSimilarity(node, key) {
+console.log("checkScriptSimilarity", node);
   if (node.pair.length > 0){
       return false;
   }

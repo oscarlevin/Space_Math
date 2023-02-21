@@ -39,11 +39,15 @@ class TreeNode {
     this.noPriority = false;
     this.exPriority = false;
 console.log("in TreeNode, this.conversiontype", this.conversiontype);
+if(true || this.conversiontype === undefined) {
+   console.log("making a TreeNode", this.position, "a", this.value = value, "b", this.key = key, "c", this.parent,"d",this.conversiontype);
+}
   }
 
   insert(value, key = value) {
   console.log("TreNode 1 conversiontype", this.conversiontype);
     this.children.push(new TreeNode(this.children.length,value, key, this.parent, this.conversiontype,  this));
+  console.log("TreNode 1 again conversiontype", this.conversiontype);
     return true;
   }
 
