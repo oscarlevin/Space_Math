@@ -60,6 +60,14 @@ if(true || this.conversiontype === undefined) {
     return true;
   }
 
+  addLeafMarkup() {
+      if(this.key == "") {
+          console.log("item with no key.  Is this a function apply?", this)
+      } else if(dictionary[this.key]["type"] == "operator") {
+          if(this.value != this.key) {this.value = "<mi>"+this.value+"</mi>"}
+      }
+  }
+
   combine(params){
   console.log("TreNode 3 conversiontype", this.conversiontype);
       for (let i of this.children){
@@ -74,11 +82,14 @@ if(true || this.conversiontype === undefined) {
       //}
 
       if (this.isLeaf){
+ console.log("isLeaf", this.isLeaf, this);
           if (this.value.length > 1){
               this.value = this.value.trim();
           }
+          this.addLeafMarkup()
       } else {
 
+ console.log("not a Leaf", this.pair, this);
           let key = this.children[0].key;
           let newValue;
           let numberOfSiblings = this.children.length;
@@ -101,7 +112,7 @@ if(true || this.conversiontype === undefined) {
 console.log("about to use conversiontype", this.conversiontype);
               try {
                 if(this.conversiontype == "SpaceMath2MathML") {
-console.log("               trying to extract from", dictionary[key]);
+console.log("               trying to extract using key", key, "from", this);
                   newValue = dictionary[key].ruleML[(position+1)+","+(numberOfSiblings)];
 console.log("               attempted       SpaceMath2MathML conversion: ", newValue);
                 } else if(this.conversiontype == "SpaceMath2spoken") {

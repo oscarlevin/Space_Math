@@ -28,14 +28,25 @@ fetch("dictionary.json").then(
       )
       //*/
 
+var theSpaceMath;
+
 if (sourceTextArea.addEventListener) {
   sourceTextArea.addEventListener('input', function() {
+/*
       echosourceTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
+*/
+      theSpaceMath = convert(sourceTextArea.value,"SpaceMath2MathML");
+/*
       mathmlTextArea.value = convert(sourceTextArea.value,"SpaceMath2MathML");
+*/
+      mathmlTextArea.value = theSpaceMath;
+      mathmlDisplayArea.innerHTML = theSpaceMath;
+/*
       mathmlDisplayArea.innerHTML = convert(sourceTextArea.value,"SpaceMath2MathML");
       spokenTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"SpaceMath2spoken") + ' "';
       mathJaxArea.innerHTML = convert(echosourceTextArea.value,"LaTeX2MathJax");
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathJaxArea"]);
+*/
   }, false);
 } else if (sourceTextArea.attachEvent) {
 /* is this part ever used? */
