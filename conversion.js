@@ -105,3 +105,29 @@ function map2(str){
     return str;
   }
 }
+
+function numberQ(str) {
+    return (/^[0-9\.]+$/).test(str);
+}
+function variableQ(str) {
+    return (/^[a-zA-Z]+$/).test(str);
+}
+function atomicQ(str) {
+    return variableQ(str) || numberQ(str)
+}
+
+function markAtomicItem(str, conversiontype) {
+  var ans = str;
+  if(conversiontype == "SpaceMath2MathML") {
+    if(numberQ(str)) {
+      ans = "<mn>"+ans+"</mn>"
+    } else if(variableQ(str)) {
+      ans = "<mi>"+ans+"</mi>"
+    } else {
+      ans = "<unknown>"+ans+"</unknown>"
+    }
+  } else {
+  }
+
+  return ans
+}

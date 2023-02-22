@@ -23,7 +23,10 @@ function convert(str,conversiontype) {
       str = str.replace(/\\,/g, " ");
   } else if(conversiontype == "SpaceMath2MathML") {
       str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "$1<math>$2</math>$3");
+      str = str.replace(/\\,/g, "");
+/*
       str = str.replace(/\\,/g, "<mspace width=\"0.16em\"></mspace>");
+*/
   }
   return str;
 }

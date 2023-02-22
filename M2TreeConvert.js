@@ -75,7 +75,9 @@ function M2TreeConvert(str,params, conversiontype){
                     let pNode = M2TreeConvert(children[1].trim(),params, conversiontype)[0].root;
                     pNode.pair.push([char,fullStr[rpos]]);
                     pNode = combinePrev(children[0],pNode, conversiontype); // there are something before the pair, consider multiplication
+console.log("just made pNode", pNode);
                     stackedTreeNode = stackNode(stackedTreeNode, pNode, conversiontype); // put the symbol node on the stack
+console.log("just made stackedTreeNode", stackedTreeNode);
 
                     if (extraArgument.length > 0){ // treat space differently if we run into extra argument case
                         stackedTreeNode.key = extraArgument[0][0].children[0].key;
@@ -446,7 +448,7 @@ return: the adjusted holding node
 
 function combinePrev(preVal,pNode,  conversiontype){
     if (preVal.trim()!=""){ // there are something before the pair, consider multiplication
-  console.log("combinePrev M2TreeConvert  conversiontype", conversiontype, "xx", pNode.conversiontype);
+  console.log("combinePrev M2TreeConvert  ", preVal, "xx", pNode, "cc", conversiontype);
 
         let tempNode = new TreeNode;
         tempNode.conversiontype = conversiontype;
@@ -455,7 +457,7 @@ function combinePrev(preVal,pNode,  conversiontype){
         tempNode.insert("","");
         tempNode.insertNode(pNode);
         pNode = tempNode;
-  console.log("pNode.conversiontype", pNode.conversiontype);
+  console.log(" combinePrev pNode.conversiontype", pNode);
     }
     return pNode;
 }

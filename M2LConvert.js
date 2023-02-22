@@ -127,5 +127,6 @@ function M2LConvert(str,lp,rp, conversiontype){
         }
         paramStack.shift();
     } //no indent
+    console.log("latexStr", latexStr);
     return trimSpaces(latexStr);
 }

@@ -28,7 +28,7 @@ class TreeNode {
 /*
   constructor(position, value, key = null, parent = null, conversiontype) {
 */
-  constructor(position, value, key, parent, conversiontype) {
+  constructor(position, value, key=null, parent=null, conversiontype="unknown") {
     this.position = position; // position of its brothers, 0 if is root
     this.value = value;
     this.key = key;
@@ -45,31 +45,43 @@ if(true || this.conversiontype === undefined) {
   }
 
   insert(value, key = value) {
-  console.log("TreNode 1 conversiontype", this.conversiontype);
-    this.children.push(new TreeNode(this.children.length,value, key, this.parent, this.conversiontype,  this));
-  console.log("TreNode 1 again conversiontype", this.conversiontype);
+  console.log("TreNode 1 ", this);
+    this.children.push(new TreeNode(this.children.length,value, key, this, this.conversiontype));
+  console.log("TreNode 1 again ", this);
     return true;
   }
 
   insertNode(node) {
-  console.log("TreNode 2 conversiontype", this.conversiontype);
+console.log("TreNode 2 ", node,"   ", this);
 
     node.parent = this;
     node.position = this.children.length;
     this.children.push(node);
+console.log("TreNode 2 again", node,"   ", this);
+
     return true;
   }
 
   addLeafMarkup() {
-      if(this.key == "") {
-          console.log("item with no key.  Is this a function apply?", this)
+      if(this.key == null) {
+          this.value = markAtomicItem(this.value, this.conversiontype);
+      } else if(this.key == " ") {
+          if(this.position == 1) {
+            if(this.conversiontype == "SpaceMath2MathML") {
+//              this.value = "<mo>&InvisibleTimes;</mo>"
+            }
+          } else {
+               this.value = markAtomicItem(this.value, this.conversiontype);
+          }
+      } else if(this.key == "" || this.key == " ") {
+          console.log("item with null or empty key.  Is this a function apply?", this)
       } else if(dictionary[this.key]["type"] == "operator") {
           if(this.value != this.key) {this.value = "<mi>"+this.value+"</mi>"}
       }
   }
 
   combine(params){
-  console.log("TreNode 3 conversiontype", this.conversiontype);
+  console.log("TreNode 3 conversiontype", params, "gg", this);
       for (let i of this.children){
           if (!i){
               continue;
@@ -82,7 +94,10 @@ if(true || this.conversiontype === undefined) {
       //}
 
       if (this.isLeaf){
- console.log("isLeaf", this.isLeaf, this);
+ if(this.parent) {
+ console.log("isLeaf", this.isLeaf, "siblings", this.parent.children, "parent.key", parent.key, "all", this);
+ } else { console.log("isLeaf wotj no parent", this);
+ }
           if (this.value.length > 1){
               this.value = this.value.trim();
           }
@@ -237,9 +252,11 @@ class Tree {
   console.log("       Tree 1 conversiontype", this.conversiontype);
 
     for (let node of this.preOrderTraversal()) {
+console.log("trying Tree1 node", node);
       if (node.value === parentNodevalue) {
         node.children.push(new TreeNode(value, key, node, conversiontype));
 /*
+oooooo
         node.children.push(new TreeNode(0,value, key, node, conversiontype));
 */
         return true;
