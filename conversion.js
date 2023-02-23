@@ -117,17 +117,40 @@ function atomicQ(str) {
 }
 
 function markAtomicItem(str, conversiontype) {
-  var ans = str;
+  let ans = str;
+console.log("markAtomicItem of", ans, "endans", numberQ(str));
   if(conversiontype == "SpaceMath2MathML") {
     if(numberQ(str)) {
       ans = "<mn>"+ans+"</mn>"
-    } else if(variableQ(str)) {
-      ans = "<mi>"+ans+"</mi>"
+    } else if(variableQ(str)) {  // need to separate each letter
+  //    ans = "<mi>"+ans+"</mi>"
+      ans = ans.replace(/(.)/g, "<mi>$1</mi>");
     } else {
       ans = "<unknown>"+ans+"</unknown>"
     }
   } else {
   }
 
+  return ans
+}
+
+function markBrackets(str, conversiontype) {
+  let ans = str;
+console.log("markBrackets of", ans, "endans");
+  if(conversiontype == "SpaceMath2MathML") {
+    if(numberQ(ans)) {
+        ans = "<mn>" + ans + "</mn>"
+    } else {
+        ans = "<mrow>" + ans + "</mrow>"
+    }
+  } else if(conversiontype == "SpaceMath2speech") {
+    if(numberQ(ans)) {
+        // nothign to do
+    } else {
+        ans = "quantity " + ans + " endquantity"
+    }
+  } else {
+    ans = "{" + ans + "}"
+  }
   return ans
 }

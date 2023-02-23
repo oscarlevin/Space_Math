@@ -18,11 +18,16 @@ function convert(str,conversiontype) {
   
   str = str.replaceAll('%24%', '\\$'); //put the special characters back
 
-  if(conversiontype == "SpaceMath2spoken") {
+console.log("   in convert, str = ", str);
+
+  str = str.trim();
+
+  if(conversiontype == "SpaceMath2speech") {
       str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
       str = str.replace(/\\,/g, " ");
   } else if(conversiontype == "SpaceMath2MathML") {
-      str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "$1<math>$2</math>$3");
+  //    str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "\n<math>$2</math>\n");
+      str = str.replace(/(^| )\$(.+?)\$( |$)/g, "\n<math>$2</math>\n");
       str = str.replace(/\\,/g, "");
 /*
       str = str.replace(/\\,/g, "<mspace width=\"0.16em\"></mspace>");

@@ -36,7 +36,10 @@
     },
     "ruleML": {
       "2,3": "#1<mo>-</mo>#3"
-    }
+    },
+    "speech": {
+      "2,3": "#1 minus #3"
+    } 
   },
   "*": {
     "comment": [
@@ -136,6 +139,12 @@
     "priority": 0,
     "rule": {
       "2,3": "#1 \\leq #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>&#x2264;</mo>#3"
+    },
+    "speech": {
+      "2,3": "#1 less than or equal to #3"
     }
   },
   "^": {
@@ -162,6 +171,12 @@
       "2,3": [
         3
       ]
+    },
+    "ruleML": {
+      "2,3": "<msup>#1#@3</msup>"
+    },
+    "speech": {
+      "2,3": "#1 to the #@3"
     }
   },
   "_": {
@@ -814,6 +829,12 @@
     "priority": -1,
     "rule": {
       "1,1": "\\mathbb{R}"
+    },
+    "speech": {
+      "1,1": " R "
+    },
+    "ruleML": {
+      "1,1": "<mi mathvariant=\"double-struck\">R</mi>"
     }
   },
   "ZZ": {
@@ -854,6 +875,12 @@
     },
     "rule": {
       "1,2": "|#2|"
+    },
+    "speech": {
+      "1,2": "cardinality of #2"
+    },
+    "ruleML": {
+      "1,2": "<mrow intent=\"cardinality($x)\"><mo>|</mo><mi arg=\"x\">#2</mi><mo>|</mo></mrow>"
     }
   },
   "abs": {
@@ -1062,6 +1089,12 @@
     "priority": 0,
     "rule": {
       "2,3": "#1 \\in #3"
+    },
+    "speech": {
+      "2,3": "#1 in #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>&#x2208;</mo>#3"
     }
   },
   "notin": {
@@ -1133,6 +1166,20 @@
       "1,1": "\\bot"
     }
   },
+  "dot": {
+    "alternative": [],
+    "type": "operator",
+    "priority": 25,
+    "rule": {
+      "2,3": "#1 \\cdot #3"
+    },
+    "speech": {
+      "2,3": "#1 dot #3"
+    },
+    "ruleML": {
+      "2,3": "<mrow>#1<mo intent=\"dot-product\">&#x22C5;</mo>#3</mrow>"
+    }
+  },
   "prod": {
     "alternative": [],
     "type": "operator",
@@ -1158,7 +1205,7 @@
       "2,3": "#1 times #3"
     },
     "ruleML": {
-      "2,3": "<mrow>#1<mo intent=\"multiplication\">×</mo>#3</mrow>"
+      "2,3": "<mrow>#1<mo>×</mo>#3</mrow>"
     }
   },
   "by": {
@@ -1172,7 +1219,7 @@
       "2,3": "#1 by #3"
     },
     "ruleML": {
-      "2,3": "<mrow><mi>#1</mi><mo intent=\"by\">×</mo><mi>#3</mi></mrow>"
+      "2,3": "<mrow>#1<mo intent=\"by\">×</mo>#3</mrow>"
     }
   },
   "cross": {
@@ -1186,7 +1233,7 @@
       "2,3": "#1 cross #3"
     },
     "ruleML": {
-      "2,3": "<mrow><mi>#1</mi><mo intent=\"cross\">×</mo><mi>#3</mi></mrow>"
+      "2,3": "<mrow>#1<mo intent=\"cross-product\">×</mo>#3</mrow>"
     }
   },
   "isom": {

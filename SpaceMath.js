@@ -12,7 +12,7 @@ let sourceTextArea = document.getElementById("sourceTextArea");
 let echosourceTextArea = document.getElementById("echosourceTextArea");
 let mathmlTextArea = document.getElementById("mathmlTextArea");
 let pretextTextArea = document.getElementById("pretextTextArea");
-let spokenTextArea = document.getElementById("spokenTextArea");
+let speechTextArea = document.getElementById("speechTextArea");
 let mathJaxArea = document.getElementById("MathJaxArea");
 
 let translateTable = new TranslateTable();
@@ -28,22 +28,24 @@ fetch("dictionary.json").then(
       )
       //*/
 
-var theSpaceMath;
+var theSpaceMathInML;
 
 if (sourceTextArea.addEventListener) {
   sourceTextArea.addEventListener('input', function() {
 /*
       echosourceTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
 */
-      theSpaceMath = convert(sourceTextArea.value,"SpaceMath2MathML");
+      theSpaceMathInML = convert(sourceTextArea.value,"SpaceMath2MathML");
 /*
       mathmlTextArea.value = convert(sourceTextArea.value,"SpaceMath2MathML");
 */
-      mathmlTextArea.value = theSpaceMath;
-      mathmlDisplayArea.innerHTML = theSpaceMath;
+      mathmlTextArea.value = theSpaceMathInML;
+      mathmlDisplayArea.innerHTML = theSpaceMathInML;
 /*
       mathmlDisplayArea.innerHTML = convert(sourceTextArea.value,"SpaceMath2MathML");
-      spokenTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"SpaceMath2spoken") + ' "';
+*/
+      speechTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"SpaceMath2speech") + ' "';
+/*
       mathJaxArea.innerHTML = convert(echosourceTextArea.value,"LaTeX2MathJax");
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathJaxArea"]);
 */
@@ -54,7 +56,7 @@ if (sourceTextArea.addEventListener) {
   sourceTextArea.attachEvent('onpropertychange', function() {
       echosourceTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
       mathmlTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
-      spokenTextArea.value = '"' + convert(sourceTextArea.value,"SpaceMath2LaTeX") + '"';
+      speechTextArea.value = '"' + convert(sourceTextArea.value,"SpaceMath2LaTeX") + '"';
       pretextTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
       mathJaxArea.innerHTML = convert(echosourceTextArea.value,"LaTeX2MathJax");
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathJaxArea"]);

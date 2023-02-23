@@ -9,7 +9,8 @@ function combineTree2Latex(tree,params){
 console.log("combineTree2Latex", tree);
 	tree.root.combine(params);
 console.log("AGAIN combineTree2Latex", tree);
-	let latexString = tree.root.value;
+//	let latexString = tree.root.value;
+	let latexString = tree.root.outputvalue;
 	//while (latexString.includes("#end?")){
 	//	latexString = latexString.replace(/#end\?\[(((?!#)\S)*)\&(((?!#)\S)*)\](.+?)/, "$3$5");
 	//	latexString = latexString.replace(/#end\?\[(((?!#)\S)*)\&(((?!#)\S)*)\]$/, "$1");
