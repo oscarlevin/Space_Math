@@ -64,7 +64,7 @@ console.log("TreNode 2 again", node,"   ", this);
   }
 
   addLeafMarkup() {
-console.log("adding leaf markup with key, val, oval", this.key, this.value, this.outputvalue, "to", this);
+console.log("   adding leaf markup with key, val, oval", this.key,",", this.value, ",",this.outputvalue, "to", this);
       if(this.key == null) {
           this.outputvalue = markAtomicItem(this.value, this.conversiontype);
       } else if(this.key == " ") {
@@ -77,17 +77,36 @@ console.log("adding leaf markup with key, val, oval", this.key, this.value, this
           } else {
                this.outputvalue = markAtomicItem(this.value, this.conversiontype);
           }
-      } else if(this.key == " ") {
-          console.log("item with space key.  Is this multiplication?", this)
       } else if(this.key == "") {
           console.log("item with empty key.  Is this function apply?", this)
+          if(this.position == 1) {
+            if(this.conversiontype == "SpaceMath2MathML") {
+              this.outputvalue = "<mo>&ApplyFunction;</mo>"
+            } else if(this.conversiontype == "SpaceMath2speech") {
+              this.outputvalue = " of "
+            }
+          } else {
+               this.outputvalue = markAtomicItem(this.value, this.conversiontype);
+          }
       } else if(dictionary[this.key]["type"] == "operator") {
      //     if(this.value != this.key) { this.outputvalue = "<mi>"+this.value+"</mi>" }
 // next two are messed up somehow
           if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
           else { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+      } else if(dictionary[this.key]["type"] == "relation") {
+          console.log("found a relation");
+          if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+          else { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+      } else if(dictionary[this.key]["type"] == "function") {
+          console.log("found a function");
+          if(this.value != this.key) {
+console.log("marking the argument of a function", this.value, "within", this);
+              this.outputvalue = markAtomicItem(this.value, this.conversiontype)
+          } else { 
+              this.outputvalue = markAtomicItem(this.value, this.conversiontype)
+          }
       }
-console.log("and now leaf is key, val, oval", this.key, this.value, this.outputvalue);
+console.log("   and now leaf is key, val, oval", this.key,",", this.value,",", this.outputvalue);
   }
 
   combine(params){
@@ -104,7 +123,14 @@ console.log("and now leaf is key, val, oval", this.key, this.value, this.outputv
       //}
 
       if (this.isLeaf){
-console.log("isLeaf with pair", this.pair, this);
+try {
+console.log("isLeaf with key", this.key, "pair", this.pair, "parent children", this.parent.children, "of length", this.parent.children.length, "what we want", this.parent.children[2]["pair"],"ee", this);
+} catch(error) {
+console.log("isLeaf with key", this.key, "pair", this.pair, "this", this);
+}
+if(this.value == "") {
+// die()
+}
           if (this.value.length > 1){
               this.value = this.value.trim();
           }
@@ -122,28 +148,42 @@ console.log("isLeaf with pair", this.pair, this);
           }
 
           //hard coded rule for specific cases
-          if ((key == " " || key == "")){
+          if ((key == " ")){
               if (this.children.length > 1 && this.children[1].value == key){
                 if (key == " "){
                   key = "\\,";
                 }
                 newValue = this.children[0].value + key + this.children[2].value;
            //     newOutputValue = this.children[0].outputvalue + key + this.children[2].outputvalue;
+console.log("adding Oo to", this);
                 newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
+                if(this.key && dictionary[this.key]["type"] == "function") {
+console.log("maybe wrapping this.key", this.key, "for", newOutputValue);
+                    if (this.conversiontype == "SpaceMath2MathML") {
+                      newOutputValue = "<mrow>" + newOutputValue + "<mrow>";
+                    } else if(this.conversiontype == "SpaceMath2speech") {
+console.log("AddIng quantity", this);
+                      newOutputValue = "quantity " + newOutputValue + " endquantity";
+                    }
+                }
               } else {
                 newOutputValue = this.children[1].outputvalue;
                 newValue = this.children[1].value;
               }
+          } else if(key == "") {
+  console.log("  found an empty key", this)
+            newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
+            newValue = this.children[0].value + this.children[1].outputvalue + this.children[2].outputvalue;
           } else {
 console.log("about to use conversiontype", this.conversiontype);
               try {
                 if(this.conversiontype == "SpaceMath2MathML") {
 console.log("               trying to extract using key", key, "from", this);
-                  newValue = dictionary[key].ruleML[(position+1)+","+(numberOfSiblings)];
+                  newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                   newOutputValue = dictionary[key].ruleML[(position+1)+","+(numberOfSiblings)];
 console.log("               attempted       SpaceMath2MathML conversion: ", newValue);
                 } else if(this.conversiontype == "SpaceMath2speech") {
-                  newValue = dictionary[key].speech[(position+1)+","+(numberOfSiblings)];
+                  newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                   newOutputValue = dictionary[key].speech[(position+1)+","+(numberOfSiblings)];
                 } else {
                   newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
@@ -232,7 +272,18 @@ console.log("                      SpaceMath2MathML conversion failed on", newVa
                     p[1] = ["\\}"];
                 }
                 this.value = p[0] + this.value + p[1];
-                this.outputvalue = p[0] + this.outputvalue + p[1];
+                if(this.conversiontype == "SpaceMath2MathML") {
+                    this.outputvalue = "<mo>" + p[0] + "</mo>" + this.outputvalue + "<mo>" + p[1] + "</mo>";
+                } else if(this.conversiontype == "SpaceMath2speech") {
+                    if(singletonQ(this.outputvalue)) {
+                        // no need to do anything
+                    } else {
+console.log("adding quantity", this);
+                        this.outputvalue = "quantity " + this.outputvalue + " endquantity";
+                    }
+                } else {
+                    this.outputvalue = p[0] + this.outputvalue + p[1];
+                }
             }
             this.pair = [];
       }

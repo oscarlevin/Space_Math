@@ -29,6 +29,7 @@ console.log("   in convert, str = ", str);
   //    str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "\n<math>$2</math>\n");
       str = str.replace(/(^| )\$(.+?)\$( |$)/g, "\n<math>$2</math>\n");
       str = str.replace(/\\,/g, "");
+      str = str.replace(/<wrap([^>]+)>(<[a-z]+)(.*?)<\/wrap>/g, "$2$1$3");
 /*
       str = str.replace(/\\,/g, "<mspace width=\"0.16em\"></mspace>");
 */
