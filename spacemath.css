@@ -1,0 +1,28 @@
+
+textarea {
+    display: block;
+    min-width: 60em;
+}
+body {
+    margin-left: 2em;
+    max-width: 50em;
+}
+h1 {
+  text-align: center;
+}
+#speechTextArea {
+    padding-top: 1em;
+    width: 50em;
+    height: 4em;
+}
+#speechTextArea em {
+    background: #ff9;
+}
+#mathmlTextArea {
+    background: #eef;
+    color: black;
+}
+#mathmlDisplayArea {
+    margin-top: 2em;
+    font-size: 120%
+}
