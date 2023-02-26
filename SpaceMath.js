@@ -32,18 +32,13 @@ var theSpaceMathInML;
 
 if (sourceTextArea.addEventListener) {
   sourceTextArea.addEventListener('input', function() {
-/*
       echosourceTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
-*/
       theSpaceMathInML = convert(sourceTextArea.value,"SpaceMath2MathML");
 /*
       mathmlTextArea.value = convert(sourceTextArea.value,"SpaceMath2MathML");
 */
       mathmlTextArea.value = theSpaceMathInML;
       mathmlDisplayArea.innerHTML = theSpaceMathInML;
-/*
-      mathmlDisplayArea.innerHTML = convert(sourceTextArea.value,"SpaceMath2MathML");
-*/
       speechTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"SpaceMath2speech") + ' "';
 /*
       mathJaxArea.innerHTML = convert(echosourceTextArea.value,"LaTeX2MathJax");
