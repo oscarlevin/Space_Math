@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>SpaceMath test interface</title>
+    <title>Space Math test interface</title>
     <style>
         table, th, td {
             border: 1px solid black;
@@ -23,17 +23,45 @@
             font-family: HK Grotesk, sans-serif;
         }
     </style>
+<link href="spacemath.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<h1>Space Math</h1>
+<!--
+
+[[
+$AB$ or $A B$ and $c + d$
+
+A $5 by n$ checkerboard contains $5 times n$ squares.
+
+$det I$ vs $abs r$
+
+$a^(7+d)$ and $5^37$ are okay, but: $RR^2$ or $A_25$
+
+-->
+<!--
 <p>Try SpaceMath in the interactive renderer below, the Latex output will be out on the right box, and the displayable form will appear below the box. Just like LaTeX, you may use a pair of deliminators (\$...\$,\$\$...\$\$) to indicate if you want some parts to be rendered in displayable math. </p>
+-->
 
-<center>
-    <textarea rows="15" cols="60" id=leftTextArea placeholder="Type in this box."></textarea>
+    <textarea rows="8" cols="60" id=sourceTextArea placeholder="Type in this box."></textarea>
 
-    <textarea rows="15" cols="60" id=rightTextArea disabled=true></textarea>
-</center>
+    <div id=speechTextArea disabled=true placeholder="How it will be spoken"></div>
+    <textarea rows="8" cols="60" id=mathmlTextArea disabled=true placeholder="MathML version"></textarea>
+<!--
+    <textarea rows="8" cols="60" id=pretextTextArea disabled=true placeholder="PreTeXt version"></textarea>
+-->
+    <div id=mathmlDisplayArea disabled=true></div>
+<!--
+    <textarea rows="8" cols="60" id=XXmathmlTextArea disabled=true placeholder="MathML version"></textarea>
+-->
+
+    <textarea rows="8" cols="60" id=echosourceTextArea disabled=true placeholder="What you typed, in LaTeX"></textarea>
+<!--
+    <textarea rows="8" cols="60" id=PreTeXtTextArea disabled=true placeholder="PreTeXt version"></textarea>
+-->
 <p id="MathJaxArea"></p>
 
+<!--
 <p>Below are charts of keyword for some several frequent used symbols in MathJax. </p>
 
 <table style="display: inline-block;">
@@ -621,6 +649,7 @@
         <td>MathJax do not yet support this output :(</td>
     </tr>
 </table>
+-->
 
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
@@ -644,6 +673,9 @@
 <script src="SpaceMath.js"></script>
 <script src="conversion.js"></script>
 <script src="convert.js"></script>
+<!-- when running locally
+<script src="dictionary.js"></script>
+-->
 <script src="M2LConvert.js"></script>
 <script src="M2TreeConvert.js"></script>
 <script src="combineTree2Latex.js"></script>
