@@ -25,30 +25,92 @@ Symbol notations:
 #2@-1 everything except the first character of 2nd argument
 */
 class TreeNode {
-  constructor(position, value, key = null, parent = null) {
+/*
+  constructor(position, value, key = null, parent = null, conversiontype) {
+*/
+  constructor(position, value, key=null, parent=null, conversiontype="unknown") {
     this.position = position; // position of its brothers, 0 if is root
     this.value = value;
+    this.outputvalue = value;
     this.key = key;
     this.parent = parent;
+    this.conversiontype = conversiontype;
     this.children = [];
     this.pair = [];
     this.noPriority = false;
     this.exPriority = false;
+console.log("in TreeNode, this.conversiontype", this.conversiontype);
+if(true || this.conversiontype === undefined) {
+   console.log("making a TreeNode", this.position, "a",  value, "b",  key, "c", this.parent,"d",this.conversiontype);
+}
   }
 
   insert(value, key = value) {
-    this.children.push(new TreeNode(this.children.length,value, key, this));
+  console.log("TreNode 1 ", this);
+    this.children.push(new TreeNode(this.children.length,value, key, this, this.conversiontype));
+  console.log("TreNode 1 again ", this);
     return true;
   }
 
   insertNode(node) {
+// console.log("TreNode 2 ", node,"   ", this);
+
     node.parent = this;
     node.position = this.children.length;
     this.children.push(node);
+console.log("TreNode 2 again", node,"   ", this);
+
     return true;
   }
 
+  addLeafMarkup() {
+console.log("   adding leaf markup with key, val, oval", this.key,",", this.value, ",",this.outputvalue, "to", this);
+      if(this.key == null) {
+          this.outputvalue = markAtomicItem(this.value, this.conversiontype);
+      } else if(this.key == " ") {
+          if(this.position == 1) {
+            if(this.conversiontype == "SpaceMath2MathML") {
+              this.outputvalue = "<mo>&InvisibleTimes;</mo>"
+            } else if(this.conversiontype == "SpaceMath2speech") {
+              this.outputvalue = " times "
+            }
+          } else {
+               this.outputvalue = markAtomicItem(this.value, this.conversiontype);
+          }
+      } else if(this.key == "") {
+          console.log("item with empty key.  Is this function apply?", this)
+          if(this.position == 1) {
+            if(this.conversiontype == "SpaceMath2MathML") {
+              this.outputvalue = "<mo>&ApplyFunction;</mo>"
+            } else if(this.conversiontype == "SpaceMath2speech") {
+              this.outputvalue = " of "
+            }
+          } else {
+               this.outputvalue = markAtomicItem(this.value, this.conversiontype);
+          }
+      } else if(dictionary[this.key]["type"] == "operator") {
+     //     if(this.value != this.key) { this.outputvalue = "<mi>"+this.value+"</mi>" }
+// next two are messed up somehow
+          if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+          else { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+      } else if(dictionary[this.key]["type"] == "relation") {
+          console.log("found a relation");
+          if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+          else { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+      } else if(dictionary[this.key]["type"] == "function") {
+          console.log("found a function");
+          if(this.value != this.key) {
+console.log("marking the argument of a function", this.value, "within", this);
+              this.outputvalue = markAtomicItem(this.value, this.conversiontype)
+          } else { 
+              this.outputvalue = markAtomicItem(this.value, this.conversiontype)
+          }
+      }
+console.log("   and now leaf is key, val, oval", this.key,",", this.value,",", this.outputvalue);
+  }
+
   combine(params){
+//   console.log("TreNode 3 conversiontype", params, "gg", this);
       for (let i of this.children){
           if (!i){
               continue;
@@ -61,13 +123,24 @@ class TreeNode {
       //}
 
       if (this.isLeaf){
+try {
+console.log("isLeaf with key", this.key, "pair", this.pair, "parent children", this.parent.children, "of length", this.parent.children.length, "what we want", this.parent.children[2]["pair"],"ee", this);
+} catch(error) {
+console.log("isLeaf with key", this.key, "pair", this.pair, "this", this);
+}
+if(this.value == "") {
+// die()
+}
           if (this.value.length > 1){
               this.value = this.value.trim();
           }
+          this.addLeafMarkup()
       } else {
 
+ console.log("not a Leaf", this.pair, this);
           let key = this.children[0].key;
           let newValue;
+          let newOutputValue;
           let numberOfSiblings = this.children.length;
           let position = 0;
           while (this.children[position].value != key){
@@ -75,17 +148,52 @@ class TreeNode {
           }
 
           //hard coded rule for specific cases
-          if ((key == " " || key == "")){
+          if ((key == " ")){
               if (this.children.length > 1 && this.children[1].value == key){
                 if (key == " "){
                   key = "\\,";
                 }
                 newValue = this.children[0].value + key + this.children[2].value;
+           //     newOutputValue = this.children[0].outputvalue + key + this.children[2].outputvalue;
+console.log("adding Oo to", this);
+                newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
+                if(this.key && dictionary[this.key]["type"] == "function") {
+console.log("maybe wrapping this.key", this.key, "for", newOutputValue);
+                    if (this.conversiontype == "SpaceMath2MathML") {
+                      newOutputValue = "<mrow>" + newOutputValue + "<mrow>";
+                    } else if(this.conversiontype == "SpaceMath2speech") {
+console.log("AddIng quantity", this);
+                      newOutputValue = "quantity " + newOutputValue + " endquantity";
+                    }
+                }
               } else {
+                newOutputValue = this.children[1].outputvalue;
                 newValue = this.children[1].value;
               }
+          } else if(key == "") {
+  console.log("  found an empty key", this)
+            newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
+            newValue = this.children[0].value + this.children[1].outputvalue + this.children[2].outputvalue;
           } else {
-              newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
+console.log("about to use conversiontype", this.conversiontype);
+              try {
+                if(this.conversiontype == "SpaceMath2MathML") {
+console.log("               trying to extract using key", key, "from", this);
+                  newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
+                  newOutputValue = dictionary[key].ruleML[(position+1)+","+(numberOfSiblings)];
+console.log("               attempted       SpaceMath2MathML conversion: ", newValue);
+                } else if(this.conversiontype == "SpaceMath2speech") {
+                  newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
+                  newOutputValue = dictionary[key].speech[(position+1)+","+(numberOfSiblings)];
+                } else {
+                  newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
+                  newOutputValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
+                }
+              } catch(error) {
+                newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
+                newOutputValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
+console.log("                      SpaceMath2MathML conversion failed on", newValue);
+              }
               if (newValue.includes("#comma?")){
                   if (this.key && dictionary[this.key].type == "operator" && dictionary[this.key].priority < 0){ // comma group
                       newValue = newValue.replace(/#comma\?\[(\S*)\&(\S*)\]$/, "$1");
@@ -113,12 +221,17 @@ class TreeNode {
               }
               for (let i = 0; i < this.children.length; i++){
                   let childValue = this.children[i].value;
+                  let childOutputValue = this.children[i].outputvalue;
                   let childValueBracket = childValue;
+                  let childOutputValueBracket = childOutputValue;
                   if (newValue.includes("#@"+(i+1))){ // the rules used by super & subscripts
                       if (childValueBracket.length > 1 ){
                           childValueBracket = "{"+childValueBracket+"}"
+                          childOutputValueBracket = markBrackets(childOutputValueBracket, this.conversiontype);
+//                          childOutputValueBracket = "<mrow>" + childOutputValueBracket + "</mrow>"
                       }
                       newValue = newValue.replace("#@"+(i+1), childValueBracket);
+                      newOutputValue = newOutputValue.replace("#@"+(i+1), childOutputValueBracket);
                   }
                   if (params.includes("caseEnvironment")){
                       newValue = newValue.replace("#&","&");
@@ -129,10 +242,12 @@ class TreeNode {
                   newValue = newValue.replace("#"+(i+1)+"@1", childValue[0]);
                   newValue = newValue.replace("#"+(i+1)+"@-1", childValue.substring(1));
                   newValue = newValue.replace("#"+(i+1), childValue);
+                  newOutputValue = newOutputValue.replace("#"+(i+1), childOutputValue);
               }
           }
 
           this.value = newValue;
+          this.outputvalue = newOutputValue;
           this.children = [];
       }
 
@@ -157,6 +272,18 @@ class TreeNode {
                     p[1] = ["\\}"];
                 }
                 this.value = p[0] + this.value + p[1];
+                if(this.conversiontype == "SpaceMath2MathML") {
+                    this.outputvalue = "<mo>" + p[0] + "</mo>" + this.outputvalue + "<mo>" + p[1] + "</mo>";
+                } else if(this.conversiontype == "SpaceMath2speech") {
+                    if(singletonQ(this.outputvalue)) {
+                        // no need to do anything
+                    } else {
+console.log("adding quantity", this);
+                        this.outputvalue = "quantity " + this.outputvalue + " endquantity";
+                    }
+                } else {
+                    this.outputvalue = p[0] + this.outputvalue + p[1];
+                }
             }
             this.pair = [];
       }
@@ -172,8 +299,9 @@ class TreeNode {
 }
 
 class Tree {
-  constructor(id,value, key) {
-    this.root = new TreeNode(id, value, key);
+  constructor(id,value, key, conversiontype) {
+    this.root = new TreeNode(id, value, key, null, conversiontype);
+  console.log("       Tree 0 conversiontype", conversiontype);
   }
 
   *preOrderTraversal(node = this.root) {
@@ -195,9 +323,16 @@ class Tree {
   }
 
   insert(parentNodevalue, value, key = value) {
+  console.log("       Tree 1 conversiontype", this.conversiontype);
+
     for (let node of this.preOrderTraversal()) {
+console.log("trying Tree1 node", node);
       if (node.value === parentNodevalue) {
-        node.children.push(new TreeNode(value, key, node));
+        node.children.push(new TreeNode(value, key, node, conversiontype));
+/*
+oooooo
+        node.children.push(new TreeNode(0,value, key, node, conversiontype));
+*/
         return true;
       }
     }

@@ -6,8 +6,11 @@ Description: A function to call combine method in tree root to get the latex str
 2022.10.12 created, only works for simple equation with operators at this stage.
 */
 function combineTree2Latex(tree,params){
+console.log("combineTree2Latex", tree);
 	tree.root.combine(params);
-	let latexString = tree.root.value;
+console.log("AGAIN combineTree2Latex", tree);
+//	let latexString = tree.root.value;
+	let latexString = tree.root.outputvalue;
 	//while (latexString.includes("#end?")){
 	//	latexString = latexString.replace(/#end\?\[(((?!#)\S)*)\&(((?!#)\S)*)\](.+?)/, "$3$5");
 	//	latexString = latexString.replace(/#end\?\[(((?!#)\S)*)\&(((?!#)\S)*)\]$/, "$1");

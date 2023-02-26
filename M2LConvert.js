@@ -9,7 +9,7 @@ Description: A helper function which generalize several steps to take the origin
 2022.11.04 compatibility with sentence structure: add in new arguments lp,rp for the left/right pair of delimiters.
 2022.11.14 add a preprocessing to transfer inline structures to multiline form
 */
-function M2LConvert(str,lp,rp){
+function M2LConvert(str,lp,rp, conversiontype){
     //preprocessing for inline structure
     for (let key of translateTable.getAllMultiLine()) { // iterate through dictionary
         let index = str.indexOf(key.slice(0, -1)+"(");
@@ -50,7 +50,7 @@ function M2LConvert(str,lp,rp){
         if (paramStack[0] && dictionary[paramStack[0]].params){
             params = dictionary[paramStack[0]].params;
         }
-        let temp = M2TreeConvert(splitStr[0],params);
+        let temp = M2TreeConvert(splitStr[0],params, conversiontype);
         let tree = temp[0];
         let exParam = temp[1];
         let response = temp[2];
@@ -127,5 +127,6 @@ function M2LConvert(str,lp,rp){
         }
         paramStack.shift();
     } //no indent
+    console.log("latexStr", latexStr);
     return trimSpaces(latexStr);
 }

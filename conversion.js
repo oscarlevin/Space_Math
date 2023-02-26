@@ -1,4 +1,5 @@
 function convert(str) {
+  console.log("called the little convert");
   return trimSpaces(str);
   let splitedLine = str.split('\n');
   let newLineStr = "";
@@ -103,4 +104,74 @@ function map2(str){
   } else {
     return str;
   }
+}
+
+function numberQ(str) {
+    return (/^[0-9\.,]+$/).test(str);
+}
+function variableQ(str) {
+    return (/^[a-zA-Z]+$/).test(str);
+}
+function numbervariableQ(str) {
+    return (/^[0-9\.,].*[a-zA-Z]$/).test(str);
+}
+function atomicQ(str) {
+    return variableQ(str) || numberQ(str)
+}
+function singletonQ(str) {
+  // need to include things like Greek letters
+  // the issue is whether  quantity ... endquantity  is needed
+    return numberQ(str) || (str.length == 1)
+}
+
+
+function markAtomicItem(str, conversiontype) {
+  if(numbervariableQ(str)) {
+    let numberpart = str.replace(/[a-zA-Z]+$/, "");
+    let variablepart = str.replace(/^[0-9\.,]+/, "");
+    console.log("found mixed", str, "with parts", numberpart, ",", variablepart);
+    numberpart = markAtomicItem(numberpart, conversiontype);
+    variablepart = markAtomicItem(variablepart, conversiontype);
+    let multiplication = "";
+    if(conversiontype == "SpaceMath2MathML") { multiplication = "<mo>&InvisibleTimes;</mo>"}
+    else if(conversiontype == "SpaceMath2speech") { multiplication = " times " }
+    return numberpart + multiplication + variablepart
+  }
+  let ans = str;
+console.log("markAtomicItem of", ans, "endans", numberQ(str));
+  if(conversiontype == "SpaceMath2MathML") {
+    if(numberQ(str)) {
+      ans = "<mn>"+ans+"</mn>"
+    } else if(variableQ(str)) {  // need to separate each letter
+  //    ans = "<mi>"+ans+"</mi>"
+      ans = ans.replace(/(.)/g, "<mi>$1</mi>");
+    } else {
+      ans = "<unknown>"+ans+"</unknown>"
+    }
+  } else {
+  }
+
+  return ans
+}
+
+function markBrackets(str, conversiontype) {
+  let ans = str;
+console.log("markBrackets of", ans, "endans");
+  if(conversiontype == "SpaceMath2MathML") {
+    if(numberQ(ans)) {
+        ans = "<mn>" + ans + "</mn>"
+    } else {
+        ans = "<mrow>" + ans + "</mrow>"
+    }
+  } else if(conversiontype == "SpaceMath2speech") {
+    if(numberQ(ans)) {
+        // nothign to do
+    } else {
+console.log("aDDing qUAntity",str);
+        ans = "quantity " + ans + " endquantity"
+    }
+  } else {
+    ans = "{" + ans + "}"
+  }
+  return ans
 }
