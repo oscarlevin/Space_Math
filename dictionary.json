@@ -496,7 +496,13 @@
     "priority": -1,
     "rule": {
       "1,1": "\\pi"
-    }
+    },
+    "speech": {
+      "1,1": " pi " 
+    },
+    "ruleML": { 
+      "1,1": "<mi>&pi;</mi>"
+    } 
   },
   "Pi": {
     "alternative": [],
@@ -1324,7 +1330,7 @@
   "overline": {
     "alternative": [
       "conj",
-      "ocnjugate"
+      "conjugate"
     ],
     "type": "function",
     "priority": 55,

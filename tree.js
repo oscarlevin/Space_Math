@@ -93,6 +93,9 @@ console.log("   adding leaf markup with key, val, oval", this.key,",", this.valu
 // next two are messed up somehow
           if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
           else { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+      } else if(dictionary[this.key]["type"] == "symbol") {
+          console.log("found a symbol");
+          // do nothing, but why?
       } else if(dictionary[this.key]["type"] == "relation") {
           console.log("found a relation");
           if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
@@ -131,6 +134,7 @@ console.log("isLeaf with key", this.key, "pair", this.pair, "this", this);
 if(this.value == "") {
 // die()
 }
+  console.log("the root", this.treeRoot);
           if (this.value.length > 1){
               this.value = this.value.trim();
           }
@@ -157,7 +161,7 @@ if(this.value == "") {
            //     newOutputValue = this.children[0].outputvalue + key + this.children[2].outputvalue;
 console.log("adding Oo to", this);
                 newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
-                if(this.key && dictionary[this.key]["type"] == "function") {
+                if(this.key && this.key != " " && dictionary[this.key]["type"] == "function") {
 console.log("maybe wrapping this.key", this.key, "for", newOutputValue);
                     if (this.conversiontype == "SpaceMath2MathML") {
                       newOutputValue = "<mrow>" + newOutputValue + "<mrow>";
@@ -273,6 +277,12 @@ console.log("                      SpaceMath2MathML conversion failed on", newVa
                 }
                 this.value = p[0] + this.value + p[1];
                 if(this.conversiontype == "SpaceMath2MathML") {
+ console.log("((((adding parentheses to", this.outputvalue)
+      // a bad hack:  need a more robust way to tell if compound object in parentheses
+      // a slightly less bad havk is counting "<" in the string
+                    if(this.outputvalue.length > 18) {
+                        this.outputvalue = "<mrow>" + this.outputvalue + "</mrow>"
+                    }
                     this.outputvalue = "<mo>" + p[0] + "</mo>" + this.outputvalue + "<mo>" + p[1] + "</mo>";
                 } else if(this.conversiontype == "SpaceMath2speech") {
                     if(singletonQ(this.outputvalue)) {
@@ -295,6 +305,14 @@ console.log("adding quantity", this);
 
   get hasChildren() {
     return !this.isLeaf;
+  }
+
+  get treeRoot() {
+      if (this.parent == null) {
+          return this
+      } else {
+          return this.parent.treeRoot
+      }
   }
 }
 
