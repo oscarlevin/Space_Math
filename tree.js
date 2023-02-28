@@ -177,8 +177,13 @@ console.log("AddIng quantity", this);
               }
           } else if(key == "") {
   console.log("  found an empty key", this)
-            newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
-            newValue = this.children[0].value + this.children[1].outputvalue + this.children[2].outputvalue;
+              if (this.children.length > 1 && this.children[1].value == key){
+                newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
+                newValue = this.children[0].value + this.children[1].value + this.children[2].value;
+              } else {
+                newOutputValue = this.children[1].outputvalue;
+                newValue = this.children[1].value;
+              }
           } else {
 console.log("about to use conversiontype", this.conversiontype);
               try {

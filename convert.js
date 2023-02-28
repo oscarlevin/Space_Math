@@ -10,6 +10,7 @@ Description: the major abstract function which takes the user input and return t
 function convert(str,conversiontype) {
   str = str.replaceAll('\\$', '%24%'); //replacement on all special characters, Using HTML UTF conversion here (see https://www.w3schools.com/tags/ref_urlencode.ASP)
   str = trimSpaces(str); //trim down all multiple spaces into one space
+  str = str.replace(/( |\(|\^)-([^ ])/g, '$1😑$2');
   if (conversiontype == "LaTeX2MathJax"){
        str = convertLaTeX2MathJax(str,0);
   } else {

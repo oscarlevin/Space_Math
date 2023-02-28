@@ -41,6 +41,25 @@ var dictionary = {
       "2,3": "#1 minus #3"
     } 
   },
+  "😑": {
+    "comment": [
+      "¼õ"
+    ],
+    "alternative": [
+    ],
+    "type": "function",
+    "priority": 11,
+    "rule": {
+      "1,2": "{-#2}"
+    },
+    "ruleML": {
+      "1,2": "<mrow><mo>-</mo>#2</mrow>"
+  //    "1,2": "<mo>-</mo>#2"
+    },
+    "speech": {
+      "1,2": " negative #2"
+    } 
+  },
   "*": {
     "comment": [
       "³Ë"
@@ -75,7 +94,13 @@ var dictionary = {
         1,
         3
       ]
-    }
+    },
+    "ruleML": {
+      "2,3": "<mfrac>#1#3</mfrac>"
+    },
+    "speech": {
+      "2,3": "fraction #1 denominator #3 enddenominator"
+    } 
   },
   "//": {
     "alternative": [
@@ -325,7 +350,7 @@ var dictionary = {
       "2,3": "#1<mo>±</mo>#3"
     },
     "speech": {
-      "2,3": "#1 plus minus #3"
+      "2,3": "#1 plus-minus #3"
     }
   },
   "alpha": {
