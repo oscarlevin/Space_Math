@@ -193,3 +193,12 @@ console.log("aDDing qUAntity",str);
   }
   return ans
 }
+
+function simplify(str) {
+    ans = str;
+
+    ans = ans.replace(/quantity ([^ ]+) endquantity/g, "$1");
+    ans = ans.replace(/<mrow>(<[a-z]+>)([^<>]+)(<\/[a-z]+>)<\/mrow>/g, "$1$2$3");
+
+    return ans
+}

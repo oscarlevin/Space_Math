@@ -35,7 +35,9 @@ console.log("   in convert, str = ", str);
       str = str.replace(/\\,/g, "<mspace width=\"0.16em\"></mspace>");
 */
   }
-  return str;
+console.log("str was", str);
+  str = simplify(str)
+  return str
 }
 
 /*

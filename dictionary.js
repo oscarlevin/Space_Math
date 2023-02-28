@@ -96,7 +96,7 @@ var dictionary = {
       ]
     },
     "ruleML": {
-      "2,3": "<mfrac>#1#3</mfrac>"
+      "2,3": "<mfrac><mrow>#1</mrow><mrow>#3</mrow></mfrac>"
     },
     "speech": {
       "2,3": "fraction #1 denominator #3 enddenominator"
@@ -1285,10 +1285,10 @@ var dictionary = {
       "2,3": "#1 \\times #3"
     },
     "speech": {
-      "2,3": "#1 cross #3"
+      "2,3": "quantity #1 endquantity cross quantity #3 endquantity"
     },
     "ruleML": {
-      "2,3": "<mrow>#1<mo intent=\"cross-product\">×</mo>#3</mrow>"
+      "2,3": "<mrow><mrow>#1</mrow><mo intent=\"cross-product\">×</mo><mrow>#3</mrow></mrow>"
     }
   },
   "isom": {
