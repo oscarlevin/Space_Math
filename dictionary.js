@@ -320,6 +320,12 @@ var dictionary = {
     "priority": 10,
     "rule": {
       "2,3": "#1 \\pm #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>±</mo>#3"
+    },
+    "speech": {
+      "2,3": "#1 plus minus #3"
     }
   },
   "alpha": {
@@ -328,6 +334,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\alpha"
+    },
+    "speech": {
+      "1,1": " alpha "
+    },
+    "ruleML": {
+      "1,1": "<mi>α</mi>"
     }
   },
   "beta": {
@@ -496,7 +508,13 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\pi"
-    }
+    },
+    "speech": {
+      "1,1": " pi " 
+    },
+    "ruleML": { 
+      "1,1": "<mi>&pi;</mi>"
+    } 
   },
   "Pi": {
     "alternative": [],
@@ -886,7 +904,7 @@ var dictionary = {
       "1,2": "cardinality of #2"
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"cardinality($x)\"><mo>|</mo><mi arg=\"x\">#2</mi><mo>|</mo></mrow>"
+      "1,2": "<mrow intent=\"cardinality($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
     }
   },
   "abs": {
@@ -911,7 +929,7 @@ var dictionary = {
       "1,2": "absolute value of #2"
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"absolute-value($x)\"><mo>|</mo><mi arg=\"x\">#2</mi><mo>|</mo></mrow>"
+      "1,2": "<mrow intent=\"absolute-value($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
     }
   },
   "det": {
@@ -935,7 +953,7 @@ var dictionary = {
       "1,2": "determinant of #2"
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"determinant($x)\"><mo>|</mo><mi arg=\"x\">#2</mi><mo>|</mo></mrow>"
+      "1,2": "<mrow intent=\"determinant($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
     }
   },
   "floor": {
@@ -974,6 +992,12 @@ var dictionary = {
     "priority": 15,
     "rule": {
       "1,2": "\\sin #2"
+    },
+    "speech": {
+      "1,2": "sine #2"
+    },
+    "ruleML": {
+      "1,2": "<mi>sin</mi><mo>&ApplyFunction;</mo>#2"
     }
   },
   "cos": {
@@ -1318,7 +1342,7 @@ var dictionary = {
   "overline": {
     "alternative": [
       "conj",
-      "ocnjugate"
+      "conjugate"
     ],
     "type": "function",
     "priority": 55,

@@ -112,6 +112,9 @@ function numberQ(str) {
 function variableQ(str) {
     return (/^[a-zA-Z]+$/).test(str);
 }
+function symbolQ(str) {
+    return (/^&[a-zA-Z]+;$/).test(str);
+}
 function numbervariableQ(str) {
     return (/^[0-9\.,].*[a-zA-Z]$/).test(str);
 }
@@ -121,9 +124,22 @@ function atomicQ(str) {
 function singletonQ(str) {
   // need to include things like Greek letters
   // the issue is whether  quantity ... endquantity  is needed
-    return numberQ(str) || (str.length == 1)
+    return numberQ(str) || str.length == 1 ||
+        (str.trim() in dictionary && dictionary[str.trim()]["type"] == "symbol")
 }
 
+function convertSymbol(str, conversiontype) {
+    let ans = str;
+
+    if(conversiontype == "SpaceMath2MathML") {
+        ans = dictionary[ans]["ruleML"]
+    } else if (conversiontype == "SpaceMath2speech") {
+        ans = dictionary[ans]["speech"]
+    } else {
+        ans = dictionary[ans]["rule"]
+    }
+    return ans
+}
 
 function markAtomicItem(str, conversiontype) {
   if(numbervariableQ(str)) {
@@ -138,10 +154,12 @@ function markAtomicItem(str, conversiontype) {
     return numberpart + multiplication + variablepart
   }
   let ans = str;
-console.log("markAtomicItem of", ans, "endans", numberQ(str));
+console.log("markAtomicItem of", ans, "endans", symbolQ(str));
   if(conversiontype == "SpaceMath2MathML") {
     if(numberQ(str)) {
       ans = "<mn>"+ans+"</mn>"
+    } else if(symbolQ(str)) {
+      ans = "<mi>"+ans+"</mi>"
     } else if(variableQ(str)) {  // need to separate each letter
   //    ans = "<mi>"+ans+"</mi>"
       ans = ans.replace(/(.)/g, "<mi>$1</mi>");
