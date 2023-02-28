@@ -320,6 +320,12 @@ var dictionary = {
     "priority": 10,
     "rule": {
       "2,3": "#1 \\pm #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>±</mo>#3"
+    },
+    "speech": {
+      "2,3": "#1 plus minus #3"
     }
   },
   "alpha": {
@@ -328,6 +334,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\alpha"
+    },
+    "speech": {
+      "1,1": " alpha "
+    },
+    "ruleML": {
+      "1,1": "<mi>α</mi>"
     }
   },
   "beta": {

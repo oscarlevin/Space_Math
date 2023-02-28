@@ -141,6 +141,16 @@ function convertSymbol(str, conversiontype) {
     return ans
 }
 
+function negativeItem(conversiontype) {
+    if(conversiontype == "SpaceMath2MathML") {
+        return "<mo>&#x2212;</mo>"
+    } else if(conversiontype == "SpaceMath2speech") {
+        return " negative "
+    } else {
+        return "-"
+    }
+}
+
 function markAtomicItem(str, conversiontype) {
   if(numbervariableQ(str)) {
     let numberpart = str.replace(/[a-zA-Z]+$/, "");
@@ -152,6 +162,9 @@ function markAtomicItem(str, conversiontype) {
     if(conversiontype == "SpaceMath2MathML") { multiplication = "<mo>&InvisibleTimes;</mo>"}
     else if(conversiontype == "SpaceMath2speech") { multiplication = " times " }
     return numberpart + multiplication + variablepart
+  }
+  if(str.startsWith("-")) {
+     return negativeItem(conversiontype) + markAtomicItem(str.substring(1), conversiontype)
   }
   let ans = str;
 console.log("markAtomicItem of", ans, "endans", symbolQ(str));

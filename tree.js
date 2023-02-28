@@ -88,6 +88,15 @@ console.log("   adding leaf markup with key, val, oval", this.key,",", this.valu
           } else {
                this.outputvalue = markAtomicItem(this.value, this.conversiontype);
           }
+      } else if(false && "canbeunary" in dictionary[this.key]) {
+// this is David's misguided attempt to handle minus and negative
+console.log("found possible unary", this.key);
+          if(this.position == 1) {
+ console.log("and this is the operator, with left", this.parent.children[0], "and right", this.parent.children[2]);
+              if(this.parent.children[0].value.endsWith(" ") && !this.parent.children[2].value.startsWith(" ")) {
+  console.log("FOUND MULTIPLICATION TIMES A NEGATIVE");
+              }
+          }
       } else if(dictionary[this.key]["type"] == "operator") {
      //     if(this.value != this.key) { this.outputvalue = "<mi>"+this.value+"</mi>" }
 // next two are messed up somehow
@@ -135,6 +144,21 @@ if(this.value == "") {
 // die()
 }
   console.log("the root", this.treeRoot);
+
+// another try at a hack to handle minus and negative
+          if(this.position == 0 && this.key == "-" && this.value.endsWith(" ") && !this.parent.children[2].value.startsWith(" ")) {
+console.log("maybe we found a negative", this);
+              this.key = " ";
+              this.parent.children[1].key = " ";
+              this.parent.children[1].value = " ";
+              this.parent.children[1].outputvalue = " ";
+              this.parent.children[2].key = " ";
+              this.parent.children[2].value = "-" + this.parent.children[2].value;
+              this.parent.children[2].outputvalue = "-" + this.parent.children[2].outputvalue;
+console.log("now teh negative is", this);
+console.log("containing sibling 1", this.parent.children[1]);
+          }
+
           if (this.value.length > 1){
               this.value = this.value.trim();
           }

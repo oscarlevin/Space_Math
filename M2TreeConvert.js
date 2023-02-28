@@ -9,7 +9,7 @@ Description: A function to parse math text to a tree
 2022.10.21 modify: improve search: do not split keyword if it ends with letter and directly followed by letter
 2022.10.25 modify: improve case that no-space and spaced operators are mixed (like 1 / 3+3 - 3)
 2022.10.31 modify: supports functions with extra argument (root, frac)
-2022.11.02 modify: supports pair up function (improve the hard coded part latter), improve script treatment
+2022.11.02 modify: supports pair up function (improve the hard coded part latter), improve script (meaning sub- or superscript)treatment
 2022.11.04 modify: supports params for better supoort of sentence structures.
 */
 function M2TreeConvert(str,params, conversiontype){
@@ -514,6 +514,8 @@ function getType(str,key,pos,stackedTreeNode){
 
     if (keyword && !containedInKeyword(str,key,pos)){
         if (keyword["mustHaveLeftArgument"] && pos == 0 && !stackedTreeNode){
+console.log("negative situation");
+        return keyword.type;
             return undefined;
         }
         return keyword.type;

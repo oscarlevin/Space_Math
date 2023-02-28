@@ -33,8 +33,8 @@ var theSpaceMathInML;
 if (sourceTextArea.addEventListener) {
   sourceTextArea.addEventListener('input', function() {
 /*
-      echosourceTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
 */
+      echosourceTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
       speechTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"SpaceMath2speech") + ' "';
       theSpaceMathInML = convert(sourceTextArea.value,"SpaceMath2MathML");
 /*
