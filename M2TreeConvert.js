@@ -514,7 +514,6 @@ function getType(str,key,pos,stackedTreeNode){
 
     if (keyword && !containedInKeyword(str,key,pos)){
         if (keyword["mustHaveLeftArgument"] && pos == 0 && !stackedTreeNode){
-console.log("negative situation");
         return keyword.type;
             return undefined;
         }
