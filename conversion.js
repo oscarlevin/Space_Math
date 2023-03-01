@@ -186,7 +186,7 @@ console.log("markBrackets of", ans, "endans");
         // nothign to do
     } else {
 console.log("aDDing qUAntity",str);
-        ans = "quantity " + ans + " endquantity"
+        ans = "quantityC " + ans + " Cendquantity"
     }
   } else {
     ans = "{" + ans + "}"
@@ -197,8 +197,15 @@ console.log("aDDing qUAntity",str);
 function simplify(str) {
     ans = str;
 
-    ans = ans.replace(/quantity ([^ ]+) endquantity/g, "$1");
+console.log("   starting to simplify", ans);
+    ans = ans.replace(/(^| )quantity([A-Z]?) +([^ ]+) +([A-Z]?)endquantity/g, " $3 ");
+    ans = ans.replace(/<mrow ([^<>]+)><([a-z]+)>([^<>]+)(<\/[a-z]+>)<\/mrow>/g, "<$2 $1>$3$4");
     ans = ans.replace(/<mrow>(<[a-z]+>)([^<>]+)(<\/[a-z]+>)<\/mrow>/g, "$1$2$3");
+console.log("removed one layer to get", ans);
+    ans = ans.replace(/(^| )quantity([A-Z]?) +([^ ]+) +([A-Z]?)endquantity/g, " $3 ");
+    ans = ans.replace(/<mrow>(<[a-z]+>)([^<>]+)(<\/[a-z]+>)<\/mrow>/g, "$1$2$3");
+    ans = ans.replace(/<mrow ([^<>]+)><([a-z]+)>([^<>]+)(<\/[a-z]+>)<\/mrow>/g, "<$2 $1>$3$4");
+console.log("removed two layer to get", ans);
 
     return ans
 }

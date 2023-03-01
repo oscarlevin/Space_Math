@@ -39,6 +39,21 @@ var dictionary = {
     },
     "speech": {
       "2,3": "#1 minus #3"
+    }
+   },
+  "⏰": {
+    "comment": [],
+    "alternative": [],
+    "type": "operator",
+    "priority": 20,
+    "rule": {
+      "2,3": "#1 #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>&InvisibleTimes;</mo>#3"
+    },
+    "speech": {
+      "2,3": "#1 #3"
     } 
   },
   "😑": {
@@ -48,16 +63,16 @@ var dictionary = {
     "alternative": [
     ],
     "type": "function",
-    "priority": 11,
+    "priority": 91,
     "rule": {
       "1,2": "{-#2}"
     },
     "ruleML": {
+//      "1,2": "<mo>-</mo>#2"
       "1,2": "<mrow><mo>-</mo>#2</mrow>"
-  //    "1,2": "<mo>-</mo>#2"
     },
     "speech": {
-      "1,2": " negative #2"
+      "1,2": " quantityN negative #2 Nquantity "
     } 
   },
   "*": {
@@ -190,7 +205,9 @@ var dictionary = {
     "priority": 30,
     "script": true,
     "rule": {
-      "2,3": "#1^#@3"
+// go back and compare this to markBrackets called from if (newValue.includes("#@"+(i+1))){ in tree.js
+ //     "2,3": "#1^#@3"
+      "2,3": "#1^{#@3}"
     },
     "offpair": {
       "2,3": [
@@ -198,10 +215,12 @@ var dictionary = {
       ]
     },
     "ruleML": {
-      "2,3": "<msup>#1#@3</msup>"
+      "2,3": "<msup><mrow>#1</mrow><mrow>#@3</mrow></msup>"
+   //   "2,3": "<msup>#1<mrow>#@3</mrow></msup>"
     },
     "speech": {
-      "2,3": "#1 to the #@3"
+      "2,3": " quantityV #1 Vendquantity to the quantityE #@3 Eendquantity "
+   //   "2,3": " #1 to the quantityE #@3 Eendquantity "
     }
   },
   "_": {
@@ -228,10 +247,10 @@ var dictionary = {
       ]
     },
     "ruleML": {
-      "2,3": "<msub>#1#@3</msub>"
+      "2,3": "<msub><mrow>#1</mrow><mrow>#@3</mrow></msub>"
     },
     "speech": {
-      "2,3": "#1 sub #@3"
+      "2,3": " quantityX #1 Xendquantity sub quantityY #@3 Yendquantity "
     }
   },
   "^^": {
@@ -951,10 +970,10 @@ var dictionary = {
       "1,2": "|#2|"
     },
     "speech": {
-      "1,2": "absolute value of #2"
+      "1,2": "absolute value of quantityB #2 Bendquantity"
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"absolute-value($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
+      "1,2": "<mrow intent=\"absolute-value($x)\"><mo>|</mo><mrow arg=\"x\">#2</mrow><mo>|</mo></mrow>"
     }
   },
   "det": {
@@ -1250,7 +1269,7 @@ var dictionary = {
     }
   },
   "times": {
-    "alternative": [],
+    "alternative": ["×"],
     "type": "operator",
     "priority": 25,
     "rule": {
@@ -1285,10 +1304,10 @@ var dictionary = {
       "2,3": "#1 \\times #3"
     },
     "speech": {
-      "2,3": "quantity #1 endquantity cross quantity #3 endquantity"
+      "2,3": " #1 cross #3 "
     },
     "ruleML": {
-      "2,3": "<mrow><mrow>#1</mrow><mo intent=\"cross-product\">×</mo><mrow>#3</mrow></mrow>"
+      "2,3": "<mrow>#1</mrow><mo intent=\"cross-product\">×</mo><mrow>#3</mrow>"
     }
   },
   "isom": {

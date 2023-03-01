@@ -160,7 +160,7 @@ if(this.value == "") {
                 }
                 newValue = this.children[0].value + key + this.children[2].value;
            //     newOutputValue = this.children[0].outputvalue + key + this.children[2].outputvalue;
-console.log("adding Oo to", this);
+console.log("adding Oo to", this, "because of", this.children[0]);
                 newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
                 if(this.key && this.key != " " && dictionary[this.key]["type"] == "function") {
 console.log("maybe wrapping this.key", this.key, "for", newOutputValue);
@@ -168,7 +168,7 @@ console.log("maybe wrapping this.key", this.key, "for", newOutputValue);
                       newOutputValue = "<mrow>" + newOutputValue + "<mrow>";
                     } else if(this.conversiontype == "SpaceMath2speech") {
 console.log("AddIng quantity", this);
-                      newOutputValue = "quantity " + newOutputValue + " endquantity";
+                      newOutputValue = "quantityS " + newOutputValue + " Sendquantity";
                     }
                 }
               } else {
@@ -236,12 +236,19 @@ console.log("                      SpaceMath2MathML conversion failed on", newVa
                   let childOutputValueBracket = childOutputValue;
                   if (newValue.includes("#@"+(i+1))){ // the rules used by super & subscripts
                       if (childValueBracket.length > 1 ){
+// inconsistency:  for some outputs, the brackets are supplied by the dictionary
                           childValueBracket = "{"+childValueBracket+"}"
-                          childOutputValueBracket = markBrackets(childOutputValueBracket, this.conversiontype);
+    //                      childOutputValueBracket = markBrackets(childOutputValueBracket, this.conversiontype);
 //                          childOutputValueBracket = "<mrow>" + childOutputValueBracket + "</mrow>"
                       }
                       newValue = newValue.replace("#@"+(i+1), childValueBracket);
                       newOutputValue = newOutputValue.replace("#@"+(i+1), childOutputValueBracket);
+  // we are trying to have these wrappers in the dictionary
+       //               if(this.conversiontype == "SpaceMath2MathML") {
+       //                   newOutputValue = "<mrow>" + newOutputValue + "</mrow>";
+       //               } else if (this.conversiontype == "SpaceMath2speech") {
+       //                   newOutputValue = "quantityA " + newOutputValue + " Aendquantity";
+       //               }
                   }
                   if (params.includes("caseEnvironment")){
                       newValue = newValue.replace("#&","&");
@@ -295,7 +302,7 @@ console.log("                      SpaceMath2MathML conversion failed on", newVa
                         // no need to do anything
                     } else {
 console.log("adding quantity", this);
-                        this.outputvalue = "quantity " + this.outputvalue + " endquantity";
+                        this.outputvalue = "quantityP " + this.outputvalue + " Pendquantity";
                     }
                 } else {
                     this.outputvalue = p[0] + this.outputvalue + p[1];
