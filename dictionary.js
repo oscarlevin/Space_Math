@@ -41,19 +41,19 @@ var dictionary = {
       "2,3": "#1 minus #3"
     }
    },
-  "⏰": {
+  "⭐": {
     "comment": [],
     "alternative": [],
     "type": "operator",
     "priority": 20,
     "rule": {
-      "2,3": "#1 #3"
+      "2,3": "#1 * #3"
     },
     "ruleML": {
-      "2,3": "#1<mo>&InvisibleTimes;</mo>#3"
+      "2,3": "#1<mo>∗</mo>#3"
     },
     "speech": {
-      "2,3": "#1 #3"
+      "2,3": "#1 star #3"
     } 
   },
   "😑": {
@@ -86,7 +86,13 @@ var dictionary = {
     "type": "operator",
     "priority": 20,
     "rule": {
-      "2,3": "#1 \\cdot #3"
+      "2,3": "#1 #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>&InvisibleTimes;</mo>#3"
+    },
+    "speech": {
+      "2,3": "#1 times #3"
     }
   },
   "/": {
@@ -902,7 +908,7 @@ var dictionary = {
       "1,1": " R "
     },
     "ruleML": {
-      "1,1": "<mi mathvariant=\"double-struck\">R</mi>"
+      "1,1": "<mi>ℝ</mi>"
     }
   },
   "ZZ": {
@@ -924,7 +930,13 @@ var dictionary = {
     },
     "rule": {
       "1,2": "\\sqrt{#2}"
-    }
+    },
+    "speech": {
+      "1,2": " square root of quantity #2 endquantity "
+    },
+    "ruleML": {
+      "1,2": "<msqrt><mrow>#2</mrow></msqrt>"
+    } 
   },
   "cardinality": {
     "comment": [

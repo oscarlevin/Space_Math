@@ -162,7 +162,8 @@ if(this.value == "") {
            //     newOutputValue = this.children[0].outputvalue + key + this.children[2].outputvalue;
 console.log("adding Oo to", this, "because of", this.children[0]);
                 newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
-                if(this.key && this.key != " " && dictionary[this.key]["type"] == "function") {
+                if(this.key && this.key != " " && dictionary[this.key]["type"] != "function") {
+//  note:  recent changed to != "function" because functions shoudl wrap their arguments
 console.log("maybe wrapping this.key", this.key, "for", newOutputValue);
                     if (this.conversiontype == "SpaceMath2MathML") {
                       newOutputValue = "<mrow>" + newOutputValue + "<mrow>";

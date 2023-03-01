@@ -13,6 +13,7 @@ function convert(str,conversiontype) {
   str = str.replace(/( |\(|\^)-([^ ])/g, '$1😑$2');  // negative sign
   str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
   str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
+  str = str.replace(/ \* /g, ' ⭐ '); // star/asterisk operator
 console.log("input is now", str);
   if (conversiontype == "LaTeX2MathJax"){
        str = convertLaTeX2MathJax(str,0);
