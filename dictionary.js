@@ -1054,6 +1054,28 @@ var dictionary = {
       "1,2": "<mrow intent=\"determinant($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
     }
   },
+ "span": {
+    "comment": [
+      "¾ø¶ÔÖµ"
+    ],
+    "alternative": [],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [
+        2
+      ]
+    },
+    "rule": {
+      "1,2": "\\langle #2\\rangle"
+    },
+    "speech": {
+      "1,2": "span of #2"
+    },
+    "ruleML": {
+      "1,2": "<mrow intent=\"span($x)\"><mo>⟨</mo><mrow arg=\"x\">#2</mrow><mo>⟩</mo></mrow>"
+    }
+  },
   "setof": {
     "comment": [],
     "alternative": [],

@@ -244,12 +244,15 @@ function preprocess(rawstring) {
 
 // the <...> with "|" have to come before the ones with only commas,
 // because those can also contain commas
+console.log("looking for span", str);
+    str = str.replace(/(\$| )< ([^<>|]+) >/, '$1span($2)');
+console.log("did we find span?", str);
     str = str.replace(/(\$| )<([^()|]+) \| ([^()|]+)>/, '$1($2) grouppresentation ($3)');
     str = str.replace(/(\$| ){([^{}|]+) \| ([^{}|]+)}/, '$1($2) setbuilder ($3)');
     str = str.replace(/(\$| ){([^{}]+)}/, 'setof($2)');
     str = str.replace(/(\$| )<([^,()|]+)\|([^,()|]+)>/, '$1($2) braket ($3)');
     str = str.replace(/(\$| )<([^,()]+)\, ([^,()]+)>/, '$1($2) twovector ($3)');
     str = str.replace(/(\$| )<([^ ][^,()]*)\,([^ ][^,()]*)>/, '$1($2) innerproduct ($3)');
-
+//  < a, b, c >  span of a,b,c
     return str
 }
