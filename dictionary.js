@@ -72,7 +72,7 @@ var dictionary = {
       "1,2": "<mrow><mo>-</mo>#2</mrow>"
     },
     "speech": {
-      "1,2": " quantityN negative #2 Nquantity "
+      "1,2": " quantityN negative #2 Nendquantity "
     } 
   },
   "*": {
@@ -106,6 +106,7 @@ var dictionary = {
       "³ýÒÔ"
     ],
     "type": "operator",
+    "wrappedarguments": true,
     "priority": 20,
     "rule": {
       "2,3": "\\frac{#1}{#3}"
@@ -201,7 +202,6 @@ var dictionary = {
       "ÉÏ±ê"
     ],
     "alternative": [
-      "to",
       "µ½",
       "ÖÕÖ¹Öµ",
       "´Î·½",
@@ -299,6 +299,12 @@ var dictionary = {
     "priority": 0,
     "rule": {
       "2,3": "#1 < #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>&lt;</mo>#3"
+    },
+    "speech": {
+      "2,3": "  #1 less than #3 "
     }
   },
   ">": {
@@ -313,6 +319,12 @@ var dictionary = {
     "priority": 0,
     "rule": {
       "2,3": "#1 > #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>&gt;</mo>#3"
+    },
+    "speech": {
+      "2,3": "  #1 greater than #3 "
     }
   },
   "\n": {
@@ -333,6 +345,12 @@ var dictionary = {
     "priority": -10,
     "rule": {
       "2,3": "#1,#3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>,</mo>#3"
+    },
+    "speech": {
+      "2,3": "#1 comma #3"
     }
   },
   ";": {
@@ -557,7 +575,7 @@ var dictionary = {
     "type": "symbol",
     "priority": -1,
     "rule": {
-      "1,1": "\\pi"
+      "1,1": "\\pi "
     },
     "speech": {
       "1,1": " pi " 
@@ -879,6 +897,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\mathbb{C}"
+    },
+    "speech": {
+      "1,1": " C "
+    },
+    "ruleML": {
+      "1,1": "<mi>ℂ</mi>"
     }
   },
   "NN": {
@@ -887,6 +911,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\mathbb{N}"
+    },
+    "speech": {
+      "1,1": " N "
+    },
+    "ruleML": {
+      "1,1": "<mi>ℕ</mi>"
     }
   },
   "QQ": {
@@ -895,6 +925,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\mathbb{Q}"
+    },
+    "speech": {
+      "1,1": " Q "
+    },
+    "ruleML": {
+      "1,1": "<mi>ℚ</mi>"
     }
   },
   "RR": {
@@ -917,6 +953,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\mathbb{Z}"
+    },
+    "speech": {
+      "1,1": " Z "
+    },
+    "ruleML": {
+      "1,1": "<mi>ℤ</mi>"
     }
   },
   "sqrt": {
@@ -932,7 +974,7 @@ var dictionary = {
       "1,2": "\\sqrt{#2}"
     },
     "speech": {
-      "1,2": " square root of quantity #2 endquantity "
+      "1,2": " square root of quantityZ #2 Zendquantity "
     },
     "ruleML": {
       "1,2": "<msqrt><mrow>#2</mrow></msqrt>"
@@ -1157,6 +1199,12 @@ var dictionary = {
     "priority": 10,
     "rule": {
       "2,3": "#1 \\cup #3"
+    },
+    "speech": {
+      "2,3": " #1 union #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>∪</mo>#3"
     }
   },
   "cap": {
@@ -1167,6 +1215,12 @@ var dictionary = {
     "priority": 10,
     "rule": {
       "2,3": "#1 \\cap #3"
+    },
+    "speech": {
+      "2,3": " #1 intersect #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>∩</mo>#3"
     }
   },
   "in": {
@@ -1189,6 +1243,12 @@ var dictionary = {
     "priority": 0,
     "rule": {
       "2,3": "#1 \\notin #3"
+    },
+    "speech": {
+      "2,3": "#1 not in #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>∉</mo>#3"
     }
   },
   "neq": {
@@ -1197,6 +1257,12 @@ var dictionary = {
     "priority": 0,
     "rule": {
       "2,3": "#1 \\not= #3"
+    },
+    "speech": {
+      "2,3": "#1 not equals #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>≠</mo>#3"
     } 
   },
   "and": {
@@ -1231,6 +1297,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\exists"
+    },
+    "speech": {
+      "1,1": " there exists "
+    },
+    "ruleML": {
+      "1,1": "<mi>∃</mi>"
     }
   },
   "not": {
@@ -1266,20 +1338,20 @@ var dictionary = {
       "2,3": "<mrow>#1<mo intent=\"dot-product\">&#x22C5;</mo>#3</mrow>"
     }
   },
-  "prod": {
-    "alternative": [],
-    "type": "operator",
-    "priority": 25,
-    "rule": {
-      "2,3": "#1 \\times #3"
-    },
-    "speech": {
-      "2,3": "product of #1 and #3"
-    },
-    "ruleML": {
-      "2,3": "<mrow>#1<mo intent=\"direct-product\">×</mo>#3</mrow>"
-    }
-  },
+//  "prod": {   // conflict with \prod_p L_p(s^{-s})
+//    "alternative": [],
+//    "type": "operator",
+//    "priority": 25,
+//    "rule": {
+//      "2,3": "#1 \\times #3"
+//    },
+//    "speech": {
+//      "2,3": "product of #1 and #3"
+//    },
+//    "ruleML": {
+//      "2,3": "<mrow>#1<mo intent=\"direct-product\">×</mo>#3</mrow>"
+//    }
+//  },
   "times": {
     "alternative": ["×"],
     "type": "operator",
@@ -1311,7 +1383,7 @@ var dictionary = {
   "cross": {
     "alternative": [ ],
     "type": "operator",
-    "priority": 25,
+    "priority": 20,
     "rule": {
       "2,3": "#1 \\times #3"
     },
@@ -1322,6 +1394,111 @@ var dictionary = {
       "2,3": "<mrow>#1</mrow><mo intent=\"cross-product\">×</mo><mrow>#3</mrow>"
     }
   },
+  "oointerval": {
+    "alternative": [ ],
+    "type": "operator",
+    "delimitedarguments": true,   // omit the temporary () around the input arguments
+    "priority": 20,  // experiment, so we get mrows for complicated arguments
+    "rule": {
+      "2,3": "(#1, #3)"
+    },
+    "speech": {
+      "2,3": " open interval from #1 to #3 endinterval "
+    },
+    "ruleML": {
+      "2,3": "<mrow intent=\"open-interval($x, $y)\"><mo>(</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>)</mo></mrow>"
+    }
+  },  
+  "gcd": {
+    "alternative": [ ],
+    "type": "operator",
+    "delimitedarguments": true,   // omit the temporary () around the input arguments
+    "priority": 20,  // experiment, so we get mrows for complicated arguments
+    "rule": {
+      "2,3": "(#1, #3)"
+    },
+    "speech": {
+      "2,3": " gcd of #1 comma #3 endgcd "
+    },  
+    "ruleML": {
+      "2,3": "<mrow intent=\"gcd($x, $y)\"><mo>(</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>)</mo></mrow>"
+    }
+  },  
+  "cartesianpoint": {
+    "alternative": [ ],
+    "type": "operator",
+    "delimitedarguments": true,   // omit the temporary () around the input arguments
+    "priority": 20,
+    "rule": {
+      "2,3": "(#1, #3)"
+    },
+    "speech": {
+      "2,3": " point with coordinates #1 comma #3 endpoint "
+    },
+    "ruleML": {
+      "2,3": "<mrow intent=\"coordinate($x, $y)\"><mo>(</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>)</mo></mrow>"
+    }
+  },
+  "innerproduct": {
+    "alternative": [ ],
+    "type": "operator",
+    "delimitedarguments": true,   // omit the temporary () around the input arguments
+    "priority": 20,
+    "rule": {
+      "2,3": "\\langle #1, #3\\rangle "
+    },
+    "speech": {
+      "2,3": " inner product of #1 and #3 endinnerproduct "
+    },
+    "ruleML": {
+      "2,3": "<mrow intent=\"inner-product($x, $y)\"><mo>⟨</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>⟩</mo></mrow>"
+    }
+  }, 
+  "twovector": {
+    "alternative": [ ],
+    "type": "operator",
+    "delimitedarguments": true,   // omit the temporary () around the input arguments
+    "priority": 20,
+    "rule": {
+      "2,3": "\\langle #1, #3\\rangle "
+    },
+    "speech": {
+      "2,3": " vector #1 comma #3 endvector "
+    },
+    "ruleML": {
+      "2,3": "<mrow intent=\"vector($x, $y)\"><mo>⟨</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>⟩</mo></mrow>"
+    }
+  },
+  "grouppresentation": {
+    "alternative": [ ],
+    "type": "operator",
+    "delimitedarguments": true,   // omit the temporary () around the input arguments
+    "priority": 20,
+    "rule": {
+      "2,3": "\\langle #1\\ |\\  #3\\rangle "
+    },  
+    "speech": {
+      "2,3": " group generated by #1 with relations #3 endrelations "
+    },
+    "ruleML": {
+      "2,3": "<mrow intent=\"group-presentation($x, $y)\"><mo>⟨</mo><wrap arg=\"x\">#1</wrap><mo>|</mo><wrap arg=\"y\">#3</wrap><mo>⟩</mo></mrow>"
+    }
+  },
+  "braket": {
+    "alternative": [ ],
+    "type": "operator",
+    "delimitedarguments": true,   // omit the temporary () around the input arguments
+    "priority": 20,
+    "rule": {
+      "2,3": "\\langle #1 |  #3\\rangle "
+    },
+    "speech": {
+      "2,3": " bra-ket of #1 and #3 endbra-ket "
+    },
+    "ruleML": {
+      "2,3": "<mrow intent=\"bra-ket($x, $y)\"><mo>⟨</mo><wrap arg=\"x\">#1</wrap><mo>|</mo><wrap arg=\"y\">#3</wrap><mo>⟩</mo></mrow>"
+    }
+  },
   "isom": {
     "alternative": [
       "isomorphic"
@@ -1329,7 +1506,71 @@ var dictionary = {
     "type": "relation",
     "priority": 0,
     "rule": {
-      "2,3": "#1 \\simeq #3"
+      "2,3": "#1 \\cong #3"
+    },
+    "speech": {
+      "2,3": " #1 isomorphic to #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo>≅</mo>#3"
+    }
+  },
+  "to": {
+    "alternative": [],
+    "type": "operator",
+    "priority": 20,
+    "rule": {
+      "2,3": "#1 \\to #3"
+    },
+    "speech": {
+      "2,3": " #1 to #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo>→</mo>#3"
+    }
+  },
+  "mapsto": {
+    "alternative": [],
+    "type": "operator",
+    "priority": 20,
+    "rule": {
+      "2,3": "#1 \\mapsto #3"
+    },
+    "speech": {
+      "2,3": " #1 maps to #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo>↦</mo>#3"
+    }
+  },
+  "cong": {
+    "alternative": [ "congruent" ],
+    "type": "relation",
+    "priority": 0,
+    "rule": {
+      "2,3": "#1 \\equiv #3"
+    },
+    "speech": {
+      "2,3": " #1 congruent to #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo intent=\"congruent\">≡</mo>#3"
+    }
+  },
+  "equiv": {
+    "alternative": [
+      "equivalent", "identical"
+    ],
+    "type": "relation",
+    "priority": 0,
+    "rule": {
+      "2,3": "#1 \\equiv #3"
+    },
+    "speech": {
+      "2,3": " #1 identical to #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo intent=\"identical\">≡</mo>#3"
     }
   },
   "cases:": {

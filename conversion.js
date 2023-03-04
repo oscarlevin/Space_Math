@@ -194,18 +194,60 @@ console.log("aDDing qUAntity",str);
   return ans
 }
 
+// remove redundancies and un-necessary markup.  For example:
+// <mrow><mi>x</mi></mrow> --> <mi>x</mi>
 function simplify(str) {
     ans = str;
 
 console.log("   starting to simplify", ans);
-    ans = ans.replace(/(^| )quantity([A-Z]?) +([^ ]+) +([A-Z]?)endquantity/g, " $3 ");
-    ans = ans.replace(/<mrow ([^<>]+)><([a-z]+)>([^<>]+)(<\/[a-z]+>)<\/mrow>/g, "<$2 $1>$3$4");
-    ans = ans.replace(/<mrow>(<[a-z]+>)([^<>]+)(<\/[a-z]+>)<\/mrow>/g, "$1$2$3");
-console.log("removed one layer to get", ans);
-    ans = ans.replace(/(^| )quantity([A-Z]?) +([^ ]+) +([A-Z]?)endquantity/g, " $3 ");
-    ans = ans.replace(/<mrow>(<[a-z]+>)([^<>]+)(<\/[a-z]+>)<\/mrow>/g, "$1$2$3");
-    ans = ans.replace(/<mrow ([^<>]+)><([a-z]+)>([^<>]+)(<\/[a-z]+>)<\/mrow>/g, "<$2 $1>$3$4");
-console.log("removed two layer to get", ans);
+    for (let i=0; i <= 2; ++i) {
+    ans = ans.replace(/to the quantity([A-Z]?) +negative 1 +([A-Z]?)endquantity/g, "inverse");
+
+        ans = ans.replace(/(^| )quantity([A-Z]?) +([^ ]+) +([A-Z]?)endquantity/g, " $3 ");
+        ans = ans.replace(/(^| )quantity([A-Z]?) +(negative +[^ ]+) +([A-Z]?)endquantity/g, " $3 ");
+        ans = ans.replace(/<mrow ([^<>]+)><([a-z]+)>([^<>]+)(<\/$2>)<\/mrow>/g, "<$2 $1>$3$4");
+        ans = ans.replace(/<mrow>(<([a-z]+)>)([^<>]+)(<\/$2>)<\/mrow>/g, "$1$3$4");
+console.log("now ans", ans);
+        ans = ans.replace(/<mrow>(<mi>)([^<>]+)(<\/mi>)<\/mrow>/g, "$1$2$3");
+        ans = ans.replace(/<mrow>(<mn>)([^<>]+)(<\/mn>)<\/mrow>/g, "$1$2$3");
+
+// next is quick and dirty: fails on some content. but note that we
+// save the outer mrow in case of attributes
+        ans = ans.replace(/(<mrow[^<>]*>)<mrow>([^w]*)<\/mrow>(<\/mrow>)/g, "$1$2$3");
+
+        console.log("removed layer", i, "to get", ans);
+    }
+
+    ans = ans.replace(/quantity([A-Z]?)/g, "quantity");
+    ans = ans.replace(/([A-Z]?)endquantity([A-Z]?)/g, "endquantity");
 
     return ans
+}
+
+// convert common constructions to functional or infix notation,
+// so that the existing tree structures can be used.
+
+function preprocess(rawstring) {
+    let str = rawstring;
+    str = str.replace(/(\$| |\(|\^)-([^ ])/g, '$1😑$2');  // negative sign
+    str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
+    str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
+    str = str.replace(/ \* /g, ' ⭐ '); // star/asterisk operator (retaining a*b for multiplication
+    str = str.replace(/(\$| )\(([^,()]+)\, +([^,()]+)\)/, '$1($2) oointerval ($3)');  //open interval
+    str = str.replace(/(\$| )gcd\( *([^,()]+)\, *([^,()]+) *\)/, '$1($2) gcd ($3)');
+    str = str.replace(/(\$| )\( ([^,()]+)\, *([^,()]+) \)/, '$1($2) gcd ($3)');
+    str = str.replace(/(\$| )\(([^ ][^,()]*)\,([^ ][^,()]*)\)/, '$1($2) cartesianpoint ($3)');
+
+// there are several construtions of the form
+// leftdelimiter (spaceornospace) (leftcontent) (sornos) (middledelimeter) (rightc) (sornos) rightdelimiter .
+// it would be good to fund a general way to handle those.
+
+// the <...> with "|" have to come before the ones with only commas,
+// because those can also contain commas
+    str = str.replace(/(\$| )<([^()|]+) \| ([^()|]+)>/, '$1($2) grouppresentation ($3)');
+    str = str.replace(/(\$| )<([^,()|]+)\|([^,()|]+)>/, '$1($2) braket ($3)');
+    str = str.replace(/(\$| )<([^,()]+)\, ([^,()]+)>/, '$1($2) twovector ($3)');
+    str = str.replace(/(\$| )<([^ ][^,()]*)\,([^ ][^,()]*)>/, '$1($2) innerproduct ($3)');
+
+    return str
 }

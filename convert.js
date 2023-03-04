@@ -8,12 +8,21 @@ Description: the major abstract function which takes the user input and return t
 2022.10.26 add conversiontype to support both cases
 */
 function convert(str,conversiontype) {
-  str = str.replaceAll('\\$', '%24%'); //replacement on all special characters, Using HTML UTF conversion here (see https://www.w3schools.com/tags/ref_urlencode.ASP)
   str = trimSpaces(str); //trim down all multiple spaces into one space
-  str = str.replace(/( |\(|\^)-([^ ])/g, '$1😑$2');  // negative sign
+
+  str = preprocess(str);
+
+/*
+  str = str.replace(/(\$| |\(|\^)-([^ ])/g, '$1😑$2');  // negative sign
   str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
   str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
   str = str.replace(/ \* /g, ' ⭐ '); // star/asterisk operator
+  str = str.replace(/(\$| )\(([^,()]+)\, +([^,()]+)\)/, '$1($2) oointerval ($3)');  //open interval
+  str = str.replace(/(\$| )gcd\( *([^,()]+)\, *([^,()]+) *\)/, '$1($2) gcd ($3)');  //open interval
+  str = str.replace(/(\$| )\( ([^,()]+)\, *([^,()]+) \)/, '$1($2) gcd ($3)');  //open interval
+  str = str.replace(/(\$| )\(([^ ][^,()]*)\,+([^ ][^,()]*)\)/, '$1($2) cartesianpoint ($3)');  //open interval
+*/
+  str = str.replaceAll('\\$', '%24%'); //replacement on all special characters, Using HTML UTF conversion here (see https://www.w3schools.com/tags/ref_urlencode.ASP)
 console.log("input is now", str);
   if (conversiontype == "LaTeX2MathJax"){
        str = convertLaTeX2MathJax(str,0);
