@@ -1027,7 +1027,7 @@ var dictionary = {
       "1,2": "absolute value of quantityB #2 Bendquantity"
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"absolute-value($x)\"><mo>|</mo><mrow arg=\"x\">#2</mrow><mo>|</mo></mrow>"
+      "1,2": "<mrow intent=\"absolute-value($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
     }
   },
   "det": {
@@ -1052,6 +1052,26 @@ var dictionary = {
     },
     "ruleML": {
       "1,2": "<mrow intent=\"determinant($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
+    }
+  },
+  "setof": {
+    "comment": [],
+    "alternative": [],
+    "type": "function",
+    "priority": 55,
+    "rule": {
+      "1,2": "\\{#2\\}"
+    },
+    "offpair": {  // what does that mean?
+      "1,2": [
+        2
+      ]
+    },
+    "speech": {
+      "1,2": "set #2"
+    },
+    "ruleML": {
+      "1,2": "<mrow intent=\"set($x)\"><mo>{</mo><wrap arg=\"x\">#2</wrap><mo>}</mo></mrow>"
     }
   },
   "floor": {
@@ -1484,6 +1504,21 @@ var dictionary = {
       "2,3": "<mrow intent=\"group-presentation($x, $y)\"><mo>⟨</mo><wrap arg=\"x\">#1</wrap><mo>|</mo><wrap arg=\"y\">#3</wrap><mo>⟩</mo></mrow>"
     }
   },
+ "setbuilder": {
+    "alternative": [ ],
+    "type": "operator",
+    "delimitedarguments": true,   // omit the temporary () around the input arguments
+    "priority": 20,
+    "rule": {
+      "2,3": "\\{ #1\\ |\\  #3\\} "
+    },  
+    "speech": {
+      "2,3": " set of #1 such that #3 endset "
+    },
+    "ruleML": {
+      "2,3": "<mrow intent=\"set-such-that($x, $y)\"><mo>{</mo><wrap arg=\"x\">#1</wrap><mo>|</mo><wrap arg=\"y\">#3</wrap><mo>}</mo></mrow>"
+    }
+  }, 
   "braket": {
     "alternative": [ ],
     "type": "operator",
