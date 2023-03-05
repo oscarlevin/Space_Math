@@ -353,6 +353,7 @@ console.log("just made stackedTreeNode", stackedTreeNode);
                     }
 
                     break;
+                case "postfix":   // such as "!" for factorial.
                 case "symbol": //symbols
                     splitStr = [fullStr.substring(0,startKey), key, fullStr.substring(counter+1)];
                     let symbolNode = new TreeNode;

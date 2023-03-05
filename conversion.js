@@ -233,6 +233,7 @@ function preprocess(rawstring) {
     str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
     str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
     str = str.replace(/ \* /g, ' ⭐ '); // star/asterisk operator (retaining a*b for multiplication
+// need a way to specify what * means
     str = str.replace(/(\$| )\(([^,()]+)\, +([^,()]+)\)/, '$1($2) oointerval ($3)');  //open interval
     str = str.replace(/(\$| )gcd\( *([^,()]+)\, *([^,()]+) *\)/, '$1($2) gcd ($3)');
     str = str.replace(/(\$| )\( ([^,()]+)\, *([^,()]+) \)/, '$1($2) gcd ($3)');
@@ -244,15 +245,18 @@ function preprocess(rawstring) {
 
 // the <...> with "|" have to come before the ones with only commas,
 // because those can also contain commas
-console.log("looking for span", str);
     str = str.replace(/(\$| )< ([^<>|]+) >/, '$1span($2)');
 console.log("did we find span?", str);
-    str = str.replace(/(\$| )<([^()|]+) \| ([^()|]+)>/, '$1($2) grouppresentation ($3)');
+    str = str.replace(/(\$| )<([^<>|]+) \| ([^<>|]+)>/, '$1($2) grouppresentation ($3)');
     str = str.replace(/(\$| ){([^{}|]+) \| ([^{}|]+)}/, '$1($2) setbuilder ($3)');
     str = str.replace(/(\$| ){([^{}]+)}/, 'setof($2)');
-    str = str.replace(/(\$| )<([^,()|]+)\|([^,()|]+)>/, '$1($2) braket ($3)');
-    str = str.replace(/(\$| )<([^,()]+)\, ([^,()]+)>/, '$1($2) twovector ($3)');
-    str = str.replace(/(\$| )<([^ ][^,()]*)\,([^ ][^,()]*)>/, '$1($2) innerproduct ($3)');
-//  < a, b, c >  span of a,b,c
+    str = str.replace(/(\$| )<([^,<>|]+)\|([^,<>|]+)>/, '$1($2) braket ($3)');
+    str = str.replace(/(\$| )<([^,<>]+)\, ([^,<>]+)>/, '$1($2) twovector ($3)');
+console.log("looking for vector", str);
+    str = str.replace(/(\$| )<([^ ,<>\$][^,<>\$]*)\, ([^<>\$]+)>/, '$1vector($2, $3)');
+console.log("did we find vector?", str);
+    str = str.replace(/(\$| )<([^ ][^,<>]*)\,([^ ][^<>]*)>/, '$1($2) innerproduct ($3)');
+// catch all for every other case <...> of unknown meaning
+    str = str.replace(/(\$| )<([^<>]+)>/, '$1anglebrackets($2)');
     return str
 }

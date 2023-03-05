@@ -80,10 +80,14 @@ console.log("   adding leaf markup with key, val, oval", this.key,"a,a", this.va
       } else if(this.key == "") {
           console.log("item with empty key.  Is this function apply?", this)
           if(this.position == 1) {
-            if(this.conversiontype == "SpaceMath2MathML") {
-              this.outputvalue = "<mo>&ApplyFunction;</mo>"
-            } else if(this.conversiontype == "SpaceMath2speech") {
-              this.outputvalue = " of "
+console.log("What is nect to this enpty key? parent:", this.parent, "left sibling", this.parent.children[0], "right sibling", this.parent.children[2]);
+            if(this.parent.children[2].pair.length > 0) {
+          // the "" is funciton application if its right-hand neighbor is in delimiters
+              if(this.conversiontype == "SpaceMath2MathML") {
+                this.outputvalue = "<mo>&ApplyFunction;</mo>"
+              } else if(this.conversiontype == "SpaceMath2speech") {
+                this.outputvalue = " of "
+              }
             }
           } else {
                this.outputvalue = markAtomicItem(this.value, this.conversiontype);
