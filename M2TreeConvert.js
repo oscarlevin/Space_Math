@@ -353,6 +353,7 @@ console.log("just made stackedTreeNode", stackedTreeNode);
                     }
 
                     break;
+                case "postfix":   // such as "!" for factorial.
                 case "symbol": //symbols
                     splitStr = [fullStr.substring(0,startKey), key, fullStr.substring(counter+1)];
                     let symbolNode = new TreeNode;
@@ -514,7 +515,7 @@ function getType(str,key,pos,stackedTreeNode){
 
     if (keyword && !containedInKeyword(str,key,pos)){
         if (keyword["mustHaveLeftArgument"] && pos == 0 && !stackedTreeNode){
-        return keyword.type;
+ //       return keyword.type;
             return undefined;
         }
         return keyword.type;

@@ -64,7 +64,7 @@ console.log("TreNode 2 again", node,"   ", this);
   }
 
   addLeafMarkup() {
-console.log("   adding leaf markup with key, val, oval", this.key,",", this.value, ",",this.outputvalue, "to", this);
+console.log("   adding leaf markup with key, val, oval", this.key,"a,a", this.value, "b,b",this.outputvalue, "to", this);
       if(this.key == null) {
           this.outputvalue = markAtomicItem(this.value, this.conversiontype);
       } else if(this.key == " ") {
@@ -80,10 +80,14 @@ console.log("   adding leaf markup with key, val, oval", this.key,",", this.valu
       } else if(this.key == "") {
           console.log("item with empty key.  Is this function apply?", this)
           if(this.position == 1) {
-            if(this.conversiontype == "SpaceMath2MathML") {
-              this.outputvalue = "<mo>&ApplyFunction;</mo>"
-            } else if(this.conversiontype == "SpaceMath2speech") {
-              this.outputvalue = " of "
+console.log("What is nect to this enpty key? parent:", this.parent, "left sibling", this.parent.children[0], "right sibling", this.parent.children[2]);
+            if(this.parent.children[2].pair.length > 0) {
+          // the "" is funciton application if its right-hand neighbor is in delimiters
+              if(this.conversiontype == "SpaceMath2MathML") {
+                this.outputvalue = "<mo>&ApplyFunction;</mo>"
+              } else if(this.conversiontype == "SpaceMath2speech") {
+                this.outputvalue = " of "
+              }
             }
           } else {
                this.outputvalue = markAtomicItem(this.value, this.conversiontype);
@@ -93,6 +97,9 @@ console.log("   adding leaf markup with key, val, oval", this.key,",", this.valu
 // next two are messed up somehow
           if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
           else { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+      } else if(this.key == ",") {
+console.log("found comma with parent", this.parent);
+          if(this.position == 1) { this.outputvalue = "COMMA" }
       } else if(dictionary[this.key]["type"] == "symbol") {
           console.log("found a symbol");
           // do nothing, but why?
@@ -135,7 +142,6 @@ if(this.value == "") {
 // die()
 }
   console.log("the root", this.treeRoot);
-
           if (this.value.length > 1){
               this.value = this.value.trim();
           }
@@ -162,11 +168,11 @@ if(this.value == "") {
            //     newOutputValue = this.children[0].outputvalue + key + this.children[2].outputvalue;
 console.log("adding Oo to", this, "because of", this.children[0]);
                 newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
-                if(this.key && this.key != " " && dictionary[this.key]["type"] != "function") {
+                if(this.key && this.key != " " && dictionary[this.key]["type"] != "function" && !dictionary[this.key]["wrappedarguments"] && dictionary[this.key]["priority"] > 20) {
 //  note:  recent changed to != "function" because functions shoudl wrap their arguments
 console.log("maybe wrapping this.key", this.key, "for", newOutputValue);
                     if (this.conversiontype == "SpaceMath2MathML") {
-                      newOutputValue = "<mrow>" + newOutputValue + "<mrow>";
+                      newOutputValue = "<mrow>" + newOutputValue + "</mrow>";
                     } else if(this.conversiontype == "SpaceMath2speech") {
 console.log("AddIng quantity", this);
                       newOutputValue = "quantityS " + newOutputValue + " Sendquantity";
@@ -291,13 +297,15 @@ console.log("                      SpaceMath2MathML conversion failed on", newVa
                 }
                 this.value = p[0] + this.value + p[1];
                 if(this.conversiontype == "SpaceMath2MathML") {
- console.log("((((adding parentheses to", this.outputvalue)
+ console.log("((((adding parentheses to", this.outputvalue, "of", this);
       // a bad hack:  need a more robust way to tell if compound object in parentheses
       // a slightly less bad havk is counting "<" in the string
                     if(this.outputvalue.length > 18) {
                         this.outputvalue = "<mrow>" + this.outputvalue + "</mrow>"
                     }
-                    this.outputvalue = "<mo>" + p[0] + "</mo>" + this.outputvalue + "<mo>" + p[1] + "</mo>";
+                    if(!this.key || this.key == " " || !dictionary[this.key].delimitedarguments) {
+                        this.outputvalue = "<mo>" + p[0] + "</mo>" + this.outputvalue + "<mo>" + p[1] + "</mo>";
+                    }
                 } else if(this.conversiontype == "SpaceMath2speech") {
                     if(singletonQ(this.outputvalue)) {
                         // no need to do anything
@@ -306,7 +314,9 @@ console.log("adding quantity", this);
                         this.outputvalue = "quantityP " + this.outputvalue + " Pendquantity";
                     }
                 } else {
-                    this.outputvalue = p[0] + this.outputvalue + p[1];
+                    if(!this.key || this.key == " " || !dictionary[this.key].delimitedarguments) {
+                        this.outputvalue = p[0] + this.outputvalue + p[1];
+                    }
                 }
             }
             this.pair = [];
