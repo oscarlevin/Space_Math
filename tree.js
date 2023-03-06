@@ -138,10 +138,9 @@ console.log("isLeaf with key", this.key, "pair", this.pair, "parent children", t
 } catch(error) {
 console.log("isLeaf with key", this.key, "pair", this.pair, "this", this);
 }
-if(this.value == "") {
-// die()
-}
+
   console.log("the root", this.treeRoot);
+// die
           if (this.value.length > 1){
               this.value = this.value.trim();
           }
@@ -194,8 +193,8 @@ console.log("AddIng quantity", this);
           } else {
 console.log("about to use conversiontype", this.conversiontype);
               try {
-                if(this.conversiontype == "SpaceMath2MathML") {
 console.log("               trying to extract using key", key, "from", this);
+                if(this.conversiontype == "SpaceMath2MathML") {
                   newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                   newOutputValue = dictionary[key].ruleML[(position+1)+","+(numberOfSiblings)];
 console.log("               attempted       SpaceMath2MathML conversion: ", newValue);
@@ -279,7 +278,9 @@ console.log("                      SpaceMath2MathML conversion failed on", newVa
       if (this.parent && dictionary[this.key] && dictionary[this.key].offpair){
           let numberOfSiblings = this.parent.children.length;
           let position = 0;
+console.log(numberOfSiblings,"this.key", this.key,"this", this, "this.parent", this.parent);
           while (this.parent.children[position].value != this.key){
+console.log(position,"this.parent.children[position]", this.parent.children[position]);
               position++;
           }
           if (dictionary[this.key].offpair[(position+1)+","+(numberOfSiblings)] && dictionary[this.key].offpair[(position+1)+","+(numberOfSiblings)].includes(this.position+1)){
@@ -398,4 +399,47 @@ oooooo
     }
     return undefined;
   }
+
+  combineSubSup() {
+// convert  a_b^c  from [a sub b] sup c  to  a subsup b c
+    for (let node of this.preOrderTraversal()) {
+console.log("trying subsup on", node);
+      if (node.value === "" && node.key === "^" && node.position == 0) {
+   console.log("found ^ in position", node.position, "and childrev with values and keys");
+        if(node.children.length > 1 && node.children[0].key == "_") {
+   console.log("0", node.children[0].value, node.children[0].key);
+   console.log("1", node.children[1].value, node.children[1].key);
+   console.log("2", node.children[2].value, node.children[2].key);
+          // found a subsup
+// the sibling with position=2 will be moved over to position 3
+          node.parent.children[2].key = "subsup";
+          node.parent.children[2].position = 3;
+// the sibling in position 1 will be moved over to position 2, and replaced by child[2]
+          node.parent.children[1] = node.children[2];
+          node.parent.children[1].key = "subsup";
+          node.parent.children[1].position = 2;
+          node.parent.children[1].parent = node.parent;
+// the child[0] gets moved up to be the 0th sibling
+          node.parent.children.unshift(node.children[0]);
+          node.parent.children[0].key = "subsup";
+          node.parent.children[0].position = 0;
+          node.parent.children[0].parent = node.parent;
+// this node gets replaced by its child[1]
+          node.parent.children[1] = node.children[1];
+          node.parent.children[1].key = "subsup";
+          node.parent.children[1].value = "subsup";
+          node.parent.children[1].position = 1;  // it was that, but good to be careful?
+          node.parent.children[1].parent = node.parent;
+    //      node.children = [];
+   console.log("0", node.parent.children[0].value, node.parent.children[0]);
+   console.log("1", node.parent.children[1].value, node.parent.children[1]);
+   console.log("2", node.parent.children[2].value, node.parent.children[2]);
+   console.log("3", node.parent.children[3].value, node.parent.children[3]);
+        } else {
+    console.log("no children")
+        }
+      }
+    }
+  }
+
 }

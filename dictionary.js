@@ -236,7 +236,6 @@ var dictionary = {
       "ÏÂ±ê"
     ],
     "alternative": [
-      "from",
       "´Ó",
       "³õÊ¼Öµ",
       "ÏÂ±ê"
@@ -257,6 +256,26 @@ var dictionary = {
     },
     "speech": {
       "2,3": " quantityX #1 Xendquantity sub quantityY #@3 Yendquantity "
+    }
+  },
+  "subsup": {
+    "comment": [ ],
+    "alternative": [ ],
+    "type": "operator",
+    "priority": 30,
+    "script": true,
+    "rule": {
+      "2,4": "#1_{#@3}^{#@4}"
+    },
+    "offpair": {
+      "2,4": [ 4 ],
+      "2,4": [ 3 ]
+    },
+    "ruleML": {
+      "2,4": "<msubsup><mrow>#1</mrow><mrow>#@3</mrow><mrow>#@4</mrow></msubsup>"
+    },
+    "speech": {
+      "2,4": " quantityX #1 Xendquantity sub quantityY #@3 Yendquantity to the quantityZ #@4 Zendquantity"
     }
   },
   "^^": {
@@ -1261,6 +1280,14 @@ var dictionary = {
     "rule": {
       "1,3": "\\int #2 \\,d#3",
       "1,2": "\\int #2"
+    },
+    "speech": {
+      "1,3": "integral  #2 d#3",
+      "1,2": "integral  #2"
+    },
+    "ruleML": {
+      "1,2": "<mo>∫</mo>#2",
+      "1,3": "<mo>∫</mo>#2<mi>d</mi>#3"
     }
   },
   "oint": {

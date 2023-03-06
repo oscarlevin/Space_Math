@@ -50,6 +50,7 @@ function M2LConvert(str,lp,rp, conversiontype){
         if (paramStack[0] && dictionary[paramStack[0]].params){
             params = dictionary[paramStack[0]].params;
         }
+   // this is the key parsing step, when one meaningful string is parsed into a tree
         let temp = M2TreeConvert(splitStr[0],params, conversiontype);
         let tree = temp[0];
         let exParam = temp[1];
