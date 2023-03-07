@@ -413,9 +413,11 @@ console.log("just made stackedTreeNode", stackedTreeNode);
             break;
         }
     }
-console.log("m2treeconvert returned",tree,"aa",tree.root, "bb", tree.root.children);
 console.log("continuing",tree.root.children[0], tree.root.children[1]);
     tree.combineSubSup();
+console.log("m2treeconvert returned",tree,"aa",tree.root, "bb", tree.root.children);
+console.log(printTree(tree.root, ""));
+//die
     return [tree,exParam,response];
 }
 

@@ -268,8 +268,7 @@ var dictionary = {
       "2,4": "#1_{#@3}^{#@4}"
     },
     "offpair": {
-      "2,4": [ 4 ],
-      "2,4": [ 3 ]
+      "2,4": [ 3, 4 ]  // subsup is 2nd out of 4, and the 3rd and 4th have implied grouping
     },
     "ruleML": {
       "2,4": "<msubsup><mrow>#1</mrow><mrow>#@3</mrow><mrow>#@4</mrow></msubsup>"
@@ -1287,7 +1286,7 @@ var dictionary = {
     },
     "ruleML": {
       "1,2": "<mo>∫</mo>#2",
-      "1,3": "<mo>∫</mo>#2<mi>d</mi>#3"
+      "1,3": "<mo>∫</mo>#2<mspace width=\"0.167em\"></mspace><mi>d</mi>#3"
     }
   },
   "oint": {

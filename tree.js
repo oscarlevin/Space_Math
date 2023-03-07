@@ -283,12 +283,14 @@ console.log(numberOfSiblings,"this.key", this.key,"this", this, "this.parent", t
 console.log(position,"this.parent.children[position]", this.parent.children[position]);
               position++;
           }
+console.log("dictionary[this.key].offpair", dictionary[this.key].offpair, "looking for",(position+1)+","+(numberOfSiblings), "containing", this.position+1, "in", dictionary[this.key].offpair[(position+1)+","+(numberOfSiblings)]);
           if (dictionary[this.key].offpair[(position+1)+","+(numberOfSiblings)] && dictionary[this.key].offpair[(position+1)+","+(numberOfSiblings)].includes(this.position+1)){
             this.pair.pop();
           }
       }
 
       if (this.pair && this.pair.length > 0){
+  console.log("ADDING a pair for", this, "out of", this.parent.children.length);
             for (let p of this.pair){
                 if (p[0] == "{"){
                     p[0] = ["\\{"];
@@ -442,4 +444,26 @@ console.log("trying subsup on", node);
     }
   }
 
+}
+
+function printTree(node, indentationlevel) {
+  //    thisleveldata = indentationlevel + this.key + " " + this.value + " " + this.pair.length + "\n";
+      console.log("printTree of", node);
+      if(!node) { return "" }
+      let nodeleveldata = indentationlevel + "[" + (node.key || "null").replace(" ","␣") + "]   " + (node.value || "null").replace(" ","␣")
+      if(node.pair.length) { nodeleveldata += " " + node.pair[0] + " " + node.pair.length}
+      if(node.children.length == 0) { nodeleveldata += "    leaf" }
+      nodeleveldata += "\n"
+      if(node.children.length == 0) {
+  //      if(node.position == node.parent.children.length) {
+          return nodeleveldata
+  //      }
+      } else {
+          let numchildren = node.children.length;
+          let childrenleveldata = nodeleveldata;
+          for (let nn=0; nn < node.children.length; ++nn) {
+              childrenleveldata += printTree(node.children[nn], indentationlevel + "    ")
+          }
+          return childrenleveldata
+      }
 }
