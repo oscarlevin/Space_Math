@@ -236,7 +236,6 @@ var dictionary = {
       "ÏÂ±ê"
     ],
     "alternative": [
-      "from",
       "´Ó",
       "³õÊ¼Öµ",
       "ÏÂ±ê"
@@ -257,6 +256,25 @@ var dictionary = {
     },
     "speech": {
       "2,3": " quantityX #1 Xendquantity sub quantityY #@3 Yendquantity "
+    }
+  },
+  "subsup": {
+    "comment": [ ],
+    "alternative": [ ],
+    "type": "operator",
+    "priority": 30,
+    "script": true,
+    "rule": {
+      "2,4": "#1_{#@3}^{#@4}"
+    },
+    "offpair": {
+      "2,4": [ 3, 4 ]  // subsup is 2nd out of 4, and the 3rd and 4th have implied grouping
+    },
+    "ruleML": {
+      "2,4": "<msubsup><mrow>#1</mrow><mrow>#@3</mrow><mrow>#@4</mrow></msubsup>"
+    },
+    "speech": {
+      "2,4": " quantityX #1 Xendquantity sub quantityY #@3 Yendquantity to the quantityZ #@4 Zendquantity"
     }
   },
   "^^": {
@@ -1216,10 +1234,7 @@ var dictionary = {
     "priority": 20,
     "extraArgument": 1,
     "offpair": {
-      "1,3": [
-        2,
-        3
-      ]
+      "1,3": [ 2, 3 ]
     },
     "rule": {
       "1,3": "\\frac{#2}{#3}",
@@ -1259,8 +1274,16 @@ var dictionary = {
     ],
     "pairedArgument": "d",
     "rule": {
-      "1,3": "\\int #2 \\,d#3",
-      "1,2": "\\int #2"
+      "1,2": "\\int #2",
+      "1,3": "\\int #2 \\,d#3"
+    },
+    "speech": {
+      "1,2": "integral  #2",
+      "1,3": "integral  #2 d#3"
+    },
+    "ruleML": {
+      "1,2": "<mo>∫</mo>#2",
+      "1,3": "<mo>∫</mo>#2<mspace width=\"0.167em\"></mspace><mi>d</mi>#3"
     }
   },
   "oint": {
