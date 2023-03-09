@@ -1234,10 +1234,7 @@ var dictionary = {
     "priority": 20,
     "extraArgument": 1,
     "offpair": {
-      "1,3": [
-        2,
-        3
-      ]
+      "1,3": [ 2, 3 ]
     },
     "rule": {
       "1,3": "\\frac{#2}{#3}",
@@ -1277,12 +1274,12 @@ var dictionary = {
     ],
     "pairedArgument": "d",
     "rule": {
-      "1,3": "\\int #2 \\,d#3",
-      "1,2": "\\int #2"
+      "1,2": "\\int #2",
+      "1,3": "\\int #2 \\,d#3"
     },
     "speech": {
-      "1,3": "integral  #2 d#3",
-      "1,2": "integral  #2"
+      "1,2": "integral  #2",
+      "1,3": "integral  #2 d#3"
     },
     "ruleML": {
       "1,2": "<mo>∫</mo>#2",
