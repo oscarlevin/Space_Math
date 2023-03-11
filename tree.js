@@ -89,6 +89,15 @@ console.log("What is nect to this enpty key? parent:", this.parent, "left siblin
                 this.outputvalue = " of "
               }
             }
+          } else if(this.position == 0) {
+              // sort of a hack to put a space in front og funciton name in speech
+              // rethink and consider inserting invisible multiplication  (which will
+              // require testing previous item)
+              if(this.conversiontype == "SpaceMath2speech") {
+                this.outputvalue = " " + markAtomicItem(this.value, this.conversiontype);
+              } else {
+                this.outputvalue = markAtomicItem(this.value, this.conversiontype);
+              }
           } else {
                this.outputvalue = markAtomicItem(this.value, this.conversiontype);
           }
@@ -193,11 +202,11 @@ console.log("AddIng quantity", this);
           } else {
 console.log("about to use conversiontype", this.conversiontype);
               try {
-console.log("               trying to extract using key", key, "from", this);
+console.log("               trying to extract using key", key, "position", position,"numberOfSiblings", numberOfSiblings, "from", this, "with rule of",(position+1)+","+(numberOfSiblings));
                 if(this.conversiontype == "SpaceMath2MathML") {
                   newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                   newOutputValue = dictionary[key].ruleML[(position+1)+","+(numberOfSiblings)];
-console.log("               attempted       SpaceMath2MathML conversion: ", newValue);
+console.log("               attempted       SpaceMath2MathML conversion: ", newValue, "newOutputValue",newOutputValue);
                 } else if(this.conversiontype == "SpaceMath2speech") {
                   newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                   newOutputValue = dictionary[key].speech[(position+1)+","+(numberOfSiblings)];
@@ -261,7 +270,7 @@ console.log("                      SpaceMath2MathML conversion failed on", newVa
                   } else {
                       newValue = newValue.replace("#&\\text{","\\text{ ");
                       newValue = newValue.replace("#&","");
-               }
+                  }
                   newValue = newValue.replace("#"+(i+1)+"@1", childValue[0]);
                   newValue = newValue.replace("#"+(i+1)+"@-1", childValue.substring(1));
                   newValue = newValue.replace("#"+(i+1), childValue);
@@ -290,7 +299,7 @@ console.log("dictionary[this.key].offpair", dictionary[this.key].offpair, "looki
       }
 
       if (this.pair && this.pair.length > 0){
-  console.log("ADDING a pair for", this, "out of", this.parent.children.length);
+//  console.log("ADDING a pair for", this, "out of", this.parent.children.length);
             for (let p of this.pair){
                 if (p[0] == "{"){
                     p[0] = ["\\{"];
@@ -407,11 +416,11 @@ oooooo
     for (let node of this.preOrderTraversal()) {
 console.log("trying subsup on", node);
       if (node.value === "" && node.key === "^" && node.position == 0) {
-   console.log("found ^ in position", node.position, "and childrev with values and keys");
+//   console.log("found ^ in position", node.position, "and childrev with values and keys");
         if(node.children.length > 1 && node.children[0].key == "_") {
-   console.log("0", node.children[0].value, node.children[0].key);
-   console.log("1", node.children[1].value, node.children[1].key);
-   console.log("2", node.children[2].value, node.children[2].key);
+//   console.log("0", node.children[0].value, node.children[0].key);
+//   console.log("1", node.children[1].value, node.children[1].key);
+//   console.log("2", node.children[2].value, node.children[2].key);
           // found a subsup
 // the sibling with position=2 will be moved over to position 3
           node.parent.children[2].key = "subsup";
@@ -433,10 +442,10 @@ console.log("trying subsup on", node);
           node.parent.children[1].position = 1;  // it was that, but good to be careful?
           node.parent.children[1].parent = node.parent;
     //      node.children = [];
-   console.log("0", node.parent.children[0].value, node.parent.children[0]);
-   console.log("1", node.parent.children[1].value, node.parent.children[1]);
-   console.log("2", node.parent.children[2].value, node.parent.children[2]);
-   console.log("3", node.parent.children[3].value, node.parent.children[3]);
+//   console.log("0", node.parent.children[0].value, node.parent.children[0]);
+//   console.log("1", node.parent.children[1].value, node.parent.children[1]);
+//   console.log("2", node.parent.children[2].value, node.parent.children[2]);
+//   console.log("3", node.parent.children[3].value, node.parent.children[3]);
         } else {
     console.log("no children")
         }
@@ -444,14 +453,67 @@ console.log("trying subsup on", node);
     }
   }
 
+  // this is not used, because it was too complicated so instead we
+  // preprocess and distinguish between different types of integrals,
+  // based on limits and weight
+  combineInt() {
+    for (let node of this.preOrderTraversal()) {
+      if(node.value == "integr" && node.key == "integr" && node.position == 0) {
+        console.log("found int in position", node.position, "and siblings with values and keys");
+   console.log("1", node.parent.children[1].key, node.parent.children[1].value);
+//   console.log("2", node.parent.children[2].key, node.parent.children[2].value);
+        if(node.parent.children[1].value == "" && node.parent.children[1].key == "integr" && node.parent.children[1].pair.length == 1) {
+   console.log("maybe found an int with limits")
+          if(node.parent.children[1].children[0].key == "," &&
+             node.parent.children[1].children[0].value == "") {
+   console.log("looking more promising");
+
+             if(node.parent.children[1].children[1].key != "," || node.parent.children[1].children[2].key != ",") {
+                 console.log("error with integral subsup structure")
+             }
+   console.log("int structure looks good");
+           }
+         }
+       }
+     }
+  }
+
+  // this is not used, because instead we went with wrapper(...)
+  unWrapCertainParentheses() {
+    for (let node of this.preOrderTraversal()) {
+      if(node.value == "" && node.pair.length == 1 && node.children.length > 0) {
+        console.log("found wrapping parentheses", node.position, "and children with values and keys");
+   console.log("0", node.children[0].key, node.children[0].value);
+//   console.log("2", node.parent.children[2].key, node.parent.children[2].value);
+// need to refactor this
+        if( (node.children[0].value == "limop" && node.children[0].key == "limop") ||
+             (node.children[0].value == "intllim" && node.children[0].key == "intllim") ||
+             (node.children[0].value == "intllimweight" && node.children[0].key == "intllimweight") ||
+             (node.children[0].value == "intlimsweight" && node.children[0].key == "intlimsweight") ||
+            (node.children[0].value == "intlims" && node.children[0].key == "intlims") ) {
+   console.log("maybe found paraens to eliminate");
+          node.pair.pop();
+        }
+     }
+   }
+  }
+ }
+
+
+function visStr(str) {
+    if(str === undefined) { return "undefined" }
+    if(str === null) { return "null" }
+    if(str == "") { return "es" }
+    return str.replace(" ","␣")
 }
 
 function printTree(node, indentationlevel) {
   //    thisleveldata = indentationlevel + this.key + " " + this.value + " " + this.pair.length + "\n";
       console.log("printTree of", node);
       if(!node) { return "" }
-      let nodeleveldata = indentationlevel + "[" + (node.key || "null").replace(" ","␣") + "]   " + (node.value || "null").replace(" ","␣")
-      if(node.pair.length) { nodeleveldata += " " + node.pair[0] + " " + node.pair.length}
+  //    let nodeleveldata = indentationlevel + "[" + (node.key || "null").replace(" ","␣") + "]   " + (node.value || "null").replace(" ","␣")
+      let nodeleveldata = indentationlevel + "[" + visStr(node.key) + "]   " + visStr(node.value)
+      if(node.pair.length) { nodeleveldata += "    " + node.pair[0] + " " + node.pair.length}
       if(node.children.length == 0) { nodeleveldata += "    leaf" }
       nodeleveldata += "\n"
       if(node.children.length == 0) {

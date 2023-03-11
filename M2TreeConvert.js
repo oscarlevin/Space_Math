@@ -21,10 +21,12 @@ function M2TreeConvert(str,params, conversiontype){
     let stackedTreeNode = undefined;
     let extraArgument = []; //number of extra requirement of stack push that need to be fulfilled (see root)
     let response = {}; //response to the params
-  console.log("continuing M2TreeConvert  conversiontype", conversiontype);
+  console.log("continuing M2TreeConvert  conversiontype", conversiontype, "on", str);
 
     while (inLoop){
         let fullStr = currentNode.value;
+        fullStr = fullStr.trim();
+console.log("fullStr", fullStr);
         let startKey = 0; // denote start of keyword
         let startCounter = 0; //start of string which may contain keyword
         let counter = 0;
@@ -417,6 +419,10 @@ console.log("continuing",tree.root.children[0], tree.root.children[1]);
     tree.combineSubSup();
 console.log("m2treeconvert returned",tree,"aa",tree.root, "bb", tree.root.children);
 console.log(printTree(tree.root, ""));
+//    tree.combineInt();
+//console.log(printTree(tree.root, ""));
+//    tree.unWrapCertainParentheses();
+//  console.log(printTree(tree.root, ""));
 //die
     return [tree,exParam,response];
 }
@@ -660,6 +666,9 @@ Description: given a string, a position of the left parenthese, find the positio
 */
 
 function findPositionOfRightParenthese(str, pos) {
+// this takes into account nesting, but it matches any left with any right
+// problematic to support French notation ]a,b[ for an open interval
+// (problematic on input, not output)
   if (!["(","[","{"].includes(str[pos])) {
     throw new Error("No" + lp + " at index " + pos);
   }

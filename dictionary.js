@@ -100,7 +100,7 @@ var dictionary = {
       "³ý, ³ýÒÔ"
     ],
     "alternative": [
-      "divides",
+      "over",
       "divide",
       "³ý",
       "³ýÒÔ"
@@ -112,10 +112,7 @@ var dictionary = {
       "2,3": "\\frac{#1}{#3}"
     },
     "offpair": {
-      "2,3": [
-        1,
-        3
-      ]
+      "2,3": [ 1, 3 ]
     },
     "ruleML": {
       "2,3": "<mfrac><mrow>#1</mrow><mrow>#3</mrow></mfrac>"
@@ -125,19 +122,20 @@ var dictionary = {
     } 
   },
   "//": {
-    "alternative": [
-      "over"
-    ],
+    "alternative": [ ],
     "type": "operator",
     "priority": 20,
+//    "offpair": {
+//      "2,3": [ 1, 3 ]
+//    },
     "rule": {
       "2,3": "#1 / #3"
     },
-    "offpair": {
-      "2,3": [
-        1,
-        3
-      ]
+    "speech": {
+      "2,3": " inline fraction #1 over #3 endfraction "
+    },
+    "ruleML": {
+      "2,3": "#1<mo>/</mo>#3"
     }
   },
   "=": {
@@ -150,6 +148,9 @@ var dictionary = {
     ],
     "type": "relation",
     "priority": 0,
+//    "offpair": {
+//      "2,3": [ 1, 3 ]
+//    },
     "rule": {
       "2,3": "#1 = #3"
     },
@@ -347,7 +348,7 @@ var dictionary = {
   },
   "\n": {
     "alternative": [
-      ""
+ //     ""
     ],
     "type": "relation",
     "priority": -10,
@@ -357,7 +358,7 @@ var dictionary = {
   },
   ",": {
     "alternative": [
-      ""
+//      ""
     ],
     "type": "operator",
     "priority": -10,
@@ -371,9 +372,25 @@ var dictionary = {
       "2,3": "#1 comma #3"
     }
   },
+  "?": {
+    "alternative": [
+//      ""
+    ],
+    "type": "symbol",
+    "priority": 10,
+    "rule": {
+      "2,3": "#1,#3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>,</mo>#3"
+    },
+    "speech": {
+      "2,3": "#1 comma #3"
+    }
+  },
   ";": {
     "alternative": [
-      ""
+//      ""
     ],
     "type": "operator",
     "priority": -10,
@@ -383,7 +400,7 @@ var dictionary = {
   },
   "|": {
     "alternative": [
-      ""
+//      ""
     ],
     "type": "operator",
     "priority": -10,
@@ -456,6 +473,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\Gamma "
+    },
+    "speech": {
+      "1,1": " Gamma "
+    },
+    "ruleML": {
+      "1,1": "<mi>Γ</mi>"
     }
   },
   "delta": {
@@ -754,13 +777,12 @@ var dictionary = {
       "1,1": "\\emptyset"
     }
   },
-  "inf": {
+  "infty": {
     "comment": [
       "ÎÞÇî´ó"
     ],
     "alternative": [
       "infty",
-      "infinity",
       "oo",
       "ÎÞÇî´ó"
     ],
@@ -771,7 +793,10 @@ var dictionary = {
     },
     "speech": {
       "1,1": "infinity"
-    }
+    },
+    "ruleML": {
+      "1,1": "<mi>∞</mi>"
+    },
   },
   "aleph": {
     "alternative": [],
@@ -1023,7 +1048,7 @@ var dictionary = {
       "1,2": "|#2|"
     },
     "speech": {
-      "1,2": "cardinality of #2"
+      "1,2": " cardinality of quantityB #2 Bendquantity "
     },
     "ruleML": {
       "1,2": "<mrow intent=\"cardinality($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
@@ -1048,7 +1073,7 @@ var dictionary = {
       "1,2": "|#2|"
     },
     "speech": {
-      "1,2": "absolute value of quantityB #2 Bendquantity"
+      "1,2": " absolute value of quantityB #2 Bendquantity "
     },
     "ruleML": {
       "1,2": "<mrow intent=\"absolute-value($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
@@ -1072,7 +1097,7 @@ var dictionary = {
       "1,2": "|#2|"
     },
     "speech": {
-      "1,2": "determinant of #2"
+      "1,2": " determinant of #2 "
     },
     "ruleML": {
       "1,2": "<mrow intent=\"determinant($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
@@ -1092,7 +1117,7 @@ var dictionary = {
       "1,2": "\\langle #2\\rangle"
     },
     "speech": {
-      "1,2": "span of #2"
+      "1,2": " span of #2 "
     },
     "ruleML": {
       "1,2": "<mrow intent=\"span($x)\"><mo>⟨</mo><mrow arg=\"x\">#2</mrow><mo>⟩</mo></mrow>"
@@ -1262,6 +1287,170 @@ var dictionary = {
       "1,2": "\\sum{#2}"
     }
   },
+  "wrapper": {  // a trick to group quantities without adding parentheses
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [ 2 ]
+    },
+    "rule": {
+      "1,2": " #2 "
+    },
+    "speech": {
+      "1,2": "#2"
+    },
+    "ruleML": {
+      "1,2": "#2"
+    }
+  },
+  "opwrap": {  // a large operator, like sum_n  , which acts like a function
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [ 2 ],
+      "1,3": [ 2, 3 ]
+    },
+    "extraArgument": 1,
+    "rule": {
+      "1,2": " #2 ",
+      "1,3": " #2{#3}"
+    },
+    "speech": {
+      "1,2": "#2",
+      "1,3": "#2 argument #3 endargument "
+    },
+    "ruleML": {
+      "1,2": "#2",
+      "1,3": "<mrow>#2<mrow>#3</mrow></mrow>"
+    }
+  },
+  "limsop": {  // large operators with lower ad upper limits, such as \sum and \prod, but not integrals
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,3": [ 2, 3 ],  // lower limit
+      "1,4": [ 1, 2, 3, 4 ],  //lower and upper lim
+      "1,5": [ 1, 2, 3, 4, 5 ]  // op, lower lim, upper lim, summand
+    },
+    "extraArgument": 2,
+    "rule": {
+      "1,4": "#2_{#3}^{#4}"
+    },
+    "speech": {
+      "1,4": " #2 from #3 to #4 "
+    },
+    "ruleML": {
+      "1,4": "<munderover>#2<mrow>#3</mrow><mrow>#4</mrow></munderover>"
+    }
+  },
+  "llimop": {  // large operators with limits, such as \sum and \prod, but not integrals
+            // either upper and lower limits, or just lower, or no limits
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,3": [ 2, 3 ]  // lower limit
+    },
+    "extraArgument": 1,
+    "rule": {
+      "1,3": "#2_{#3}"
+    },
+    "speech": {
+      "1,3": " #2 over #3 "
+    },
+    "ruleML": {
+      "1,3": "<munder><mo>#2</mo><mrow>#3</mrow></munder>"
+    }
+  },
+  "bigop": {  // large operators with no limits, such as \sum and \prod, but not integrals
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "rule": {
+      "1,2": " #2 "
+    },
+    "speech": {
+      "1,2": " #2 "
+    },
+    "ruleML": {
+      "1,2": "<mo>#2</mo>"   // how to say it is big?
+    }
+  },
+  "intlims": {  // various integrals
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,6": [ 2, 3, 4, 5, 6 ],  // op, lower lim, upper lim, "summand"
+    },
+    "extraArgument": 4,
+    "rule": {
+      "1,6": "#2_{#3}^{#4} #5 \\,d#6"
+    },
+    "speech": {
+      "1,6": " #2 from #3 to #4 of #5 d#6 "
+    },
+    "ruleML": {
+      "1,6": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mi>d</mi>#6</mrow>",
+    }
+   },
+    "intlimsweight": {  // various integrals
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,7": [ 2, 3, 4, 5, 6, 7 ],  // op, lower lim, upper lim, "summand"
+    },
+    "extraArgument": 5,
+    "rule": {
+      "1,7": "#2_{#3}^{#4} #5 \\,\\frac{d#6}{#7}"
+    },
+    "speech": {
+      "1,7": " #2 from #3 to #4 of #5 d#6 over #7 "
+    },
+    "ruleML": {
+      "1,7": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mfrac><mrow><mi>d</mi>#6</mrow><mrow>#7</mrow></mfrac></mrow>"
+     }
+    },  
+    "intllimweight": {  // various integrals
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,6": [ 2, 3, 4, 5, 6 ],  // op, lower lim, upper lim, "summand"
+    },
+    "extraArgument": 4,
+    "rule": {
+      "1,6": "#2_{#3} #4 \\,\\frac{d#5}{#6}"
+    },
+    "speech": { 
+      "1,6": " #2 over #3 of #4 d#5 over #6 "
+    },
+    "ruleML": {
+      "1,6": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mfrac><mrow><mi>d</mi>#5</mrow><mrow>#6</mrow></mfrac></mrow>"
+     }
+    },
+    "intllim": {  // various integrals
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,5": [ 2, 3, 4, 5 ],  // op, lower lim, "integrand",  var
+    },
+    "extraArgument": 3,
+    "rule": {
+      "1,5": "#2_{#3} #4 \\,d#5"
+    },
+    "speech": {
+      "1,5": " #2 over #3 of #4 d#5 "
+    },
+    "ruleML": {
+      "1,5": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mi>d</mi>#5</</mrow>"
+     }
+    },
   "int": {
     "alternative": [
       "integral"
@@ -1275,11 +1464,13 @@ var dictionary = {
     "pairedArgument": "d",
     "rule": {
       "1,2": "\\int #2",
-      "1,3": "\\int #2 \\,d#3"
+      "1,3": "\\int #2 \\,d#3",
+      "1,5": "\\int_{#2}^{3} #4 \\,d#5"
     },
     "speech": {
       "1,2": "integral  #2",
-      "1,3": "integral  #2 d#3"
+      "1,3": "integral  #2 d#3",
+      "1,5": "integral from #2 to #3 of #4 d#5"
     },
     "ruleML": {
       "1,2": "<mo>∫</mo>#2",
@@ -1828,3 +2019,27 @@ var dictionary = {
     }
   }
 }
+
+var integrals = {
+    "oint": "∮",
+    "iiint": "∭",
+    "iint": "∬",
+    "int": "∫",
+    "oiiint": "∰",
+    "oiint": "∯",
+    "oint": "∮"
+}
+
+var symbolswithlimits = {
+    "sum": "∑",
+    "union": "⋃",
+    "intersection": "⋂",
+    "oplus": "⨁",
+    "otimes": "⨂",
+    "coprod": "∐",
+    "prod": "∏"
+}
+
+// need to generate this automatically from: integrals, symbolswithlimits, ???
+
+var operatorsymbols = [ "∑","⋃","⋂","⨁","⨂","∐","∏","∮","∭","∬","∫","∰","∯","∮"];
