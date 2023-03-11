@@ -100,7 +100,7 @@ var dictionary = {
       "³ý, ³ýÒÔ"
     ],
     "alternative": [
-      "divides",
+      "over",
       "divide",
       "³ý",
       "³ýÒÔ"
@@ -112,10 +112,7 @@ var dictionary = {
       "2,3": "\\frac{#1}{#3}"
     },
     "offpair": {
-      "2,3": [
-        1,
-        3
-      ]
+      "2,3": [ 1, 3 ]
     },
     "ruleML": {
       "2,3": "<mfrac><mrow>#1</mrow><mrow>#3</mrow></mfrac>"
@@ -125,19 +122,20 @@ var dictionary = {
     } 
   },
   "//": {
-    "alternative": [
-      "over"
-    ],
+    "alternative": [ ],
     "type": "operator",
     "priority": 20,
+//    "offpair": {
+//      "2,3": [ 1, 3 ]
+//    },
     "rule": {
       "2,3": "#1 / #3"
     },
-    "offpair": {
-      "2,3": [
-        1,
-        3
-      ]
+    "speech": {
+      "2,3": " inline fraction #1 over #3 endfraction "
+    },
+    "ruleML": {
+      "2,3": "#1<mo>/</mo>#3"
     }
   },
   "=": {
@@ -150,6 +148,9 @@ var dictionary = {
     ],
     "type": "relation",
     "priority": 0,
+//    "offpair": {
+//      "2,3": [ 1, 3 ]
+//    },
     "rule": {
       "2,3": "#1 = #3"
     },
@@ -1286,8 +1287,46 @@ var dictionary = {
       "1,2": "\\sum{#2}"
     }
   },
-  "limop": {  // large operators with limits, such as \sum and \prod, but not integrals
-            // either upper and lower limits, or just lower, or no limits
+  "wrapper": {  // a trick to group quantities without adding parentheses
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [ 2 ]
+    },
+    "rule": {
+      "1,2": " #2 "
+    },
+    "speech": {
+      "1,2": "#2"
+    },
+    "ruleML": {
+      "1,2": "#2"
+    }
+  },
+  "opwrap": {  // a large operator, like sum_n  , which acts like a function
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [ 2 ],
+      "1,3": [ 2, 3 ]
+    },
+    "extraArgument": 1,
+    "rule": {
+      "1,2": " #2 ",
+      "1,3": " #2{#3}"
+    },
+    "speech": {
+      "1,2": "#2",
+      "1,3": "#2 argument #3 endargument "
+    },
+    "ruleML": {
+      "1,2": "#2",
+      "1,3": "<mrow>#2<mrow>#3</mrow></mrow>"
+    }
+  },
+  "limsop": {  // large operators with lower ad upper limits, such as \sum and \prod, but not integrals
     "alternative": [ ],
     "type": "function",
     "priority": 55,
@@ -1298,19 +1337,46 @@ var dictionary = {
     },
     "extraArgument": 2,
     "rule": {
-      "1,2": " #2 ",
-      "1,3": "#2_{#3}",
       "1,4": "#2_{#3}^{#4}"
     },
     "speech": {
-      "1,2": " #2 of ",
-      "1,3": " #2 over #3 of ",
-      "1,4": " #2 from #3 to #4 of "
+      "1,4": " #2 from #3 to #4 "
     },
     "ruleML": {
-      "1,2": "<mo>#2</mo>",
-      "1,3": "<munder><mo>#2</mo><mrow>#3</mrow></munder>",
       "1,4": "<munderover>#2<mrow>#3</mrow><mrow>#4</mrow></munderover>"
+    }
+  },
+  "llimop": {  // large operators with limits, such as \sum and \prod, but not integrals
+            // either upper and lower limits, or just lower, or no limits
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,3": [ 2, 3 ]  // lower limit
+    },
+    "extraArgument": 1,
+    "rule": {
+      "1,3": "#2_{#3}"
+    },
+    "speech": {
+      "1,3": " #2 over #3 "
+    },
+    "ruleML": {
+      "1,3": "<munder><mo>#2</mo><mrow>#3</mrow></munder>"
+    }
+  },
+  "bigop": {  // large operators with no limits, such as \sum and \prod, but not integrals
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "rule": {
+      "1,2": " #2 "
+    },
+    "speech": {
+      "1,2": " #2 "
+    },
+    "ruleML": {
+      "1,2": "<mo>#2</mo>"   // how to say it is big?
     }
   },
   "intlims": {  // various integrals
@@ -1376,13 +1442,13 @@ var dictionary = {
     },
     "extraArgument": 3,
     "rule": {
-      "1,6": "#2_{#3} #4 \\,d#5"
+      "1,5": "#2_{#3} #4 \\,d#5"
     },
     "speech": {
-      "1,6": " #2 over #3 of #4 d#5 "
+      "1,5": " #2 over #3 of #4 d#5 "
     },
     "ruleML": {
-      "1,6": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mi>d</mi>#5</</mrow>"
+      "1,5": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mi>d</mi>#5</</mrow>"
      }
     },
   "int": {

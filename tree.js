@@ -453,6 +453,9 @@ console.log("trying subsup on", node);
     }
   }
 
+  // this is not used, because it was too complicated so instead we
+  // preprocess and distinguish between different types of integrals,
+  // based on limits and weight
   combineInt() {
     for (let node of this.preOrderTraversal()) {
       if(node.value == "integr" && node.key == "integr" && node.position == 0) {
@@ -475,6 +478,7 @@ console.log("trying subsup on", node);
      }
   }
 
+  // this is not used, because instead we went with wrapper(...)
   unWrapCertainParentheses() {
     for (let node of this.preOrderTraversal()) {
       if(node.value == "" && node.pair.length == 1 && node.children.length > 0) {

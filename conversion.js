@@ -262,9 +262,10 @@ console.log("did we find vector?", str);
     str = str.replace(/(\$| )<([^<>]+)>/g, '$1anglebrackets($2)');
 
 //    str = str.replace(/(\$| )intr\_\(([^()]+)\)\^\(([^()]+)\) ?(.*?) d([a-z])( |\$)/g, '$1limop(∫)($2)($3)($4)($5)$6');
-    for (const [symbolname, symbol] of Object.entries(integrals)) {
+    for (let [symbolname, symbol] of Object.entries(integrals)) {
 console.log("looking for limits: symbolname", symbolname);
       if(str.includes(symbolname)) {
+         symbolname = "\\\\?" + symbolname;  // hack to be partially backward compatible with TeX
 // the lower and upper limits might be in parentheses.  We handle these awkwardly
          var regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^() ]+)\\)\\^\\(([^()]+)\\) ?(.*?) d([a-z]+)";
          var regExStr = regExStrStub + "( |\\$)";
@@ -272,9 +273,9 @@ console.log("looking for limits: symbolname", symbolname);
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          var regExWeight = new RegExp(regExStrWeight, "g");
-         str = str.replace(regExWeight, '$1(intlimsweight(' + symbol + ')($2)($3)($4)($5)($6))$7');
+         str = str.replace(regExWeight, '$1wrapper(intlimsweight(' + symbol + ')($2)($3)($4)($5)($6))$7');
          var regEx = new RegExp(regExStr, "g");
-         str = str.replace(regEx, '$1(intlims(' + symbol + ')($2)($3)($4)($5))$6');
+         str = str.replace(regEx, '$1wrapper(intlims(' + symbol + ')($2)($3)($4)($5))$6');
 
          // case of no () around limits
          regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?) d([a-z]+)";
@@ -283,42 +284,61 @@ console.log("regExStrWeight", regExStrWeight);
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          regExWeight = new RegExp(regExStrWeight, "g");
-         str = str.replace(regExWeight, '$1(intlimsweight(' + symbol + ')($2)($3)($4)($5)($6))$7');
+         str = str.replace(regExWeight, '$1wrapper(intlimsweight(' + symbol + ')($2)($3)($4)($5)($6))$7');
          regEx = new RegExp(regExStr, "g");
-         str = str.replace(regEx, '$1(intlims(' + symbol + ')($2)($3)($4)($5))$6');
+         str = str.replace(regEx, '$1wrapper(intlims(' + symbol + ')($2)($3)($4)($5))$6');
 
          // case of lower lim only, no () around lower limit (unless intended)
          regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?) (.*?) d([a-z]+)";
+         regExStr = regExStrStub + "( |\\$)";
          regExStrWeight = regExStrStub + "/([^ $]+)" + "( |\\$)";
          regExWeight = new RegExp(regExStrWeight, "g");
-         str = str.replace(regExWeight, '$1(intllimweight(' + symbol + ')($2)($3)($4)($5))$6');
+         str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')($2)($3)($4)($5))$6');
          regEx = new RegExp(regExStr, "g");
-         str = str.replace(regEx, '$1(intllim(' + symbol + ')($2)($3)($4))$5');
+         str = str.replace(regEx, '$1wrapper(intllim(' + symbol + ')($2)($3)($4))$5');
 
       }
     }
 console.log("did we find integral?", str);
 
 // extract sum, prod, and other big tings with limits
-    for (const [symbolname, symbol] of Object.entries(symbolswithlimits)) {
+    for (let [symbolname, symbol] of Object.entries(symbolswithlimits)) {
 console.log("looking for limits operator: symbolname", symbolname);
       if(str.includes(symbolname)) {
-// assume the limits are not in parentheses.  First check for lower and upper
-         var regExStr = "(\\$| )" + symbolname + "\\_([^ ]+)\\^([^ ]+)";
-    // for now assume no spaces in the summand
- // idea: try only preprocessing the limits, and let the parsing code
- // handle the summand
-console.log("regExStr", regExStr);
+         symbolname = "\\\\?" + symbolname;
+// first check for limits in brackets
+         var regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]\\^[\\[\\(\\{]([^ ]+)[\\]\\)\\}]";
          var regEx = new RegExp(regExStr, "g");
-         str = str.replace(regEx, '$1(limop(' + symbol + ')($2)($3))');
-// now only lower limit
+         str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))');
+// then only lower limit in brackets
+         var regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]\\^([^ ]+)";
+         var regEx = new RegExp(regExStr, "g");
+         str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))');
+// now assume the limits are not in parentheses.  First check for lower and upper
+         regExStr = "(\\$| )" + symbolname + "\\_([^ ]+)\\^([^ ]+)";
+    // for now assume no spaces in the summand
+console.log("regExStr", regExStr);
+         regEx = new RegExp(regExStr, "g");
+         str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))');
+// now only lower, in brackets
+         regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]";
+console.log("regExStr", regExStr);
+         regEx = new RegExp(regExStr, "g");
+         str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2))');
+// now only lower limit no brackets
          regExStr = "(\\$| )" + symbolname + "\\_([^ ]+)";
+    // for now assume no spaces in the summand
+console.log("regExStr", regExStr);
+         regEx = new RegExp(regExStr, "g");
+         str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2))');
+// no limits
+         regExStr = "(\\$| )" + symbolname + "( |\\$)";
     // for now assume no spaces in the summand
  // idea: try only preprocessing the limits, and let the parsing code
  // handle the summand
 console.log("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
-         str = str.replace(regEx, '$1(limop(' + symbol + ')($2))');
+         str = str.replace(regEx, '$1opwrap(bigop(' + symbol + '))($2)');
       }
     }
 

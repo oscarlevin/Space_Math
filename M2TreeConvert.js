@@ -421,8 +421,8 @@ console.log("m2treeconvert returned",tree,"aa",tree.root, "bb", tree.root.childr
 console.log(printTree(tree.root, ""));
 //    tree.combineInt();
 //console.log(printTree(tree.root, ""));
-    tree.unWrapCertainParentheses();
- console.log(printTree(tree.root, ""));
+//    tree.unWrapCertainParentheses();
+//  console.log(printTree(tree.root, ""));
 //die
     return [tree,exParam,response];
 }
