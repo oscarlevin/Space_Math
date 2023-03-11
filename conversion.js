@@ -231,15 +231,41 @@ console.log("now ans", ans);
 
 function preprocess(rawstring) {
     let str = rawstring;
+
+    str = preprocessarithmetic(str);
+    str = preprocessparentheses(str);
+    str = preprocessbrackets(str);
+    str = preprocessintegrals(str);
+    str = preprocesslargeoperators(str);
+
+    return str
+}
+
+function preprocessarithmetic(rawstring) {
+    let str = rawstring;
+
     str = str.replace(/(\$| |\(|\^)-([^ ])/g, '$1😑$2');  // negative sign
     str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
     str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
     str = str.replace(/ \* /g, ' ⭐ '); // star/asterisk operator (retaining a*b for multiplication
 // need a way to specify what * means
+
+    return str
+}
+
+function preprocessparentheses(rawstring) {
+    let str = rawstring;
+
     str = str.replace(/(\$| )\(([^,()]+)\, +([^,()]+)\)/, '$1($2) oointerval ($3)');  //open interval
     str = str.replace(/(\$| )gcd\( *([^,()]+)\, *([^,()]+) *\)/, '$1($2) gcd ($3)');
     str = str.replace(/(\$| )\( ([^,()]+)\, *([^,()]+) \)/, '$1($2) gcd ($3)');
     str = str.replace(/(\$| )\(([^ ][^,()]*)\,([^ ][^,()]*)\)/, '$1($2) cartesianpoint ($3)');
+
+    return str
+}
+
+function preprocessbrackets(rawstring) {
+    let str = rawstring;
 
 // there are several construtions of the form
 // leftdelimiter (spaceornospace) (leftcontent) (sornos) (middledelimeter) (rightc) (sornos) rightdelimiter .
@@ -260,6 +286,12 @@ console.log("did we find vector?", str);
     str = str.replace(/(\$| )<([^ ][^,<>]*)\,([^ ][^<>]*)>/g, '$1($2) innerproduct ($3)');
 // catch all for every other case <...> of unknown meaning
     str = str.replace(/(\$| )<([^<>]+)>/g, '$1anglebrackets($2)');
+
+    return str
+}
+
+function preprocessintegrals(rawstring) {
+    let str = rawstring;
 
 //    str = str.replace(/(\$| )intr\_\(([^()]+)\)\^\(([^()]+)\) ?(.*?) d([a-z])( |\$)/g, '$1limop(∫)($2)($3)($4)($5)$6');
     for (let [symbolname, symbol] of Object.entries(integrals)) {
@@ -300,6 +332,12 @@ console.log("regExStrWeight", regExStrWeight);
       }
     }
 console.log("did we find integral?", str);
+
+    return str
+}
+
+function preprocesslargeoperators(rawstring) {
+    let str = rawstring;
 
 // extract sum, prod, and other big tings with limits
     for (let [symbolname, symbol] of Object.entries(symbolswithlimits)) {
