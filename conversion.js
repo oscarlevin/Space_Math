@@ -245,7 +245,8 @@ function preprocessarithmetic(rawstring) {
     let str = rawstring;
 
     str = str.replace(/(\$| |\(|\^)-([^ ])/g, '$1😑$2');  // negative sign
-    str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
+    str = str.replace(/(^|\$) *-/, '$1😑');  // negative sign
+//    str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
     str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
     str = str.replace(/ \* /g, ' ⭐ '); // star/asterisk operator (retaining a*b for multiplication
 // need a way to specify what * means

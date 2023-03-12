@@ -8,7 +8,7 @@ Description: the major abstract function which takes the user input and return t
 2022.10.26 add conversiontype to support both cases
 */
 function convert(str,conversiontype) {
-  str = trimSpaces(str); //trim down all multiple spaces into one space
+// why did we need that?   str = trimSpaces(str); //trim down all multiple spaces into one space
 
   str = preprocess(str);
 

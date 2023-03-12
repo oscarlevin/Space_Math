@@ -431,318 +431,6 @@ var dictionary = {
       "2,3": "#1 plus-minus #3"
     }
   },
-  "alpha": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\alpha"
-    },
-    "speech": {
-      "1,1": " alpha "
-    },
-    "ruleML": {
-      "1,1": "<mi>α</mi>"
-    }
-  },
-  "beta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\beta "
-    },
-    "speech": {
-      "1,1": " beta "
-    },
-    "ruleML": {
-      "1,1": "<mi>β</mi>"
-    }
-  },
-  "gamma": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\gamma "
-    }
-  },
-  "Gamma": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Gamma "
-    },
-    "speech": {
-      "1,1": " Gamma "
-    },
-    "ruleML": {
-      "1,1": "<mi>Γ</mi>"
-    }
-  },
-  "delta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\delta"
-    }
-  },
-  "Delta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Delta"
-    }
-  },
-  "epsilon": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\epsilon"
-    }
-  },
-  "varepsilon": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\varepsilon"
-    }
-  },
-  "zeta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\zeta"
-    }
-  },
-  "eta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\eta"
-    }
-  },
-  "theta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\theta"
-    }
-  },
-  "Theta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Theta"
-    }
-  },
-  "vartheta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\vartheta"
-    }
-  },
-  "iota": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\iota"
-    }
-  },
-  "kappa": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\kappa"
-    }
-  },
-  "lambda": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\lambda"
-    }
-  },
-  "Lamda": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Lamda"
-    }
-  },
-  "mu": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\mu"
-    }
-  },
-  "nu": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\nu"
-    }
-  },
-  "xi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\xi"
-    }
-  },
-  "Xi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Xi"
-    }
-  },
-  "pi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\pi "
-    },
-    "speech": {
-      "1,1": " pi " 
-    },
-    "ruleML": { 
-      "1,1": "<mi>&pi;</mi>"
-    } 
-  },
-  "Pi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Pi"
-    }
-  },
-  "rho": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\rho"
-    }
-  },
-  "sigma": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\sigma"
-    }
-  },
-  "Sigma": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Sigma"
-    }
-  },
-  "tau": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\tau"
-    }
-  },
-  "upsilon": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\upsilon"
-    }
-  },
-  "phi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\phi"
-    }
-  },
-  "Phi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Phi"
-    }
-  },
-  "varphi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\varphi"
-    }
-  },
-  "chi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\chi"
-    }
-  },
-  "psi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\psi"
-    }
-  },
-  "Psi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Psi"
-    }
-  },
-  "omega": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\omega"
-    }
-  },
-  "Omega": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Omega"
-    }
-  },
   "del": {
     "comment": [
       "Æ«Î¢·Ö"
@@ -782,7 +470,7 @@ var dictionary = {
       "ÎÞÇî´ó"
     ],
     "alternative": [
-      "infty",
+      "infinity",
       "oo",
       "ÎÞÇî´ó"
     ],
@@ -792,11 +480,11 @@ var dictionary = {
       "1,1": "\\infty"
     },
     "speech": {
-      "1,1": "infinity"
+      "1,1": " infinity "
     },
     "ruleML": {
       "1,1": "<mi>∞</mi>"
-    },
+    }
   },
   "aleph": {
     "alternative": [],
@@ -804,6 +492,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\aleph"
+    },
+    "speech": {
+      "1,1": " aleph "
+    },
+    "ruleML": {
+      "1,1": "<mi>א</mi>"
     }
   },
   ":.": {
@@ -2048,7 +1742,8 @@ var greekletters = [["α","alpha"],
 ["β","beta"],
 ["γ","gamma"],
 ["δ","delta"],
-["ε","epsilon"],
+["ε","varepsilon"],
+["ϵ","epsilon"],
 ["ζ","zeta"],
 ["η","eta"],
 ["θ","theta"],
@@ -2064,7 +1759,8 @@ var greekletters = [["α","alpha"],
 ["σ","sigma"],
 ["τ","tau"],
 ["υ","upsilon"],
-["φ","phi"],
+["ϕ","phi"],
+["φ","varphi"],
 ["χ","chi"],
 ["ψ","psi"],
 ["ω","omega"],
@@ -2109,29 +1805,3 @@ for (const letterpair of greekletters) {
     }
   }
 }
-/*
-["Α","Alpha"],
-["Β","Beta"],
-["Γ","Gamma"],
-["Δ","Delta"],
-["Ε","Epsilon"],
-["Ζ","Zeta"],
-["Η","Eta"],
-["Θ","Theta"],
-["Ι","Iota"],
-["Κ","Kappa"],
-["Λ","Lambda"],
-["Μ","Mu"],
-["Ν","Nu"],
-["Ξ","Xi"],
-["Ο","Omicron"],
-["Π","Pi"],
-["Ρ","Rho"],
-["Σ","Sigma"],
-["Τ","Tau"],
-["Υ","Upsilon"],
-["Φ","Phi"],
-["Χ","Chi"],
-["Ψ","Psi"],
-["Ω","Omega"],
-*/
