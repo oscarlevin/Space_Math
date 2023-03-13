@@ -1034,14 +1034,14 @@ var dictionary = {
     "offpair": {
       "1,3": [ 2, 3 ],  // lower limit
       "1,4": [ 1, 2, 3, 4 ],  //lower and upper lim
-      "1,5": [ 1, 2, 3, 4, 5 ]  // op, lower lim, upper lim, summand
+      "1,5": [ 1, 2, 3, 4, 5 ]  // op, lower lim, upper lim, summand ???
     },
     "extraArgument": 2,
     "rule": {
       "1,4": "#2_{#3}^{#4}"
     },
     "speech": {
-      "1,4": " #2 from #3 to #4 "
+      "1,4": " #2 from #3 to #4 of "
     },
     "ruleML": {
       "1,4": "<munderover>#2<mrow>#3</mrow><mrow>#4</mrow></munderover>"
@@ -1053,28 +1053,35 @@ var dictionary = {
     "type": "function",
     "priority": 55,
     "offpair": {
-      "1,3": [ 2, 3 ]  // lower limit
+      "1,3": [ 2, 3 ],  // lower limit
+// experiment      "1,4": [ 2, 3, 4 ]  // lower limit and argument
     },
     "extraArgument": 1,
     "rule": {
-      "1,3": "#2_{#3}"
+      "1,3": "#2_{#3}",
+// experiment      "1,4": "#2_{#3} #4"
     },
     "speech": {
-      "1,3": " #2 over #3 "
+      "1,3": " #2 over #3 of ",
+ // experiment     "1,4": " #2 over #3 of #4 "
     },
     "ruleML": {
-      "1,3": "<munder><mo>#2</mo><mrow>#3</mrow></munder>"
+      "1,3": "<munder><mo>#2</mo><mrow>#3</mrow></munder>",
+// experiment      "1,4": "<munder><mo>#2</mo><mrow>#3</mrow></munder>#4"
     }
   },
   "bigop": {  // large operators with no limits, such as \sum and \prod, but not integrals
     "alternative": [ ],
     "type": "function",
     "priority": 55,
+    "offpair": {
+      "1,2": [ 2 ],
+    },
     "rule": {
       "1,2": " #2 "
     },
     "speech": {
-      "1,2": " #2 "
+      "1,2": " #2 of"
     },
     "ruleML": {
       "1,2": "<mo>#2</mo>"   // how to say it is big?
@@ -1339,20 +1346,20 @@ var dictionary = {
       "2,3": "<mrow>#1<mo intent=\"dot-product\">&#x22C5;</mo>#3</mrow>"
     }
   },
-//  "prod": {   // conflict with \prod_p L_p(s^{-s})
-//    "alternative": [],
-//    "type": "operator",
-//    "priority": 25,
-//    "rule": {
-//      "2,3": "#1 \\times #3"
-//    },
-//    "speech": {
-//      "2,3": "product of #1 and #3"
-//    },
-//    "ruleML": {
-//      "2,3": "<mrow>#1<mo intent=\"direct-product\">×</mo>#3</mrow>"
-//    }
-//  },
+  "product": {   // partial conflict with \prod_p L_p(s^{-s})
+    "alternative": [],
+    "type": "operator",
+    "priority": 25,
+    "rule": {
+      "2,3": "#1 \\times #3"
+    },
+    "speech": {
+      "2,3": " #1 product #3 "
+    },
+    "ruleML": {
+      "2,3": "<mrow>#1<mo intent=\"direct-product\">×</mo>#3</mrow>"
+    }
+  },
   "times": {
     "alternative": ["×"],
     "type": "operator",

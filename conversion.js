@@ -281,6 +281,7 @@ console.log("after preprocess fractions", str);
 
 // need to preprocess integrals, summation, etc, before wrapping bases
 
+console.log("before operators", str);
     str = preprocessintegrals(str);
     str = preprocesslargeoperators(str);
 console.log("after operators", str);
@@ -295,7 +296,7 @@ console.log("after operators", str);
 //  // we have previously put in grouping parentheses, so now we separate addition and subtraction
     str = str.replace(/([0-9a-zA-Z])(\+|-|\+-|-\+)([0-9a-zA-Z])/g, '$1 $2 $3');
 
-//    str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
+    str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
     str = str.replace(/ \* /g, ' ⭐ '); // star/asterisk operator (retaining a*b for multiplication
 // need a way to specify what * means
 
@@ -403,21 +404,25 @@ console.log("looking for limits operator: symbolname", symbolname);
          str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))');
 // now assume the limits are not in parentheses.  First check for lower and upper
          regExStr = "(\\$| )" + symbolname + "\\_([^ ]+)\\^([^ ]+)";
-    // for now assume no spaces in the summand
+    // for now assume no spaces in the limits
 console.log("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))');
 // now only lower, in brackets
          regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]";
+ // experiment       regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}] *([^ \\$]+)( |\\$)";
 console.log("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2))');
-// now only lower limit no brackets  (3/12/23: cannot happen, because we pre-wrap subscripts
+ // experiemnt        str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2)($3))$4');
+// now only lower limit no brackets (when do we wrap all subscripts?)
          regExStr = "(\\$| )" + symbolname + "\\_([^ ]+)";
+ //experiment        regExStr = "(\\$| )" + symbolname + "\\_([^ ]+) *([^ \\$]+)( |\\$)";
     // for now assume no spaces in the summand
-console.log("regExStr", regExStr);
+console.log("regExStr for llimop", regExStr);
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2))');
+  //experiment       str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2)($3))$4');
 // no limits
          regExStr = "(\\$| )" + symbolname + "( |\\$)";
     // for now assume no spaces in the summand
@@ -425,7 +430,7 @@ console.log("regExStr", regExStr);
  // handle the summand
 console.log("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
-         str = str.replace(regEx, '$1opwrap(bigop(' + symbol + '))($2)');
+         str = str.replace(regEx, '$1opwrap(bigop(' + symbol + '))$2');
       }
     }
 
