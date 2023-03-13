@@ -125,9 +125,9 @@ var dictionary = {
     "alternative": [ ],
     "type": "operator",
     "priority": 20,
-//    "offpair": {
-//      "2,3": [ 1, 3 ]
-//    },
+    "offpair": {
+      "2,3": [ 1, 3 ]
+    },
     "rule": {
       "2,3": "#1 / #3"
     },
@@ -166,6 +166,7 @@ var dictionary = {
       "´óÓÚµÈÓÚ"
     ],
     "alternative": [
+      "ge",
       "geq",
       "´óÓÚµÈÓÚ"
     ],
@@ -180,6 +181,7 @@ var dictionary = {
       "Ð¡ÓÚµÈÓÚ"
     ],
     "alternative": [
+      "le",
       "leq",
       "Ð¡ÓÚµÈÓÚ"
     ],
@@ -217,9 +219,7 @@ var dictionary = {
       "2,3": "#1^{#@3}"
     },
     "offpair": {
-      "2,3": [
-        3
-      ]
+      "2,3": [ 3 ]
     },
     "ruleML": {
       "2,3": "<msup><mrow>#1</mrow><mrow>#@3</mrow></msup>"
@@ -406,6 +406,12 @@ var dictionary = {
     "priority": -10,
     "rule": {
       "2,3": "#1 \\mid #3"
+    },
+    "speech": {
+      "2,3": "#1 divides #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>|</mo>#3"
     }
   },
   "+-": {
@@ -960,7 +966,7 @@ var dictionary = {
       "1,2": "\\frac{#2@1}{#2@-1}"
     }
   },
-  "sum": {
+  "summm": {
     "comment": [
       "×ÜºÍ",
       "ÇóºÍ"
@@ -1004,7 +1010,8 @@ var dictionary = {
     "priority": 55,
     "offpair": {
       "1,2": [ 2 ],
-      "1,3": [ 2, 3 ]
+ //     "1,3": [ 2, 3 ]
+      "1,3": [ 2 ]
     },
     "extraArgument": 1,
     "rule": {
@@ -1013,11 +1020,11 @@ var dictionary = {
     },
     "speech": {
       "1,2": "#2",
-      "1,3": "#2 argument #3 endargument "
+      "1,3": "#2 #3 "
     },
     "ruleML": {
       "1,2": "#2",
-      "1,3": "<mrow>#2<mrow>#3</mrow></mrow>"
+      "1,3": "#2<mrow>#3</mrow>"
     }
   },
   "limsop": {  // large operators with lower ad upper limits, such as \sum and \prod, but not integrals
@@ -1091,7 +1098,7 @@ var dictionary = {
       "1,6": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mi>d</mi>#6</mrow>",
     }
    },
-    "intlimsweight": {  // various integrals
+   "intlimsweight": {  // various integrals
     "alternative": [ ],
     "type": "function",
     "priority": 55,
@@ -1126,7 +1133,7 @@ var dictionary = {
     "ruleML": {
       "1,6": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mfrac><mrow><mi>d</mi>#5</mrow><mrow>#6</mrow></mfrac></mrow>"
      }
-    },
+   },
     "intllim": {  // various integrals
     "alternative": [ ],
     "type": "function",
@@ -1612,26 +1619,26 @@ var dictionary = {
     "changeLineTurn": ",",
     "note": "\\systeme"
   },
-  "ge": {
-    "alternative": [
-      ">="
-    ],
-    "type": "relation",
-    "priority": 0,
-    "rule": {
-      "2,3": "#1 \\ge #3"
-    }
-  },
-  "le": {
-    "alternative": [
-      "<="
-    ],
-    "type": "relation",
-    "priority": 0,
-    "rule": {
-      "2,3": "#1 \\le #3"
-    }
-  },
+//  "ge": {
+//    "alternative": [
+//      ">="
+//    ],
+//    "type": "relation",
+//    "priority": 0,
+//    "rule": {
+//      "2,3": "#1 \\ge #3"
+//    }
+//  },
+//  "le": {
+//    "alternative": [
+//      "<="
+//    ],
+//    "type": "relation",
+//    "priority": 0,
+//    "rule": {
+//      "2,3": "#1 \\le #3"
+//    }
+//  },
   "hat": {
     "alternative": [],
     "type": "function",
@@ -1733,6 +1740,8 @@ var symbolswithlimits = {
     "coprod": "∐",
     "prod": "∏"
 }
+
+var greedyfunctions = ["log", "ln", "lg", "abs", "det", "order", "card", "len", "length"];
 
 // need to generate this automatically from: integrals, symbolswithlimits, ???
 

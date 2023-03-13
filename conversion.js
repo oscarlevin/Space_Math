@@ -216,12 +216,13 @@ console.log("now ans", ans);
 // next is quick and dirty: fails on some content. but note that we
 // save the outer mrow in case of attributes
         ans = ans.replace(/(<mrow[^<>]*>)<mrow>([^w]*)<\/mrow>(<\/mrow>)/g, "$1$2$3");
-
+// 3/12/23 above fails on <mrow><mrow><mo>-</mo><mi>s</mi></mrow></mrow>
         console.log("removed layer", i, "to get", ans);
     }
 
     ans = ans.replace(/quantity([A-Z]?)/g, "quantity");
     ans = ans.replace(/([A-Z]?)endquantity([A-Z]?)/g, "endquantity");
+    ans = ans.replace(/(quantity *)quantity([^q]*)endquantity( *endquantity)/g, "$1$2$3");
 
     return ans
 }
@@ -233,10 +234,12 @@ function preprocess(rawstring) {
     let str = rawstring;
 
     str = preprocessarithmetic(str);
+console.log("after preprocessarithmetic", str);
     str = preprocessparentheses(str);
     str = preprocessbrackets(str);
-    str = preprocessintegrals(str);
-    str = preprocesslargeoperators(str);
+//next two are called in preprocessarithmetic
+//    str = preprocessintegrals(str);
+//    str = preprocesslargeoperators(str);
 
     return str
 }
@@ -244,10 +247,55 @@ function preprocess(rawstring) {
 function preprocessarithmetic(rawstring) {
     let str = rawstring;
 
-    str = str.replace(/(\$| |\(|\^)-([^ ])/g, '$1😑$2');  // negative sign
-    str = str.replace(/(^|\$) *-/, '$1😑');  // negative sign
-//    str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
-    str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
+    str = str.replace(/(\$| |\(|\^|_)-([^ ])/g, '$1😑$2');  // negative sign
+    str = str.replace(/(^|\$|\() *-/, '$1😑');  // negative sign
+
+// groupings which seem to be needed to overcome the implied left-to-right(?) precedence
+// should these be "wrapper" instead of literal parentheses?
+
+// note that we introduce an error with e^5+sin(x) because of the parentheses
+// inside the implied parentheses
+
+// inline fractions
+    str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '[$1]//');  // numerator
+    str = str.replace(/\/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '//{$1}');  // denominator
+
+// over-under fractions
+    str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/)/g, '[$1]/');  // numerator
+    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/{$1}');  // denominator
+console.log("after preprocess fractions", str);
+
+    for (const symbolname of greedyfunctions) {
+        var regExStrStub = "(\\$| )" + symbolname + " " + "([^ \$]+)";
+        var regExStr = regExStrStub + "( |\\$)";
+        var regEx = new RegExp(regExStr, "g");
+        str = str.replace(regEx, '$1' + symbolname + '($2)$3');
+    }
+// go back and see how e^x^2/2 is working
+
+// XX    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
+// XXconsole.log("after exponents once ", str);
+// XX    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
+// XXconsole.log("after exponents twice", str);
+// XX    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_($1)');  // subscript
+
+// need to preprocess integrals, summation, etc, before wrapping bases
+
+    str = preprocessintegrals(str);
+    str = preprocesslargeoperators(str);
+console.log("after operators", str);
+
+// XX    str = str.replace(/([^ *\/+\-\(\)\[\]\{\}\$]*[^ \)\]\}_])_/, '($1)_');  // base of subscript
+// XX    str = str.replace(/([^ +*\/\-\(\)\[\]\{\}\$]*[^ \)\]\}\^])\^/, 'wrapper($1)^');  // base of exponent (danger from a_b^c)
+// XXconsole.log("after bases once ", str);
+
+    str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
+
+// not so fast!
+//  // we have previously put in grouping parentheses, so now we separate addition and subtraction
+    str = str.replace(/([0-9a-zA-Z])(\+|-|\+-|-\+)([0-9a-zA-Z])/g, '$1 $2 $3');
+
+//    str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
     str = str.replace(/ \* /g, ' ⭐ '); // star/asterisk operator (retaining a*b for multiplication
 // need a way to specify what * means
 
@@ -257,10 +305,10 @@ function preprocessarithmetic(rawstring) {
 function preprocessparentheses(rawstring) {
     let str = rawstring;
 
-    str = str.replace(/(\$| )\(([^,()]+)\, +([^,()]+)\)/, '$1($2) oointerval ($3)');  //open interval
-    str = str.replace(/(\$| )gcd\( *([^,()]+)\, *([^,()]+) *\)/, '$1($2) gcd ($3)');
-    str = str.replace(/(\$| )\( ([^,()]+)\, *([^,()]+) \)/, '$1($2) gcd ($3)');
-    str = str.replace(/(\$| )\(([^ ][^,()]*)\,([^ ][^,()]*)\)/, '$1($2) cartesianpoint ($3)');
+    str = str.replace(/(\$| )\(([^,()]+)\, +([^,()]+)\)/g, '$1($2) oointerval ($3)');  //open interval
+    str = str.replace(/(\$| )gcd\( *([^,()]+)\, *([^,()]+) *\)/g, '$1($2) gcd ($3)');
+    str = str.replace(/(\$| )\( ([^,()]+)\, *([^,()]+) \)/g, '$1($2) gcd ($3)');
+    str = str.replace(/(\$| )\(([^ ][^,()]*)\,([^ ][^,()]*)\)/g, '$1($2) cartesianpoint ($3)');
 
     return str
 }
@@ -364,7 +412,7 @@ console.log("regExStr", regExStr);
 console.log("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2))');
-// now only lower limit no brackets
+// now only lower limit no brackets  (3/12/23: cannot happen, because we pre-wrap subscripts
          regExStr = "(\\$| )" + symbolname + "\\_([^ ]+)";
     // for now assume no spaces in the summand
 console.log("regExStr", regExStr);
