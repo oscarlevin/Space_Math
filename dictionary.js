@@ -125,9 +125,9 @@ var dictionary = {
     "alternative": [ ],
     "type": "operator",
     "priority": 20,
-//    "offpair": {
-//      "2,3": [ 1, 3 ]
-//    },
+    "offpair": {
+      "2,3": [ 1, 3 ]
+    },
     "rule": {
       "2,3": "#1 / #3"
     },
@@ -166,6 +166,7 @@ var dictionary = {
       "´óÓÚµÈÓÚ"
     ],
     "alternative": [
+      "ge",
       "geq",
       "´óÓÚµÈÓÚ"
     ],
@@ -180,6 +181,7 @@ var dictionary = {
       "Ð¡ÓÚµÈÓÚ"
     ],
     "alternative": [
+      "le",
       "leq",
       "Ð¡ÓÚµÈÓÚ"
     ],
@@ -217,9 +219,7 @@ var dictionary = {
       "2,3": "#1^{#@3}"
     },
     "offpair": {
-      "2,3": [
-        3
-      ]
+      "2,3": [ 3 ]
     },
     "ruleML": {
       "2,3": "<msup><mrow>#1</mrow><mrow>#@3</mrow></msup>"
@@ -406,6 +406,12 @@ var dictionary = {
     "priority": -10,
     "rule": {
       "2,3": "#1 \\mid #3"
+    },
+    "speech": {
+      "2,3": "#1 divides #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>|</mo>#3"
     }
   },
   "+-": {
@@ -429,318 +435,6 @@ var dictionary = {
     },
     "speech": {
       "2,3": "#1 plus-minus #3"
-    }
-  },
-  "alpha": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\alpha"
-    },
-    "speech": {
-      "1,1": " alpha "
-    },
-    "ruleML": {
-      "1,1": "<mi>α</mi>"
-    }
-  },
-  "beta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\beta "
-    },
-    "speech": {
-      "1,1": " beta "
-    },
-    "ruleML": {
-      "1,1": "<mi>β</mi>"
-    }
-  },
-  "gamma": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\gamma "
-    }
-  },
-  "Gamma": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Gamma "
-    },
-    "speech": {
-      "1,1": " Gamma "
-    },
-    "ruleML": {
-      "1,1": "<mi>Γ</mi>"
-    }
-  },
-  "delta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\delta"
-    }
-  },
-  "Delta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Delta"
-    }
-  },
-  "epsilon": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\epsilon"
-    }
-  },
-  "varepsilon": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\varepsilon"
-    }
-  },
-  "zeta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\zeta"
-    }
-  },
-  "eta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\eta"
-    }
-  },
-  "theta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\theta"
-    }
-  },
-  "Theta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Theta"
-    }
-  },
-  "vartheta": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\vartheta"
-    }
-  },
-  "iota": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\iota"
-    }
-  },
-  "kappa": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\kappa"
-    }
-  },
-  "lambda": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\lambda"
-    }
-  },
-  "Lamda": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Lamda"
-    }
-  },
-  "mu": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\mu"
-    }
-  },
-  "nu": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\nu"
-    }
-  },
-  "xi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\xi"
-    }
-  },
-  "Xi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Xi"
-    }
-  },
-  "pi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\pi "
-    },
-    "speech": {
-      "1,1": " pi " 
-    },
-    "ruleML": { 
-      "1,1": "<mi>&pi;</mi>"
-    } 
-  },
-  "Pi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Pi"
-    }
-  },
-  "rho": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\rho"
-    }
-  },
-  "sigma": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\sigma"
-    }
-  },
-  "Sigma": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Sigma"
-    }
-  },
-  "tau": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\tau"
-    }
-  },
-  "upsilon": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\upsilon"
-    }
-  },
-  "phi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\phi"
-    }
-  },
-  "Phi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Phi"
-    }
-  },
-  "varphi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\varphi"
-    }
-  },
-  "chi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\chi"
-    }
-  },
-  "psi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\psi"
-    }
-  },
-  "Psi": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Psi"
-    }
-  },
-  "omega": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\omega"
-    }
-  },
-  "Omega": {
-    "alternative": [],
-    "type": "symbol",
-    "priority": -1,
-    "rule": {
-      "1,1": "\\Omega"
     }
   },
   "del": {
@@ -782,7 +476,7 @@ var dictionary = {
       "ÎÞÇî´ó"
     ],
     "alternative": [
-      "infty",
+      "infinity",
       "oo",
       "ÎÞÇî´ó"
     ],
@@ -792,11 +486,11 @@ var dictionary = {
       "1,1": "\\infty"
     },
     "speech": {
-      "1,1": "infinity"
+      "1,1": " infinity "
     },
     "ruleML": {
       "1,1": "<mi>∞</mi>"
-    },
+    }
   },
   "aleph": {
     "alternative": [],
@@ -804,6 +498,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\aleph"
+    },
+    "speech": {
+      "1,1": " aleph "
+    },
+    "ruleML": {
+      "1,1": "<mi>א</mi>"
     }
   },
   ":.": {
@@ -1266,7 +966,7 @@ var dictionary = {
       "1,2": "\\frac{#2@1}{#2@-1}"
     }
   },
-  "sum": {
+  "summm": {
     "comment": [
       "×ÜºÍ",
       "ÇóºÍ"
@@ -1310,7 +1010,8 @@ var dictionary = {
     "priority": 55,
     "offpair": {
       "1,2": [ 2 ],
-      "1,3": [ 2, 3 ]
+ //     "1,3": [ 2, 3 ]
+      "1,3": [ 2 ]
     },
     "extraArgument": 1,
     "rule": {
@@ -1319,11 +1020,11 @@ var dictionary = {
     },
     "speech": {
       "1,2": "#2",
-      "1,3": "#2 argument #3 endargument "
+      "1,3": "#2 #3 "
     },
     "ruleML": {
       "1,2": "#2",
-      "1,3": "<mrow>#2<mrow>#3</mrow></mrow>"
+      "1,3": "#2<mrow>#3</mrow>"
     }
   },
   "limsop": {  // large operators with lower ad upper limits, such as \sum and \prod, but not integrals
@@ -1333,14 +1034,14 @@ var dictionary = {
     "offpair": {
       "1,3": [ 2, 3 ],  // lower limit
       "1,4": [ 1, 2, 3, 4 ],  //lower and upper lim
-      "1,5": [ 1, 2, 3, 4, 5 ]  // op, lower lim, upper lim, summand
+      "1,5": [ 1, 2, 3, 4, 5 ]  // op, lower lim, upper lim, summand ???
     },
     "extraArgument": 2,
     "rule": {
       "1,4": "#2_{#3}^{#4}"
     },
     "speech": {
-      "1,4": " #2 from #3 to #4 "
+      "1,4": " #2 from #3 to #4 of "
     },
     "ruleML": {
       "1,4": "<munderover>#2<mrow>#3</mrow><mrow>#4</mrow></munderover>"
@@ -1352,28 +1053,35 @@ var dictionary = {
     "type": "function",
     "priority": 55,
     "offpair": {
-      "1,3": [ 2, 3 ]  // lower limit
+      "1,3": [ 2, 3 ],  // lower limit
+// experiment      "1,4": [ 2, 3, 4 ]  // lower limit and argument
     },
     "extraArgument": 1,
     "rule": {
-      "1,3": "#2_{#3}"
+      "1,3": "#2_{#3}",
+// experiment      "1,4": "#2_{#3} #4"
     },
     "speech": {
-      "1,3": " #2 over #3 "
+      "1,3": " #2 over #3 of ",
+ // experiment     "1,4": " #2 over #3 of #4 "
     },
     "ruleML": {
-      "1,3": "<munder><mo>#2</mo><mrow>#3</mrow></munder>"
+      "1,3": "<munder><mo>#2</mo><mrow>#3</mrow></munder>",
+// experiment      "1,4": "<munder><mo>#2</mo><mrow>#3</mrow></munder>#4"
     }
   },
   "bigop": {  // large operators with no limits, such as \sum and \prod, but not integrals
     "alternative": [ ],
     "type": "function",
     "priority": 55,
+    "offpair": {
+      "1,2": [ 2 ],
+    },
     "rule": {
       "1,2": " #2 "
     },
     "speech": {
-      "1,2": " #2 "
+      "1,2": " #2 of"
     },
     "ruleML": {
       "1,2": "<mo>#2</mo>"   // how to say it is big?
@@ -1397,7 +1105,7 @@ var dictionary = {
       "1,6": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mi>d</mi>#6</mrow>",
     }
    },
-    "intlimsweight": {  // various integrals
+   "intlimsweight": {  // various integrals
     "alternative": [ ],
     "type": "function",
     "priority": 55,
@@ -1432,7 +1140,7 @@ var dictionary = {
     "ruleML": {
       "1,6": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mfrac><mrow><mi>d</mi>#5</mrow><mrow>#6</mrow></mfrac></mrow>"
      }
-    },
+   },
     "intllim": {  // various integrals
     "alternative": [ ],
     "type": "function",
@@ -1638,20 +1346,20 @@ var dictionary = {
       "2,3": "<mrow>#1<mo intent=\"dot-product\">&#x22C5;</mo>#3</mrow>"
     }
   },
-//  "prod": {   // conflict with \prod_p L_p(s^{-s})
-//    "alternative": [],
-//    "type": "operator",
-//    "priority": 25,
-//    "rule": {
-//      "2,3": "#1 \\times #3"
-//    },
-//    "speech": {
-//      "2,3": "product of #1 and #3"
-//    },
-//    "ruleML": {
-//      "2,3": "<mrow>#1<mo intent=\"direct-product\">×</mo>#3</mrow>"
-//    }
-//  },
+  "product": {   // partial conflict with \prod_p L_p(s^{-s})
+    "alternative": [],
+    "type": "operator",
+    "priority": 25,
+    "rule": {
+      "2,3": "#1 \\times #3"
+    },
+    "speech": {
+      "2,3": " #1 product #3 "
+    },
+    "ruleML": {
+      "2,3": "<mrow>#1<mo intent=\"direct-product\">×</mo>#3</mrow>"
+    }
+  },
   "times": {
     "alternative": ["×"],
     "type": "operator",
@@ -1918,26 +1626,26 @@ var dictionary = {
     "changeLineTurn": ",",
     "note": "\\systeme"
   },
-  "ge": {
-    "alternative": [
-      ">="
-    ],
-    "type": "relation",
-    "priority": 0,
-    "rule": {
-      "2,3": "#1 \\ge #3"
-    }
-  },
-  "le": {
-    "alternative": [
-      "<="
-    ],
-    "type": "relation",
-    "priority": 0,
-    "rule": {
-      "2,3": "#1 \\le #3"
-    }
-  },
+//  "ge": {
+//    "alternative": [
+//      ">="
+//    ],
+//    "type": "relation",
+//    "priority": 0,
+//    "rule": {
+//      "2,3": "#1 \\ge #3"
+//    }
+//  },
+//  "le": {
+//    "alternative": [
+//      "<="
+//    ],
+//    "type": "relation",
+//    "priority": 0,
+//    "rule": {
+//      "2,3": "#1 \\le #3"
+//    }
+//  },
   "hat": {
     "alternative": [],
     "type": "function",
@@ -2040,6 +1748,76 @@ var symbolswithlimits = {
     "prod": "∏"
 }
 
+var greedyfunctions = ["log", "ln", "lg", "abs", "det", "order", "card", "len", "length"];
+
 // need to generate this automatically from: integrals, symbolswithlimits, ???
 
 var operatorsymbols = [ "∑","⋃","⋂","⨁","⨂","∐","∏","∮","∭","∬","∫","∰","∯","∮"];
+
+var greekletters = [["α","alpha"],
+["β","beta"],
+["γ","gamma"],
+["δ","delta"],
+["ε","varepsilon"],
+["ϵ","epsilon"],
+["ζ","zeta"],
+["η","eta"],
+["θ","theta"],
+["ι","iota"],
+["κ","kappa"],
+["λ","lambda"],
+["μ","mu"],
+["ν","nu"],
+["ξ","xi"],
+["ο","omicron"],
+["π","pi"],
+["ρ","rho"],
+["σ","sigma"],
+["τ","tau"],
+["υ","upsilon"],
+["ϕ","phi"],
+["φ","varphi"],
+["χ","chi"],
+["ψ","psi"],
+["ω","omega"],
+["Α","Alpha"],
+["Β","Beta"],
+["Γ","Gamma"],
+["Δ","Delta"],
+["Ε","Epsilon"],
+["Ζ","Zeta"],
+["Η","Eta"],
+["Θ","Theta"],
+["Ι","Iota"],
+["Κ","Kappa"],
+["Λ","Lambda"],
+["Μ","Mu"],
+["Ν","Nu"],
+["Ξ","Xi"],
+["Ο","Omicron"],
+["Π","Pi"],
+["Ρ","Rho"],
+["Σ","Sigma"],
+["Τ","Tau"],
+["Υ","Upsilon"],
+["Φ","Phi"],
+["Χ","Chi"],
+["Ψ","Psi"],
+["Ω","Omega"]];
+
+for (const letterpair of greekletters) {
+  dictionary[letterpair[1]] = {
+    "alternative": [],
+    "type": "symbol",
+    "priority": -1,
+    "rule": {
+      "1,1": "\\" + letterpair[1]
+    },
+    "speech": {
+      "1,1": " " + letterpair[1] + " "
+    },
+    "ruleML": {
+      "1,1": "<mi>" + letterpair[0] + "</mi>"
+    }
+  }
+}

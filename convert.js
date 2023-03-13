@@ -8,7 +8,7 @@ Description: the major abstract function which takes the user input and return t
 2022.10.26 add conversiontype to support both cases
 */
 function convert(str,conversiontype) {
-  str = trimSpaces(str); //trim down all multiple spaces into one space
+// why did we need that?   str = trimSpaces(str); //trim down all multiple spaces into one space
 
   str = preprocess(str);
 
@@ -39,6 +39,8 @@ console.log("   in convert, str = ", str);
   if(conversiontype == "SpaceMath2speech") {
       str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
       str = str.replace(/\\,/g, " ");
+      str = str.replace(/∏/g, "product");
+      str = str.replace(/∑/g, "sum");
   } else if(conversiontype == "SpaceMath2MathML") {
   //    str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "\n<math>$2</math>\n");
       str = str.replace(/(^| )\$\$(.+?)\$\$( |$)/g, "\n<math display=\"block\">$2</math>\n");
@@ -51,6 +53,9 @@ console.log("   in convert, str = ", str);
   }
 console.log("str was", str);
   str = simplify(str)
+  str = str.replace(/<mrow>/g, "\n<mrow>");
+  str = str.replace(/<\/mrow>/g, "</mrow>\n");
+  str = str.replace(/\n+/g, "\n");
   return str
 }
 
