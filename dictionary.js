@@ -57,11 +57,8 @@ var dictionary = {
     } 
   },
   "😑": {
-    "comment": [
-      "¼õ"
-    ],
-    "alternative": [
-    ],
+    "comment": [ ],
+    "alternative": [ ],
     "type": "function",
     "priority": 91,
     "rule": {
@@ -74,6 +71,21 @@ var dictionary = {
     "speech": {
       "1,2": " quantityN negative #2 Nendquantity "
     } 
+  },
+  "⚡": {
+    "comment": [ ],
+    "alternative": [ ],
+    "type": "operator",
+    "priority": 20,
+    "rule": {
+      "2,3": "#1 #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>&ApplyFunction;</mo>#3"
+    },
+    "speech": {
+      "2,3": "#1 of #3"
+    }
   },
   "*": {
     "comment": [
@@ -1124,7 +1136,7 @@ var dictionary = {
       "1,4": "#2_{#3}^{#4}"
     },
     "speech": {
-      "1,4": " #2 from #3 to #4 of "
+      "1,4": " #2 from #3 to #4 "
     },
     "ruleML": {
       "1,4": "<munderover>#2<mrow>#3</mrow><mrow>#4</mrow></munderover>"
@@ -1145,7 +1157,7 @@ var dictionary = {
 // experiment      "1,4": "#2_{#3} #4"
     },
     "speech": {
-      "1,3": " #2 over #3 of ",
+      "1,3": " #2 over #3 ",
  // experiment     "1,4": " #2 over #3 of #4 "
     },
     "ruleML": {
@@ -1164,7 +1176,7 @@ var dictionary = {
       "1,2": " #2 "
     },
     "speech": {
-      "1,2": " #2 of"
+      "1,2": " #2 "
     },
     "ruleML": {
       "1,2": "<mo>#2</mo>"   // how to say it is big?
