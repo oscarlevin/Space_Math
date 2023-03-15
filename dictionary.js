@@ -56,7 +56,7 @@ var dictionary = {
       "2,3": "#1 star #3"
     } 
   },
-  "😑": {
+  "😑": {    // used for "negative", as distinct from subtraction
     "comment": [ ],
     "alternative": [ ],
     "type": "function",
@@ -72,7 +72,7 @@ var dictionary = {
       "1,2": " quantityN negative #2 Nendquantity "
     } 
   },
-  "⚡": {
+  "⚡": {   // funciton application 
     "comment": [ ],
     "alternative": [ ],
     "type": "operator",

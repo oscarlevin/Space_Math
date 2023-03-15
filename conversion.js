@@ -382,9 +382,9 @@ console.log("looking for limits: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;  // hack to be partially backward compatible with TeX
 // the lower and upper limits might be in parentheses.  We handle these awkwardly
-         var regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^() ]+)\\)\\^\\(([^()]+)\\) ?(.*?) d([a-z]+)";
-         var regExStr = regExStrStub + "( |\\$)";
-         var regExStrWeight = regExStrStub + "/([^ $]+)" + "( |\\$)";
+         var regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^() ]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
+         var regExStr = regExStrStub + " d([a-z]+)" + "( |\\$)";
+         var regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          var regExWeight = new RegExp(regExStrWeight, "g");
@@ -393,9 +393,9 @@ console.log("regExStrWeight", regExStrWeight);
          str = str.replace(regEx, '$1wrapper(intlims(' + symbol + ')($2)($3)($4)($5))$6');
 
          // case of no () around limits
-         regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?) d([a-z]+)";
-         regExStr = regExStrStub + "( |\\$)";
-         regExStrWeight = regExStrStub + "/([^ $]+)" + "( |\\$)";
+         regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?)";
+         regExStr = regExStrStub + " d([a-z]+)" + "( |\\$)";
+         regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          regExWeight = new RegExp(regExStrWeight, "g");
