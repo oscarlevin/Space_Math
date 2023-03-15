@@ -42,7 +42,16 @@ console.log("fullStr", fullStr);
                     if (rpos != -1){ 
                         let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
                         currentNode.value = "";
-                        let qNode = new TreeNode(0,"\\text{"+children[1]+"}",null,null, conversiontype);
+                       
+                        let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\",null,null, conversiontype);
+                        // it is a bad sign that this is the only place where conversiontype is used in this function
+                        // what will we do when we combine all the conversion methods?
+                        if(conversiontype == "SpaceMath2MathML") {
+                            qNode = new TreeNode(0,"<mspace width=\"0.5em\"/></mspace><mtext>"+children[1]+"</mtext><mspace width=\"0.5em\"/></mspace>",null,null, conversiontype);
+                        } else if(conversiontype == "SpaceMath2speech") {
+                            qNode = new TreeNode(0,"text "+children[1]+" endtext",null,null, conversiontype);
+                        }
+
                         qNode = combinePrev(children[0],qNode, conversiontype); // there are something before the pair, consider multiplication/compositio
                         stackedTreeNode = stackNode(stackedTreeNode, qNode, conversiontype); // put the symbol node on the stack
 

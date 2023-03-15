@@ -165,6 +165,8 @@ console.log("markAtomicItem of", ans, "endans", symbolQ(str));
       ans = ans.replace(/(.)/g, "<mi>$1</mi>");
     } else if(operatorsymbols.includes(str)) {
       ans = "<mo>"+ans+"</mo>"
+    } else if(str.includes("mtext")) {  // probably text in math
+      // do nothing
     } else {
       ans = "<unknown>"+ans+"</unknown>"
     }
@@ -241,12 +243,20 @@ console.log("after preprocessarithmetic", str);
 //    str = preprocessintegrals(str);
 //    str = preprocesslargeoperators(str);
 
+console.log("before other", str);
+    str = preprocessother(str);
+console.log("after other", str);
+
     return str
 }
 
 function preprocessarithmetic(rawstring) {
     let str = rawstring;
 
+    str = str.replace(/-->/g, 'longrightarrow');
+    str = str.replace(/->/g, 'to');
+    str = str.replace(/<--/g, 'longleftarrow');
+    str = str.replace(/<-/g, 'from');
     str = str.replace(/(\$| |\(|\^|_)-([^ ])/g, '$1😑$2');  // negative sign
     str = str.replace(/(^|\$|\() *-/, '$1😑');  // negative sign
 
@@ -307,7 +317,7 @@ function preprocessparentheses(rawstring) {
     let str = rawstring;
 
     str = str.replace(/(\$| )\(([^,()]+)\, +([^,()]+)\)/g, '$1($2) oointerval ($3)');  //open interval
-    str = str.replace(/(\$| )gcd\( *([^,()]+)\, *([^,()]+) *\)/g, '$1($2) gcd ($3)');
+    str = str.replace(/(\$| )gcd\( *([^,()]+)\, *([^,()]+) *\)/g, '$1($2) innergcd ($3)');
     str = str.replace(/(\$| )\( ([^,()]+)\, *([^,()]+) \)/g, '$1($2) gcd ($3)');
     str = str.replace(/(\$| )\(([^ ][^,()]*)\,([^ ][^,()]*)\)/g, '$1($2) cartesianpoint ($3)');
 
@@ -326,8 +336,8 @@ function preprocessbrackets(rawstring) {
     str = str.replace(/(\$| )< ([^<>|]+) >/g, '$1span($2)');
 console.log("did we find span?", str);
     str = str.replace(/(\$| )<([^<>|]+) \| ([^<>|]+)>/g, '$1($2) grouppresentation ($3)');
-    str = str.replace(/(\$| ){([^{}|]+) \| ([^{}|]+)}/g, '$1($2) setbuilder ($3)');
-    str = str.replace(/(\$| ){([^{}]+)}/g, 'setof($2)');
+    str = str.replace(/(\$| |\(){([^{}|]+) \| ([^{}|]+)}/g, '$1($2) setbuilder ($3)');
+    str = str.replace(/(\$| ){([^{}]+)}/g, '$1setof($2)');
     str = str.replace(/(\$| )<([^,<>|]+)\|([^,<>|]+)>/g, '$1($2) braket ($3)');
     str = str.replace(/(\$| )<([^,<>]+)\, ([^,<>]+)>/g, '$1($2) twovector ($3)');
 console.log("looking for vector", str);
@@ -433,6 +443,18 @@ console.log("regExStr", regExStr);
          str = str.replace(regEx, '$1opwrap(bigop(' + symbol + '))$2');
       }
     }
+
+    return str
+}
+
+function preprocessother(rawstring) {
+    let str = rawstring;
+
+    str = str.replace(/([^ \$\(\)\[\]\{\}]+):([^ ]+) to ([^ \$\(\)\[\]\{\}]+)/g,
+               "fundef($1)($2)($3)");
+    str = str.replace(/([^\$\|]+) cong(ruent)* ([^\$]+) mod ([^\$\{\}]+)/g,  // note: assumes an isolated equation
+                                                   // or maybe a condition in set builder
+               "congruentmod($1)($3)($4)");
 
     return str
 }

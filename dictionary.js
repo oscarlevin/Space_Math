@@ -411,7 +411,7 @@ var dictionary = {
       "2,3": "#1 divides #3"
     },
     "ruleML": {
-      "2,3": "#1<mo>|</mo>#3"
+      "2,3": "#1<mo intent=\"divides\">|</mo>#3"
     }
   },
   "+-": {
@@ -729,6 +729,25 @@ var dictionary = {
       "1,2": "<msqrt><mrow>#2</mrow></msqrt>"
     } 
   },
+  "gcd": {
+    "alternative": [],
+    "type": "function",
+    "priority": 55,    
+    "offpair": {
+      "1,2": [
+        2
+      ]
+    },
+    "rule": {
+      "1,2": "\\gcd(#2)"
+    },
+    "speech": {
+      "1,2": " gcd of quantityZ #2 Zendquantity "
+    },
+    "ruleML": {
+      "1,2": "<mi>gcd</mi><mo>&ApplyFunction;</mo>(#2)"
+    } 
+  },
   "cardinality": {
     "comment": [
       "»ùÊý"
@@ -803,6 +822,28 @@ var dictionary = {
       "1,2": "<mrow intent=\"determinant($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
     }
   },
+  "order": {  // for a group or group element
+    "comment": [       
+      "¾ø¶ÔÖµ"
+    ],
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [
+        2
+      ]
+    },
+    "rule": {
+      "1,2": "|#2|"
+    },
+    "speech": {
+      "1,2": " order of #2 "
+    },
+    "ruleML": {
+      "1,2": "<mrow intent=\"order($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
+    }
+  },
  "span": {
     "comment": [],
     "alternative": [],
@@ -868,19 +909,19 @@ var dictionary = {
     "alternative": [],
     "type": "function",
     "priority": 55,
-    "rule": {
-      "1,2": "\\{#2\\}"
-    },
-    "offpair": {  // what does that mean?
+    "offpair": {
       "1,2": [
         2
       ]
+    },
+    "rule": {
+      "1,2": "\\{#2\\}"
     },
     "speech": {
       "1,2": "set #2"
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"set($x)\"><mo>{</mo><wrap arg=\"x\">#2</wrap><mo>}</mo></mrow>"
+      "1,2": "<mrow intent=\"set($x)\"><mo>{</mo><mrow arg=\"x\">#2</mrow><mo>}</mo></mrow>"
     }
   },
   "floor": {
@@ -894,6 +935,12 @@ var dictionary = {
     },
     "rule": {
       "1,2": "\\lfloor #2 \\rfloor"
+    },
+    "speech": {
+      "1,2": "floor of #2 endfloor"
+    },
+    "ruleML": {
+      "1,2": "<mrow intent=\"floor($x)\"><mo>⌊</mo><mrow arg=\"x\">#2</mrow><mo>⌋</mo></mrow>"
     }
   },
   "ceiling": {
@@ -987,6 +1034,42 @@ var dictionary = {
       "1,2": "\\sum{#2}"
     }
   },
+  "fundef": {  // as in   f : a -> b
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,4": [ 1, 2, 3, 4 ]
+    },
+    "extraArgument": 2,
+    "rule": {
+      "1,4": "#2\\,:\\, #3 \to #4"
+    },
+    "speech": {
+      "1,4": "function #2 from #3 to #4 "
+    },
+    "ruleML": {
+      "1,4": "<mrow>#2<mo>:</mo>#3<mo>→</mo>#4</mrow>"
+    }
+  },
+  "congruentmod": {  // as in   a \equiv b (mod c)
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,4": [ 1, 2, 3, 4 ]
+    },
+    "extraArgument": 2,
+    "rule": { 
+      "1,4": "#2\\equiv #3 \\pmod  #4"
+    },
+    "speech": {
+      "1,4": "#2 congruent to #3 modulo #4 "
+    },
+    "ruleML": { 
+      "1,4": "<mrow>#2<mo>≡</mo>#3<mspace width=\"0.5em\"></mspace><mo>(</mo><mi>mod</mi><mspace width=\"0.25em\"></mspace>#4<mo>)</mo></mrow>"
+    } 
+  },  
   "wrapper": {  // a trick to group quantities without adding parentheses
     "alternative": [ ],
     "type": "function",
@@ -1013,7 +1096,7 @@ var dictionary = {
  //     "1,3": [ 2, 3 ]
       "1,3": [ 2 ]
     },
-    "extraArgument": 1,
+//    "extraArgument": 1,
     "rule": {
       "1,2": " #2 ",
       "1,3": " #2{#3}"
@@ -1417,7 +1500,7 @@ var dictionary = {
       "2,3": "<mrow intent=\"open-interval($x, $y)\"><mo>(</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>)</mo></mrow>"
     }
   },  
-  "gcd": {
+  "innergcd": {
     "alternative": [ ],
     "type": "operator",
     "delimitedarguments": true,   // omit the temporary () around the input arguments
@@ -1504,7 +1587,7 @@ var dictionary = {
       "2,3": " set of #1 such that #3 endset "
     },
     "ruleML": {
-      "2,3": "<mrow intent=\"set-such-that($x, $y)\"><mo>{</mo><wrap arg=\"x\">#1</wrap><mo>|</mo><wrap arg=\"y\">#3</wrap><mo>}</mo></mrow>"
+      "2,3": "<mrow intent=\"set-such-that($x, $y)\"><mo>{</mo><mrow arg=\"x\">#1</mrow><mo>|</mo><mrow arg=\"y\">#3</mrow><mo>}</mo></mrow>"
     }
   }, 
   "braket": {
@@ -1539,7 +1622,7 @@ var dictionary = {
     }
   },
   "to": {
-    "alternative": [],
+    "alternative": [ "->" , "rightarrow"],  // -> and similar below are intercepted by the preprocessor
     "type": "operator",
     "priority": 20,
     "rule": {
@@ -1550,6 +1633,48 @@ var dictionary = {
     },
     "ruleML": {
       "2,3": "#1<mo>→</mo>#3"
+    }
+  },
+  "longrightarrow": {
+    "alternative": [ "-->" ],
+    "type": "operator",
+    "priority": 20,
+    "rule": {
+      "2,3": "#1 \\longrightarrow #3"
+    },
+    "speech": {
+      "2,3": " #1 long-to #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo>⟶</mo>#3"
+    } 
+  },
+  "from": {
+    "alternative": [ "<-" , "leftarrow"],
+    "type": "operator",
+    "priority": 20,
+    "rule": {
+      "2,3": "#1 \\leftarrow #3"
+    },
+    "speech": {
+      "2,3": " #1 from #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo>←</mo>#3"
+    } 
+  },
+  "longleftarrow": {
+    "alternative": [ "<--" ],
+    "type": "operator",
+    "priority": 20,
+    "rule": {
+      "2,3": "#1 \\longleftarrow #3"
+    },
+    "speech": {
+      "2,3": " #1 long-from #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo>⟵</mo>#3"
     }
   },
   "mapsto": {
@@ -1581,9 +1706,21 @@ var dictionary = {
     }
   },
   "equiv": {
-    "alternative": [
-      "equivalent", "identical"
-    ],
+    "alternative": [ "equivalent", ],
+    "type": "relation",
+    "priority": 0,
+    "rule": {
+      "2,3": "#1 \\equiv #3"
+    },
+    "speech": {
+      "2,3": " #1 equivalent to #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo intent=\"equivalent\">≡</mo>#3"
+    }
+  },
+  "identical": {
+    "alternative": [ ],
     "type": "relation",
     "priority": 0,
     "rule": {
@@ -1594,7 +1731,7 @@ var dictionary = {
     },
     "ruleML": {
       "2,3": "#1<mo intent=\"identical\">≡</mo>#3"
-    }
+    } 
   },
   "cases:": {
     "alternative": [],
@@ -1748,7 +1885,15 @@ var symbolswithlimits = {
     "prod": "∏"
 }
 
-var greedyfunctions = ["log", "ln", "lg", "abs", "det", "order", "card", "len", "length"];
+var charactersymbols = [
+    ["cent", "¢"],
+    ["dollar", "$"],
+    ["pound", "£"],
+    ["euro", "€"]
+]
+
+var greedyfunctions = ["log", "ln", "lg", "abs", "det", "order", "card", "len", "length",
+                       "floor", "ceil", "ceiling"];
 
 // need to generate this automatically from: integrals, symbolswithlimits, ???
 
@@ -1821,3 +1966,21 @@ for (const letterpair of greekletters) {
     }
   }
 }
+
+for (const letterpair of charactersymbols) {
+  dictionary[letterpair[0]] = {
+    "alternative": [],
+    "type": "symbol",
+    "priority": -1,
+    "rule": {
+      "1,1": "\\" + letterpair[0]
+    },
+    "speech": {
+      "1,1": " " + letterpair[0] + " "
+    },
+    "ruleML": {
+      "1,1": "<mi>" + letterpair[1] + "</mi>"
+    }
+  }
+}
+

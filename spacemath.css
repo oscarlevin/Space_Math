@@ -13,7 +13,7 @@ h1 {
 #speechTextArea {
     padding-top: 1em;
     width: 50em;
-    height: 3em;
+    min-height: 3em;
 }
 #speechTextArea em {
     background: #ff9;
