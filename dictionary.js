@@ -1438,7 +1438,7 @@ var dictionary = {
       "2,3": "#1 dot #3"
     },
     "ruleML": {
-      "2,3": "<mrow>#1<mo intent=\"dot-product\">&#x22C5;</mo>#3</mrow>"
+      "2,3": "<mrow>#1<mo intent=\"dot-product\">⋅</mo>#3</mrow>"
     }
   },
   "product": {   // partial conflict with \prod_p L_p(s^{-s})
@@ -1809,10 +1809,7 @@ var dictionary = {
     }
   },
   "overline": {
-    "alternative": [
-      "conj",
-      "conjugate"
-    ],
+    "alternative": [ "bar" ],
     "type": "function",
     "priority": 55,
     "offpair": {
@@ -1822,6 +1819,31 @@ var dictionary = {
     },
     "rule": {
       "1,2": "\\overline{#2}"
+    },
+    "speech": {
+      "1,2": " #2 bar "
+    },
+    "ruleML": {
+      "1,2": "<mover>#2<mo accent=\"true\">―</mo></mover>"
+    }
+  },
+  "conj": {
+    "alternative": [ "conjugate" ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [
+        2
+      ]
+    },
+    "rule": {
+      "1,2": "\\overline{#2}"
+    },
+    "speech": {
+      "1,2": " #2 conjugate "
+    },
+    "ruleML": {
+      "1,2": "<mover intent=\"conjugate($x)\"><wrap arg=\"x\">#2</wrap><mo accent=\"true\">-</mo></mover>"
     }
   },
   "underline": {
@@ -1911,6 +1933,23 @@ var greedyfunctions = ["log", "ln", "lg", "abs", "det", "order", "card", "len", 
 
 var operatorsymbols = [ "∑","⋃","⋂","⨁","⨂","∐","∏","∮","∭","∬","∫","∰","∯","∮"];
 
+var triglikefunctions = [["sin","sine"],
+["cos","cosine"],
+["tan","tangent"],
+["cot","cotgent"],
+["sec","secant"],
+["csc","cosecant"],
+["arcsin","arcsine"],
+["arccos","arccosine"],
+["arctan","arctangent"],
+["arccot","arccotgent"],
+["arcsec","arcsecant"],
+["arccsc","arccosecant"],
+["sinh","sinch"],
+["cosh","cosh"],
+["tanh","tanch"]
+];
+
 var greekletters = [["α","alpha"],
 ["β","beta"],
 ["γ","gamma"],
@@ -1961,6 +2000,23 @@ var greekletters = [["α","alpha"],
 ["Χ","Chi"],
 ["Ψ","Psi"],
 ["Ω","Omega"]];
+
+for (const letterpair of triglikefunctions) {
+  dictionary[letterpair[0]] = {
+    "alternative": [ ],
+    "type": "function",
+    "priority": 15,
+    "rule": {
+      "1,2": "\\" + letterpair[0] + " #2"
+    },
+    "speech": {
+      "1,2": letterpair[1] + " #2"
+    },
+    "ruleML": {
+      "1,2": "<mi>" + letterpair[0] + "</mi><mo>&ApplyFunction;</mo>#2"
+    } 
+  }
+}
 
 for (const letterpair of greekletters) {
   dictionary[letterpair[1]] = {

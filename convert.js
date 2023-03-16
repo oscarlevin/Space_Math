@@ -55,8 +55,8 @@ console.log("   in convert, str = ", str);
   }
 console.log("str was", str);
   str = simplify(str)
-  str = str.replace(/<mrow>/g, "\n<mrow>");
-  str = str.replace(/<\/mrow>/g, "</mrow>\n");
+//  str = str.replace(/<mrow>/g, "\n<mrow>");
+//  str = str.replace(/<\/mrow>/g, "</mrow>\n");
   str = str.replace(/\n+/g, "\n");
   return str
 }
