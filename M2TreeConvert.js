@@ -26,6 +26,7 @@ function M2TreeConvert(str,params, conversiontype){
     while (inLoop){
         let fullStr = currentNode.value;
 // why are we trimming here?  when is it right to throw away a space?
+// (we do, or should, trim before first calling M2TreeConvert)
 // This was causing an important space to be lost with $Gamma (x)$
 //        fullStr = fullStr.trim();
 console.log("fullStr", "X"+fullStr+"X");

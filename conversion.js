@@ -323,15 +323,27 @@ console.log("after exponents once ", str);
     str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
 console.log("after exponents twice", str);
     str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_($1)');  // subscript
+    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_($1)');  // subscript
+console.log("after subscript twice", str);
 
 console.log("after sub and sup grouping", str);
 
     str = str.replace(/([0-9])([\(\[\{])/g, '$1 $2'); // implied multiplication number times group
 
 //  having )( is not always multiplication:  J_(0)(x)
+//  these substitution are too simplistic, because there can be () in the sub/superscript
     str = str.replace(/(_\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // subscripted function application
     str = str.replace(/(\^\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // superscripted function application
-    str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
+// twice, because we have not separated the math part
+    str = str.replace(/(_\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // subscripted function application
+    str = str.replace(/(\^\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // superscripted function application
+// this is a bad hack, because it is specific do doubly wrapped sub- or superscripts.
+// need to go back and properly parse complicated sub- abd super
+    str = str.replace(/(_\(\([^\(\)]+)\)\)\(/g, '$1)) ⚡ ('); // subscripted (()) function application
+    str = str.replace(/(\^\(\([^\(\)]+)\)\)\(/g, '$1)) ⚡ ('); // superscripted (()) function application
+
+// separatnig )( caused problems, so maybe need another way to recognize it as implies multiplication
+//    str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
 
     return str
 }
