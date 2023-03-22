@@ -970,7 +970,39 @@ var dictionary = {
       "1,2": "\\lceiling #2 \\rceiling"
     }
   },
-  "sin": {
+  "log": {   // delete this and cos because handled as a category
+    "alternative": [
+      "log"
+    ],
+    "type": "function",
+    "priority": 15,
+    "rule": {
+      "1,2": "\\log #2"
+    },
+    "speech": {
+      "1,2": "log #2"
+    },
+    "ruleML": {
+      "1,2": "<mi>log</mi><mo>&ApplyFunction;</mo>#2"
+    } 
+  },
+  "ln": {   // delete this and cos because handled as a category
+    "alternative": [
+      "ln"
+    ],
+    "type": "function",
+    "priority": 15,
+    "rule": {
+      "1,2": "\\ln #2"
+    },
+    "speech": {
+      "1,2": "natural log #2"
+    },
+    "ruleML": {
+      "1,2": "<mi>ln</mi><mo>&ApplyFunction;</mo>#2"
+    }
+  },
+  "sin": {   // delete this and cos because handled as a category
     "alternative": [
       "sine"
     ],
@@ -2021,7 +2053,8 @@ for (const letterpair of triglikefunctions) {
 for (const letterpair of greekletters) {
   dictionary[letterpair[1]] = {
     "alternative": [],
-    "type": "symbol",
+//    "type": "symbol",
+    "type": "letter",
     "priority": -1,
     "rule": {
       "1,1": "\\" + letterpair[1]

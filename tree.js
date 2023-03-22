@@ -512,7 +512,7 @@ function printTree(node, indentationlevel) {
       console.log("printTree of", node);
       if(!node) { return "" }
   //    let nodeleveldata = indentationlevel + "[" + (node.key || "null").replace(" ","␣") + "]   " + (node.value || "null").replace(" ","␣")
-      let nodeleveldata = indentationlevel + "[" + visStr(node.key) + "]   " + visStr(node.value)
+      let nodeleveldata = indentationlevel + "[" + visStr(node.key) + "]   |" + visStr(node.value) + "|"
       if(node.pair.length) { nodeleveldata += "    " + node.pair[0] + " " + node.pair.length}
       if(node.children.length == 0) { nodeleveldata += "    leaf" }
       nodeleveldata += "\n"

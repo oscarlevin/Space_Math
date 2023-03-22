@@ -25,8 +25,10 @@ function M2TreeConvert(str,params, conversiontype){
 
     while (inLoop){
         let fullStr = currentNode.value;
-        fullStr = fullStr.trim();
-console.log("fullStr", fullStr);
+// why are we trimming here?  when is it right to throw away a space?
+// This was causing an important space to be lost with $Gamma (x)$
+//        fullStr = fullStr.trim();
+console.log("fullStr", "X"+fullStr+"X");
         let startKey = 0; // denote start of keyword
         let startCounter = 0; //start of string which may contain keyword
         let counter = 0;
@@ -38,6 +40,7 @@ console.log("fullStr", fullStr);
             let breakSearch = false;
             for (let quote of [["\"","\""],["\'","\'"]]){
                 if (char == quote[0]){
+console.log("found a quote");
                     let rpos = findPositionOfRightPair(fullStr,counter,quote[0],quote[1],[[quote[0]]]);
                     if (rpos != -1){ 
                         let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
@@ -79,6 +82,7 @@ console.log("fullStr", fullStr);
             }
 
             if (isLeftPair(char)){
+console.log("apparently found a left of pair", char);
                 let rpos = findPositionOfRightParenthese(fullStr,counter);
                 if (rpos != -1){ 
                     let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
@@ -113,6 +117,7 @@ console.log("just made stackedTreeNode", stackedTreeNode);
             }
 
             if (char == "<" && fullStr[counter+1] != " "){
+console.log("looking fo an angle pair");
                 let rpos = findPositionOfRightAngle(fullStr,counter);
                 if (rpos != -1){ 
                     let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
@@ -141,21 +146,32 @@ console.log("just made stackedTreeNode", stackedTreeNode);
                     key = undefined;
                     keyType = undefined; //reset states;
                     endSearch = true;
+console.log("keyType", keyType);
                 }
             }
 
             let j = startCounter;
-            for (let j = startCounter; j <= counter; j++){
+console.log("j", j, "on", "X"+fullStr+"X");
+// this for loop seems to check of the string ends with a symbol name.
+// for example: breta matches br+eta.
+// is this an unwanted backward compatibility with AsciiMath?
+//   attempt to disable this feature, but recheck later
+      //      for (let j = startCounter; j <= startCounter; j++){
+            for (let j = startCounter; j <= counter; j++) {
+// do the g's in these matches actually do anything, since the match is on a single character?
+// if the user enters a greek letter, will this part fail?
                 if (fullStr[counter+1] && fullStr[counter].match(/[A-Za-z]/g) && fullStr[counter+1].match(/[A-Za-z]/g)){
                     continue; //we do not split keyword if it ends with letter and directly followed by letter
                 }
                 let subStr = fullStr.substring(j,counter+1);
                 let type = getType(fullStr,subStr,counter,stackedTreeNode);
-                if (type){
+console.log("subStr", subStr, "type", type);
+                if (type) {
                     key = subStr;
                     startKey = j;
                     keyType = type;
                     breakSearch = true;
+console.log("A keyType", keyType, "with key", "X"+key+"X");
                     break;
                 }
                 if (subStr == " " && (counter >= 1 || (currentNode.parent && currentNode.parent.children.length == 2 && currentNode.position == 1) || stackedTreeNode) && !containOperatorOrRelationPure(findNextWord(fullStr,counter))){
@@ -163,6 +179,7 @@ console.log("just made stackedTreeNode", stackedTreeNode);
                     startKey = j;
                     keyType = "space";
                     breakSearch = true;
+console.log("B keyType", keyType);
                     break;
                 }
             }
@@ -176,10 +193,13 @@ console.log("just made stackedTreeNode", stackedTreeNode);
                 }
             }
         }
+console.log("is there a"+ key + "key?");
         if (key){ // found a key in the value of the currentNode;
+console.log("yes, there is there a"+ key + "key");
             if (!dictionary[key] && key != " " && key !=""){
                 key = translateTable.getItem(key)// translate the key if it is not directly in the dictionary;
             }
+console.log("and now it is"+ key + "key of", keyType, "keyType");
             
             let splitStr;
             let leftNode;
@@ -366,13 +386,16 @@ console.log("just made stackedTreeNode", stackedTreeNode);
                     break;
                 case "postfix":   // such as "!" for factorial.
                 case "symbol": //symbols
+                case "letter":   // probably wrong
                     splitStr = [fullStr.substring(0,startKey), key, fullStr.substring(counter+1)];
+console.log("making a symbolNode with", splitStr);
                     let symbolNode = new TreeNode;
                     symbolNode.conversiontype = conversiontype;
                     symbolNode.value = "";
                     symbolNode.insert(key,key);
                     symbolNode = combinePrev(splitStr[0],symbolNode, conversiontype); // there are something before the pair, consider multiplication
                     stackedTreeNode = stackNode(stackedTreeNode, symbolNode, conversiontype); // put the symbol node on the stack
+console.log("now have stackedTreeNode", stackedTreeNode);
 
                     if (extraArgument.length > 0){ // treat space differently if we run into extra argument case
                         stackedTreeNode.key = extraArgument[0][0].children[0].key;
@@ -387,13 +410,18 @@ console.log("just made stackedTreeNode", stackedTreeNode);
                     }
 
                     currentNode.value = splitStr[2];
+console.log("now have currentNode", currentNode);
                     break;
-                 case "multiline":
+                case "multiline":
                     splitStr = [fullStr.substring(0,startKey), key, fullStr.substring(counter+1)];
                     let mNode = new TreeNode(0,splitStr[0],null,null, conversiontype);
                     stackedTreeNode = stackNode(stackedTreeNode, mNode, conversiontype); // put the symbol node on the stack
                     currentNode.value = splitStr[2];
                     exParam = key;
+                    break;
+                case "UNUSED":   // probably wrong
+                    splitStr = [fullStr.substring(0,startKey), key, fullStr.substring(counter+1)];
+                    currentNode.value = splitStr[2];
                     break;
             }
         } else {
