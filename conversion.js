@@ -205,7 +205,9 @@ function simplify(str) {
 
 console.log("   starting to simplify", ans);
     for (let i=0; i <= 2; ++i) {
-    ans = ans.replace(/to the quantity([A-Z]?) +negative 1 +([A-Z]?)endquantity/g, "inverse");
+        ans = ans.replace(/to the quantity([A-Z]?) +negative 1 +([A-Z]?)endquantity/g, "inverse");
+        ans = ans.replace(/to the quantity([A-Z]?) +2 +([A-Z]?)endquantity/g, "squared");
+        ans = ans.replace(/power +2 +/g, "squared ");
 
         ans = ans.replace(/(^| )quantity([A-Z]?) +([^ ]+) +([A-Z]?)endquantity/g, " $3 ");
         ans = ans.replace(/(^| )quantity([A-Z]?) +(negative +[^ ]+) +([A-Z]?)endquantity/g, " $3 ");
@@ -437,11 +439,16 @@ function preprocessfunctionpowers(rawstring) {
     let str = rawstring;
 console.log("looking for powers of functions");
 
-    for (let symbolname of greedyfunctions) {
+    basefunctions = greedyfunctions.slice();
+    for (const letterpair of triglikefunctions) {
+        basefunctions.push(letterpair[0])
+    }
+
+    for (let symbolname of basefunctions) {
         let slashsymbol = "\\\\?" + symbolname;
         var regExStr = "(\\$| )" + slashsymbol + "\\\^❲([^❲❳]*)❳";
 //first case is already have parentheses around function argument
-        var regExStrPlus = regExStr + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
+        var regExStrPlus = regExStr + " *" + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
 console.log("regExStrPlus", regExStrPlus);
         var regEx = new RegExp(regExStrPlus, "g");
         str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)$3❳');

@@ -995,7 +995,7 @@ var dictionary = {
       "1,2": "log "
     },
     "ruleML": {
-      "1,2": "<mi>log</mi>"
+      "1,2": "log"
     }
   },
   "ln": {
@@ -1025,10 +1025,10 @@ var dictionary = {
       "1,2": "natural log "
     },
     "ruleML": {
-      "1,2": "<mi>ln</mi>"
+      "1,2": "ln"
     }
   },
-  "sin": {   // delete this and cos because handled as a category
+  "sin": {   // ??? delete this and cos because handled as a category
     "alternative": [
       "sine"
     ],
@@ -1238,13 +1238,13 @@ var dictionary = {
     "rule": {
       "1,2": "#1^{#2}",
       "1,3": "#2^{#3}",
-      "1,4": "#2^{#3}(#4)",
+      "1,4": "#2^{#3}#4",
 // experiment      "1,4": "#2_{#3} #4"
     },
     "speech": {
-      "1,2": " #1 powerr #2 ",
-      "1,3": " #2 powerrr #3 ",
-      "1,4": " #2 powerrrr #3 of quantityF #4 Fendquantity ",
+      "1,2": " #1 power #2 ",
+      "1,3": " #2 power #3 ",
+      "1,4": " #2 power #3 of quantityF #4 Fendquantity ",
  // experiment     "1,4": " #2 over #3 of #4 "
     },
     "ruleML": {
@@ -1507,13 +1507,18 @@ var dictionary = {
   },
   "perp": {
     "alternative": [
-      "perpendicular",
-      "bot"
+      "perpendicular", "bot"
     ],
-    "type": "symbol",
-    "priority": -1,
+    "type": "operator",
+    "priority": 25,
     "rule": {
-      "1,1": "\\bot"
+      "2,3": "#1 \\perp #3"
+    },
+    "speech": {
+      "2,3": "#1 perpendicular to #3"
+    },
+    "ruleML": {
+      "2,3": "<mrow>#1<mo intent=\"perpendicular\">⊥</mo>#3</mrow>"
     }
   },
   "dot": {
@@ -2103,7 +2108,23 @@ for (const letterpair of triglikefunctions) {
     "ruleML": {
       "1,2": "<mi>" + letterpair[0] + "</mi><mo>&ApplyFunction;</mo><mrow>#2</mrow>"
     } 
+  };
+
+  dictionary["base" + letterpair[0]] = {
+    "alternative": [ ],
+    "type": "function",
+    "priority": 15,
+    "rule": {
+      "1,2": "\\" + letterpair[0]
+    },
+    "speech": {
+      "1,2": letterpair[1] + " "
+    },
+    "ruleML": {
+      "1,2": letterpair[0]
+    }
   }
+
 }
 
 for (const letterpair of greekletters) {
