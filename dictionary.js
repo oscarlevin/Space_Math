@@ -970,10 +970,8 @@ var dictionary = {
       "1,2": "\\lceiling #2 \\rceiling"
     }
   },
-  "log": {   // delete this and cos because handled as a category
-    "alternative": [
-      "log"
-    ],
+  "log": {
+    "alternative": [ ],
     "type": "function",
     "priority": 15,
     "rule": {
@@ -986,7 +984,21 @@ var dictionary = {
       "1,2": "<mi>log</mi><mo>&ApplyFunction;</mo>#2"
     } 
   },
-  "ln": {   // delete this and cos because handled as a category
+  "baselog": {
+    "alternative": [ ],
+    "type": "function",
+    "priority": 15,
+    "rule": {
+      "1,2": "\\log"
+    },
+    "speech": {
+      "1,2": "log "
+    },
+    "ruleML": {
+      "1,2": "<mi>log</mi>"
+    }
+  },
+  "ln": {
     "alternative": [
       "ln"
     ],
@@ -1000,6 +1012,20 @@ var dictionary = {
     },
     "ruleML": {
       "1,2": "<mi>ln</mi><mo>&ApplyFunction;</mo>#2"
+    }
+  },
+  "baseln": {
+    "alternative": [ ],
+    "type": "function",
+    "priority": 15,
+    "rule": {
+      "1,2": "\\ln"
+    },
+    "speech": {
+      "1,2": "natural log "
+    },
+    "ruleML": {
+      "1,2": "<mi>ln</mi>"
     }
   },
   "sin": {   // delete this and cos because handled as a category
@@ -1175,7 +1201,7 @@ var dictionary = {
     }
   },
   "llimop": {  // large operators with limits, such as \sum and \prod, but not integrals
-            // either upper and lower limits, or just lower, or no limits
+            // lower lim only
     "alternative": [ ],
     "type": "function",
     "priority": 55,
@@ -1194,6 +1220,37 @@ var dictionary = {
     },
     "ruleML": {
       "1,3": "<munder><mo>#2</mo><mrow>#3</mrow></munder>",
+// experiment      "1,4": "<munder><mo>#2</mo><mrow>#3</mrow></munder>#4"
+    }
+  },
+  "functionpower": {  // like f^2 as in log^2(x), which literally means log(x)^2,
+            // but that is not how people write it
+// currently messed up wrt number of arguments
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [ 2 ],
+      "1,3": [ 2, 3 ],
+      "1,4": [ 2, 3 ],
+    },
+    "extraArgument": 2,
+    "rule": {
+      "1,2": "#1^{#2}",
+      "1,3": "#2^{#3}",
+      "1,4": "#2^{#3}(#4)",
+// experiment      "1,4": "#2_{#3} #4"
+    },
+    "speech": {
+      "1,2": " #1 powerr #2 ",
+      "1,3": " #2 powerrr #3 ",
+      "1,4": " #2 powerrrr #3 of quantityF #4 Fendquantity ",
+ // experiment     "1,4": " #2 over #3 of #4 "
+    },
+    "ruleML": {
+      "1,2": "<msup><mi>#1</mi><mrow>#2</mrow></msup>",
+      "1,3": "<msup><mi>#2</mi><mrow>#3</mrow></msup>",
+      "1,4": "<msup><mi>#2</mi><mrow>#3</mrow></msup><mo>&ApplyFunction;</mo><mrow>#4</mrow>",
 // experiment      "1,4": "<munder><mo>#2</mo><mrow>#3</mrow></munder>#4"
     }
   },

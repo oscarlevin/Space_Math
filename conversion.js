@@ -225,6 +225,7 @@ console.log("now ans", ans);
     ans = ans.replace(/quantity([A-Z]?)/g, "quantity");
     ans = ans.replace(/([A-Z]?)endquantity([A-Z]?)/g, "endquantity");
     ans = ans.replace(/(quantity *)quantity([^q]*)endquantity( *endquantity)/g, "$1$2$3");
+    ans = ans.replace(/(quantity *)quantity([^q]*)endquantity( *endquantity)/g, "$1$2$3");
 
     return ans
 }
@@ -267,6 +268,7 @@ function preprocessarithmetic(rawstring) {
 // this is wrong, because x + 3//5 does not need any parentheses
   //  str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '($1)//');  // numerator
   //  str = str.replace(/\/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '//($1)');  // denominator
+// this is only slightly better
     str = str.replace(/([^ \(\)\[\]\{\}\$]*[+\-][^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '($1)//');  // numerator
     str = str.replace(/\/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*[+\-][^ \(\)\[\]\{\}\$]*)/g, '//($1)');  // denominator
 
@@ -282,15 +284,9 @@ console.log("after preprocess fractions", str);
 // note that we wrap in brackets the user shoudl not write: ⁅⁆
         str = str.replace(regEx, '$1' + symbolname + '⁅$2⁆$3');
     }
-// go back and see how e^x^2/2 is working
-
-// XX    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
-// XXconsole.log("after exponents once ", str);
-// XX    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
-// XXconsole.log("after exponents twice", str);
-// XX    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_($1)');  // subscript
 
 // need to preprocess integrals, summation, etc, before wrapping bases
+// (but we gave up on wrapping bases)
 
 console.log("before operators", str);
     str = preprocessintegrals(str);
@@ -317,19 +313,22 @@ console.log("before sub and sup grouping", str);
 
 // go back and see how e^x^2/2 is working
 
-    str = str.replace(/\^([^ \/\(\[{][^ \/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
+    str = str.replace(/\^([^ ❲❳\/\(\[{][^ ❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents once ", str);
-    str = str.replace(/\^([^ \/\(\[{][^ \/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
+    str = str.replace(/\^([^ ❲❳\/\(\[{][^ ❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents twice", str);
-    str = str.replace(/_([^ \/\(\[{\$][^ \/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
-    str = str.replace(/_([^ \/\(\[{\$][^ \/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
+    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ ❲❳\/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
+    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ ❲❳\/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
 console.log("after subscript twice", str);
+
+// do after the implied grouping for exponents
+    str = preprocessfunctionpowers(str);
 
 //Is this too late? An issue is e^2x+5
 // number-group mught not be multiplicaiton, as in  J_0(x)
     str = str.replace(/([0-9])([a-zA-Z])/g, '$1 $2'); // implied multiplication number times letter
 
-console.log("after implies number letter multiplicatin", str);
+console.log("after implied number letter multiplicatin", str);
 
     str = str.replace(/([0-9])([\(\[\{])/g, '$1 $2'); // implied multiplication number times group
 
@@ -431,6 +430,27 @@ console.log("regExStrWeight", regExStrWeight);
     }
 console.log("did we find integral?", str);
 
+    return str
+}
+
+function preprocessfunctionpowers(rawstring) {
+    let str = rawstring;
+console.log("looking for powers of functions");
+
+    for (let symbolname of greedyfunctions) {
+        let slashsymbol = "\\\\?" + symbolname;
+        var regExStr = "(\\$| )" + slashsymbol + "\\\^❲([^❲❳]*)❳";
+//first case is already have parentheses around function argument
+        var regExStrPlus = regExStr + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
+console.log("regExStrPlus", regExStrPlus);
+        var regEx = new RegExp(regExStrPlus, "g");
+        str = str.replace(regEx, '$1❲functionpower(' + "base" + symbolname + ')($2)$3❳');
+//second case is trig-like implied parentheses for function argument
+        regExStrPlus = regExStr  + " " + "([^ \$]+)";
+        regEx = new RegExp(regExStrPlus, "g");
+        str = str.replace(regEx, '$1❲functionpower(' + "base" + symbolname + ')($2)❲$3❳❳');
+    }
+console.log("prodessed powers of functions", str);
     return str
 }
 
