@@ -263,13 +263,12 @@ function preprocessarithmetic(rawstring) {
 // groupings which seem to be needed to overcome the implied left-to-right(?) precedence
 // should these be "wrapper" instead of literal parentheses?
 
-// note that we introduce an error with e^5+sin(x) because of the parentheses
-// inside the implied parentheses
-
 // inline fractions
 // this is wrong, because x + 3//5 does not need any parentheses
-    str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '($1)//');  // numerator
-    str = str.replace(/\/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '//{$1}');  // denominator
+  //  str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '($1)//');  // numerator
+  //  str = str.replace(/\/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '//($1)');  // denominator
+    str = str.replace(/([^ \(\)\[\]\{\}\$]*[+\-][^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '($1)//');  // numerator
+    str = str.replace(/\/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*[+\-][^ \(\)\[\]\{\}\$]*)/g, '//($1)');  // denominator
 
 // over-under fractions
     str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/)/g, '❲$1❳/');  // numerator
@@ -318,12 +317,12 @@ console.log("before sub and sup grouping", str);
 
 // go back and see how e^x^2/2 is working
 
-    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
+    str = str.replace(/\^([^ \/\(\[{][^ \/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents once ", str);
-    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
+    str = str.replace(/\^([^ \/\(\[{][^ \/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents twice", str);
-    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
-    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
+    str = str.replace(/_([^ \/\(\[{\$][^ \/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
+    str = str.replace(/_([^ \/\(\[{\$][^ \/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
 console.log("after subscript twice", str);
 
 //Is this too late? An issue is e^2x+5

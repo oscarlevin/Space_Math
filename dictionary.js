@@ -2041,10 +2041,10 @@ for (const letterpair of triglikefunctions) {
       "1,2": "\\" + letterpair[0] + " #2"
     },
     "speech": {
-      "1,2": letterpair[1] + " #2"
+      "1,2": letterpair[1] + " quantityT #2 Tendquantity "
     },
     "ruleML": {
-      "1,2": "<mi>" + letterpair[0] + "</mi><mo>&ApplyFunction;</mo>#2"
+      "1,2": "<mi>" + letterpair[0] + "</mi><mo>&ApplyFunction;</mo><mrow>#2</mrow>"
     } 
   }
 }
