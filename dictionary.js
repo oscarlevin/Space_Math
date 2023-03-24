@@ -137,9 +137,9 @@ var dictionary = {
     "alternative": [ ],
     "type": "operator",
     "priority": 20,
-    "offpair": {
-      "2,3": [ 1, 3 ]
-    },
+//    "offpair": {
+//      "2,3": [ 1, 3 ]
+//    },
     "rule": {
       "2,3": "#1 / #3"
     },
@@ -980,7 +980,7 @@ var dictionary = {
       "1,2": "\\log #2"
     },
     "speech": {
-      "1,2": "log #2"
+      "1,2": "log of #2"
     },
     "ruleML": {
       "1,2": "<mi>log</mi><mo>&ApplyFunction;</mo>#2"
@@ -996,7 +996,7 @@ var dictionary = {
       "1,2": "\\ln #2"
     },
     "speech": {
-      "1,2": "natural log #2"
+      "1,2": "natural log of #2"
     },
     "ruleML": {
       "1,2": "<mi>ln</mi><mo>&ApplyFunction;</mo>#2"
@@ -1962,7 +1962,6 @@ var greedyfunctions = ["log", "ln", "lg", "abs", "det", "order", "card", "len", 
                        "floor", "ceil", "ceiling"];
 
 // need to generate this automatically from: integrals, symbolswithlimits, ???
-
 var operatorsymbols = [ "∑","⋃","⋂","⨁","⨂","∐","∏","∮","∭","∬","∫","∰","∯","∮"];
 
 var triglikefunctions = [["sin","sine"],

@@ -267,19 +267,21 @@ function preprocessarithmetic(rawstring) {
 // inside the implied parentheses
 
 // inline fractions
-    str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '[$1]//');  // numerator
+// this is wrong, because x + 3//5 does not need any parentheses
+    str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '($1)//');  // numerator
     str = str.replace(/\/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '//{$1}');  // denominator
 
 // over-under fractions
-    str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/)/g, '[$1]/');  // numerator
-    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/{$1}');  // denominator
+    str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/)/g, '❲$1❳/');  // numerator
+    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/❲$1❳');  // denominator
 console.log("after preprocess fractions", str);
 
     for (const symbolname of greedyfunctions) {
         var regExStrStub = "(\\$| )" + symbolname + " " + "([^ \$]+)";
         var regExStr = regExStrStub + "( |\\$)";
         var regEx = new RegExp(regExStr, "g");
-        str = str.replace(regEx, '$1' + symbolname + '($2)$3');
+// note that we wrap in brackets the user shoudl not write: ⁅⁆
+        str = str.replace(regEx, '$1' + symbolname + '⁅$2⁆$3');
     }
 // go back and see how e^x^2/2 is working
 
@@ -301,8 +303,6 @@ console.log("after operators", str);
 // XXconsole.log("after bases once ", str);
 
  //   str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
-// number-group mught not be multiplicaiton, as in  J_0(x)
-    str = str.replace(/([0-9])([a-zA-Z])/g, '$1 $2'); // implied multiplication number times letter
 
 // not so fast!
 //  // we have previously put in grouping parentheses, so now we separate addition and subtraction
@@ -318,15 +318,19 @@ console.log("before sub and sup grouping", str);
 
 // go back and see how e^x^2/2 is working
 
-    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
+    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents once ", str);
-    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
+    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents twice", str);
-    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_($1)');  // subscript
-    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_($1)');  // subscript
+    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
+    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
 console.log("after subscript twice", str);
 
-console.log("after sub and sup grouping", str);
+//Is this too late? An issue is e^2x+5
+// number-group mught not be multiplicaiton, as in  J_0(x)
+    str = str.replace(/([0-9])([a-zA-Z])/g, '$1 $2'); // implied multiplication number times letter
+
+console.log("after implies number letter multiplicatin", str);
 
     str = str.replace(/([0-9])([\(\[\{])/g, '$1 $2'); // implied multiplication number times group
 

@@ -594,9 +594,10 @@ function getKeyword(key){
 /*
 Description: function to detect left parenthese
 2022.10.14 created, 
+2023.3.23 added ⁅⁆ as a new pair
 */
 function isLeftPair(key){
-    return ["(","[","{"].includes(key);
+    return ["(","[","{","⁅","❲"].includes(key);
 }
 
 /*
@@ -612,6 +613,10 @@ function getRightPair(key){
             return "]";
         case "{":
             return "}";
+        case "⁅":
+            return "⁆";
+        case "❲":
+            return "❳";
     }
 }
 
@@ -707,7 +712,7 @@ function findPositionOfRightParenthese(str, pos) {
 // this takes into account nesting, but it matches any left with any right
 // problematic to support French notation ]a,b[ for an open interval
 // (problematic on input, not output)
-  if (!["(","[","{"].includes(str[pos])) {
+  if (!["(","[","{","⁅","❲"].includes(str[pos])) {
     throw new Error("No" + lp + " at index " + pos);
   }
   let depth = 1;
@@ -716,11 +721,15 @@ function findPositionOfRightParenthese(str, pos) {
     case "(":
     case "[":
     case "{":
+    case "⁅":
+    case "❲":
       depth++;
       break;
     case ")":
     case "]":
     case "}":
+    case "⁆":
+    case "❳":
       if (--depth == 0) {
         return i;
       }
