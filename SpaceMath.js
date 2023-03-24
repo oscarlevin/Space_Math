@@ -17,7 +17,7 @@ let mathJaxArea = document.getElementById("MathJaxArea");
 
 let translateTable = new TranslateTable();
 
-///*
+/*
 var dictionary;    
 fetch("dictionary.json").then(
         function(u){ return u.json();}
@@ -26,7 +26,7 @@ fetch("dictionary.json").then(
           dictionary = json;
         }
       )
-      //*/
+      */
 
 var theSpaceMathInML;
 
