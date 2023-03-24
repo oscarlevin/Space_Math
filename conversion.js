@@ -444,11 +444,11 @@ console.log("looking for powers of functions");
         var regExStrPlus = regExStr + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
 console.log("regExStrPlus", regExStrPlus);
         var regEx = new RegExp(regExStrPlus, "g");
-        str = str.replace(regEx, '$1❲functionpower(' + "base" + symbolname + ')($2)$3❳');
+        str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)$3❳');
 //second case is trig-like implied parentheses for function argument
         regExStrPlus = regExStr  + " " + "([^ \$]+)";
         regEx = new RegExp(regExStrPlus, "g");
-        str = str.replace(regEx, '$1❲functionpower(' + "base" + symbolname + ')($2)❲$3❳❳');
+        str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)wrapper❲$3❳❳');
     }
 console.log("prodessed powers of functions", str);
     return str
