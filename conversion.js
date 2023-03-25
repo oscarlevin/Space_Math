@@ -205,7 +205,9 @@ function simplify(str) {
 
 console.log("   starting to simplify", ans);
     for (let i=0; i <= 2; ++i) {
-    ans = ans.replace(/to the quantity([A-Z]?) +negative 1 +([A-Z]?)endquantity/g, "inverse");
+        ans = ans.replace(/to the quantity([A-Z]?) +negative 1 +([A-Z]?)endquantity/g, "inverse");
+        ans = ans.replace(/to the quantity([A-Z]?) +2 +([A-Z]?)endquantity/g, "squared");
+        ans = ans.replace(/power +2 +/g, "squared ");
 
         ans = ans.replace(/(^| )quantity([A-Z]?) +([^ ]+) +([A-Z]?)endquantity/g, " $3 ");
         ans = ans.replace(/(^| )quantity([A-Z]?) +(negative +[^ ]+) +([A-Z]?)endquantity/g, " $3 ");
@@ -224,6 +226,7 @@ console.log("now ans", ans);
 
     ans = ans.replace(/quantity([A-Z]?)/g, "quantity");
     ans = ans.replace(/([A-Z]?)endquantity([A-Z]?)/g, "endquantity");
+    ans = ans.replace(/(quantity *)quantity([^q]*)endquantity( *endquantity)/g, "$1$2$3");
     ans = ans.replace(/(quantity *)quantity([^q]*)endquantity( *endquantity)/g, "$1$2$3");
 
     return ans
@@ -263,33 +266,30 @@ function preprocessarithmetic(rawstring) {
 // groupings which seem to be needed to overcome the implied left-to-right(?) precedence
 // should these be "wrapper" instead of literal parentheses?
 
-// note that we introduce an error with e^5+sin(x) because of the parentheses
-// inside the implied parentheses
-
 // inline fractions
-    str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '[$1]//');  // numerator
-    str = str.replace(/\/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '//{$1}');  // denominator
+// this is wrong, because x + 3//5 does not need any parentheses
+  //  str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '($1)//');  // numerator
+  //  str = str.replace(/\/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '//($1)');  // denominator
+// this is only slightly better
+    str = str.replace(/([^ \(\)\[\]\{\}\$]*[+\-][^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/\/)/g, '($1)//');  // numerator
+    str = str.replace(/\/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*[+\-][^ \(\)\[\]\{\}\$]*)/g, '//($1)');  // denominator
 
 // over-under fractions
-    str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/)/g, '[$1]/');  // numerator
-    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/{$1}');  // denominator
+    str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/)/g, '❲$1❳/');  // numerator
+    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/❲$1❳');  // denominator
 console.log("after preprocess fractions", str);
 
     for (const symbolname of greedyfunctions) {
-        var regExStrStub = "(\\$| )" + symbolname + " " + "([^ \$]+)";
-        var regExStr = regExStrStub + "( |\\$)";
+        var regExStrStub = "([\\$ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}\\$]+)";
+        var regExStr = regExStrStub + "([$ \\$\\(\\)\\[\\]\\{\\}])";
+// console.log("regExStr", regExStr);
         var regEx = new RegExp(regExStr, "g");
-        str = str.replace(regEx, '$1' + symbolname + '($2)$3');
+// note that we wrap in brackets the user shoudl not write: ⁅⁆
+        str = str.replace(regEx, '$1' + symbolname + '⁅$2⁆$3');
     }
-// go back and see how e^x^2/2 is working
-
-// XX    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
-// XXconsole.log("after exponents once ", str);
-// XX    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
-// XXconsole.log("after exponents twice", str);
-// XX    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_($1)');  // subscript
 
 // need to preprocess integrals, summation, etc, before wrapping bases
+// (but we gave up on wrapping bases)
 
 console.log("before operators", str);
     str = preprocessintegrals(str);
@@ -301,8 +301,6 @@ console.log("after operators", str);
 // XXconsole.log("after bases once ", str);
 
  //   str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
-// number-group mught not be multiplicaiton, as in  J_0(x)
-    str = str.replace(/([0-9])([a-zA-Z])/g, '$1 $2'); // implied multiplication number times letter
 
 // not so fast!
 //  // we have previously put in grouping parentheses, so now we separate addition and subtraction
@@ -318,20 +316,39 @@ console.log("before sub and sup grouping", str);
 
 // go back and see how e^x^2/2 is working
 
-    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
+    str = str.replace(/\^([^ ❲❳\/\(\[{][^ ❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents once ", str);
-    str = str.replace(/\^([^ \(\[{][^ \(\)\[\]\{\}\$]*)/, '^($1)');  // exponent
+    str = str.replace(/\^([^ ❲❳\/\(\[{][^ ❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents twice", str);
-    str = str.replace(/_([^ \(\[{\$][^ \^\(\)\[\]\{\}]*)/, '_($1)');  // subscript
+    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ ❲❳\/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
+    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ ❲❳\/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
+console.log("after subscript twice", str);
 
-console.log("after sub and sup grouping", str);
+// do after the implied grouping for exponents
+    str = preprocessfunctionpowers(str);
+
+//Is this too late? An issue is e^2x+5
+// number-group mught not be multiplicaiton, as in  J_0(x)
+    str = str.replace(/([0-9])([a-zA-Z])/g, '$1 $2'); // implied multiplication number times letter
+
+console.log("after implied number letter multiplicatin", str);
 
     str = str.replace(/([0-9])([\(\[\{])/g, '$1 $2'); // implied multiplication number times group
 
 //  having )( is not always multiplication:  J_(0)(x)
+//  these substitution are too simplistic, because there can be () in the sub/superscript
     str = str.replace(/(_\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // subscripted function application
     str = str.replace(/(\^\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // superscripted function application
-    str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
+// twice, because we have not separated the math part
+    str = str.replace(/(_\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // subscripted function application
+    str = str.replace(/(\^\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // superscripted function application
+// this is a bad hack, because it is specific do doubly wrapped sub- or superscripts.
+// need to go back and properly parse complicated sub- abd super
+    str = str.replace(/(_\(\([^\(\)]+)\)\)\(/g, '$1)) ⚡ ('); // subscripted (()) function application
+    str = str.replace(/(\^\(\([^\(\)]+)\)\)\(/g, '$1)) ⚡ ('); // superscripted (()) function application
+
+// separatnig )( caused problems, so maybe need another way to recognize it as implies multiplication
+//    str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
 
     return str
 }
@@ -416,6 +433,30 @@ console.log("regExStrWeight", regExStrWeight);
     }
 console.log("did we find integral?", str);
 
+    return str
+}
+
+function preprocessfunctionpowers(rawstring) {
+    let str = rawstring;
+console.log("looking for powers of functions");
+
+    for (let symbolname of greedyfunctions) {
+        let slashsymbol = "\\\\?" + symbolname;
+// when we refactor to pull out the math pieces, allow more general
+// characters that "(" as in (log^2 x 
+        var regExStr = "([\\$ \\(\\[\\{])" + slashsymbol + "\\\^❲([^❲❳]*)❳";
+//first case is already have parentheses around function argument
+        var regExStrPlus = regExStr + " *" + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
+// console.log("regExStrPlus", regExStrPlus);
+        var regEx = new RegExp(regExStrPlus, "g");
+        str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)$3❳');
+//second case is trig-like implied parentheses for function argument
+   // another place where maybe we can better handle what the greed funciton grabs
+        regExStrPlus = regExStr  + " " + "([^ \\$\\(\\)\\[\\]\\{\\}]+)";
+        regEx = new RegExp(regExStrPlus, "g");
+        str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)wrapper❲$3❳❳');
+    }
+console.log("prodessed powers of functions", str);
     return str
 }
 

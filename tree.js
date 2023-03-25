@@ -299,14 +299,18 @@ console.log("dictionary[this.key].offpair", dictionary[this.key].offpair, "looki
       }
 
       if (this.pair && this.pair.length > 0){
-//  console.log("ADDING a pair for", this, "out of", this.parent.children.length);
+//  The \{ should only be fore LaTeX output.
+//  Also need special cases for implied brackets.
+console.log("this.pair[0]", this.pair[0]);
+            this.pair[0] = adjustBrackets(this.pair, this.conversiontype);
+console.log("this.pair[0]", this.pair[0]);
             for (let p of this.pair){
-                if (p[0] == "{"){
-                    p[0] = ["\\{"];
-                }
-                if (p[1] == "}"){
-                    p[1] = ["\\}"];
-                }
+  //              if (p[0] == "{"){
+  //                  p[0] = ["\\{"];
+  //              }
+  //              if (p[1] == "}"){
+  //                  p[1] = ["\\}"];
+  //              }
                 this.value = p[0] + this.value + p[1];
                 if(this.conversiontype == "SpaceMath2MathML") {
  console.log("((((adding parentheses to", this.outputvalue, "of", this);
@@ -499,6 +503,20 @@ console.log("trying subsup on", node);
   }
  }
 
+// should this be with the utility functions
+function adjustBrackets(brackets, conversiontype) {
+    let p = brackets[0];
+console.log("adjusting brackets", p);
+    if(conversiontype == "SpaceMath2LaTeX") {
+        if (p[0] == "{"){ p[0] = ["\\{"] }
+        if (p[1] == "}"){ p[1] = ["\\}"] }
+    }
+    if (p[0] == "⁅"){ p[0] = ["("] }   // assumed brackets on greedy functions
+    if (p[1] == "⁆"){ p[1] = [")"] }
+    if (p[0] == "❲"){ p[0] = [""] }    // assumed brackets on trig-like and grouping functions
+    if (p[1] == "❳"){ p[1] = [""] }
+    return p
+}
 
 function visStr(str) {
     if(str === undefined) { return "undefined" }

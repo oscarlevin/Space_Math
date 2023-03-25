@@ -45,10 +45,15 @@ console.log("   in convert, str = ", str);
       str = str.replace(/∑/g, "sum");
   } else if(conversiontype == "SpaceMath2MathML") {
   //    str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "\n<math>$2</math>\n");
-      str = str.replace(/(^| |\n)\$\$(.+?)\$\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math display=\"block\">$2</math>\n");
-      str = str.replace(/(^| |\n)\$(.+?)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math>$2</math>\n");
+      str = str.replace(/(^| |\n)\$\$(.+?)\$\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math display=\"block\">$2</math>$3\n");
+      str = str.replace(/(^| |\n)\$(.+?)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math>$2</math>$3\n");
       str = str.replace(/\\,/g, "");
-      str = str.replace(/<wrap([^>]+)>(<[a-z]+)(.*?)<\/wrap>/g, "$2$1$3");
+// We use "wrap" to add attributes to a child, but don't know if there is
+// a single child.  When there is, transfer the attributes to the single child
+// refactor to imporve and reconcile this with "simplify" in conversion.js
+      str = str.replace(/<wrap([^>]+)>(<m[a-z]+[^<>]*)(>[^<>]*<\/m[a-z]+>)<\/wrap>/g, "$2$1$3");
+      str = str.replace(/<wrap /g, "<mrow ");
+      str = str.replace(/<\/wrap>/g, "</mrow>");
 /*
       str = str.replace(/\\,/g, "<mspace width=\"0.16em\"></mspace>");
 */
