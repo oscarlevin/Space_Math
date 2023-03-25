@@ -782,7 +782,7 @@ var dictionary = {
       "1,2": " cardinality of quantityB #2 Bendquantity "
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"cardinality($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
+      "1,2": "<mrow intent=\"cardinality($b)\"><mo>|</mo><wrap arg=\"b\">#2</wrap><mo>|</mo></mrow>"
     }
   },
   "abs": {
@@ -807,7 +807,27 @@ var dictionary = {
       "1,2": " absolute value of quantityB #2 Bendquantity "
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"absolute-value($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
+      "1,2": "<mrow intent=\"absolute-value($absb)\"><mo>|</mo><mrow arg=\"absb\">#2</mrow><mo>|</mo></mrow>"
+    }
+  },
+  "norm": {
+    "comment": [       ],
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [
+        2
+      ]
+    },
+    "rule": {
+      "1,2": "|#2|"
+    },
+    "speech": {
+      "1,2": " norm of quantityB #2 Bendquantity "
+    },
+    "ruleML": {
+      "1,2": "<mrow intent=\"norm($normb)\"><mo>|</mo><mrow arg=\"normb\">#2</mrow><mo>|</mo></mrow>"
     }
   },
   "det": {
@@ -831,7 +851,7 @@ var dictionary = {
       "1,2": " determinant of #2 "
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"determinant($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
+      "1,2": "<mrow intent=\"determinant($detb)\"><mo>|</mo><wrap arg=\"detb\">#2</wrap><mo>|</mo></mrow>"
     }
   },
   "order": {  // for a group or group element
@@ -853,7 +873,7 @@ var dictionary = {
       "1,2": " order of #2 "
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"order($x)\"><mo>|</mo><wrap arg=\"x\">#2</wrap><mo>|</mo></mrow>"
+      "1,2": "<mrow intent=\"order($orderb)\"><mo>|</mo><wrap arg=\"orderb\">#2</wrap><mo>|</mo></mrow>"
     }
   },
  "span": {
@@ -873,7 +893,7 @@ var dictionary = {
       "1,2": " span of #2 "
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"span($x)\"><mo>⟨</mo><mrow arg=\"x\">#2</mrow><mo>⟩</mo></mrow>"
+      "1,2": "<mrow intent=\"span($c)\"><mo>⟨</mo><mrow arg=\"c\">#2</mrow><mo>⟩</mo></mrow>"
     }
   },
  "vector": {
@@ -893,7 +913,7 @@ var dictionary = {
       "1,2": "coordinate vector #2 endvector"
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"coordinate-vector($x)\"><mo>⟨</mo><mrow arg=\"x\">#2</mrow><mo>⟩</mo></mrow>"
+      "1,2": "<mrow intent=\"coordinate-vector($c)\"><mo>⟨</mo><mrow arg=\"c\">#2</mrow><mo>⟩</mo></mrow>"
     }
   },
  "anglebrackets": {
@@ -913,7 +933,7 @@ var dictionary = {
       "1,2": " anglebrackets #2 endanglebrackets " 
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"angle-brackets($x)\"><mo>⟨</mo><mrow arg=\"x\">#2</mrow><mo>⟩</mo></mrow>"
+      "1,2": "<mrow intent=\"angle-brackets($c)\"><mo>⟨</mo><mrow arg=\"c\">#2</mrow><mo>⟩</mo></mrow>"
     }
   },
   "setof": {
@@ -933,7 +953,7 @@ var dictionary = {
       "1,2": "set #2"
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"set($x)\"><mo>{</mo><mrow arg=\"x\">#2</mrow><mo>}</mo></mrow>"
+      "1,2": "<mrow intent=\"set($d)\"><mo>{</mo><mrow arg=\"d\">#2</mrow><mo>}</mo></mrow>"
     }
   },
   "floor": {
@@ -952,7 +972,7 @@ var dictionary = {
       "1,2": "floor of #2 endfloor"
     },
     "ruleML": {
-      "1,2": "<mrow intent=\"floor($x)\"><mo>⌊</mo><mrow arg=\"x\">#2</mrow><mo>⌋</mo></mrow>"
+      "1,2": "<mrow intent=\"floor($e)\"><mo>⌊</mo><mrow arg=\"e\">#2</mrow><mo>⌋</mo></mrow>"
     }
   },
   "ceiling": {
@@ -1505,7 +1525,7 @@ var dictionary = {
       "1,1": "\\neg"
     }
   },
-  "perp": {
+  "perp": {  //  need something separate for V^perp
     "alternative": [
       "perpendicular", "bot"
     ],
@@ -1603,7 +1623,7 @@ var dictionary = {
       "2,3": " open interval from #1 to #3 endinterval "
     },
     "ruleML": {
-      "2,3": "<mrow intent=\"open-interval($x, $y)\"><mo>(</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>)</mo></mrow>"
+      "2,3": "<mrow intent=\"open-interval($f, $g)\"><mo>(</mo><wrap arg=\"f\">#1</wrap><mo>,</mo><wrap arg=\"g\">#3</wrap><mo>)</mo></mrow>"
     }
   },  
   "innergcd": {
@@ -1618,7 +1638,7 @@ var dictionary = {
       "2,3": " gcd of #1 comma #3 endgcd "
     },  
     "ruleML": {
-      "2,3": "<mrow intent=\"gcd($x, $y)\"><mo>(</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>)</mo></mrow>"
+      "2,3": "<mrow intent=\"gcd($f, $g)\"><mo>(</mo><wrap arg=\"f\">#1</wrap><mo>,</mo><wrap arg=\"g\">#3</wrap><mo>)</mo></mrow>"
     }
   },  
   "cartesianpoint": {
@@ -1633,7 +1653,7 @@ var dictionary = {
       "2,3": " point with coordinates #1 comma #3 endpoint "
     },
     "ruleML": {
-      "2,3": "<mrow intent=\"coordinate($x, $y)\"><mo>(</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>)</mo></mrow>"
+      "2,3": "<mrow intent=\"coordinate($f, $g)\"><mo>(</mo><wrap arg=\"f\">#1</wrap><mo>,</mo><wrap arg=\"g\">#3</wrap><mo>)</mo></mrow>"
     }
   },
   "innerproduct": {
@@ -1648,7 +1668,7 @@ var dictionary = {
       "2,3": " inner product of #1 and #3 endinnerproduct "
     },
     "ruleML": {
-      "2,3": "<mrow intent=\"inner-product($x, $y)\"><mo>⟨</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>⟩</mo></mrow>"
+      "2,3": "<mrow intent=\"inner-product($f, $g)\"><mo>⟨</mo><wrap arg=\"f\">#1</wrap><mo>,</mo><wrap arg=\"g\">#3</wrap><mo>⟩</mo></mrow>"
     }
   }, 
   "twovector": {
@@ -1663,7 +1683,7 @@ var dictionary = {
       "2,3": " vector #1 comma #3 endvector "
     },
     "ruleML": {
-      "2,3": "<mrow intent=\"vector($x, $y)\"><mo>⟨</mo><wrap arg=\"x\">#1</wrap><mo>,</mo><wrap arg=\"y\">#3</wrap><mo>⟩</mo></mrow>"
+      "2,3": "<mrow intent=\"vector($va, $vb)\"><mo>⟨</mo><wrap arg=\"va\">#1</wrap><mo>,</mo><wrap arg=\"vb\">#3</wrap><mo>⟩</mo></mrow>"
     }
   },
   "grouppresentation": {
@@ -1678,7 +1698,7 @@ var dictionary = {
       "2,3": " group generated by #1 with relations #3 endrelations "
     },
     "ruleML": {
-      "2,3": "<mrow intent=\"group-presentation($x, $y)\"><mo>⟨</mo><wrap arg=\"x\">#1</wrap><mo stretchy=\"true\">|</mo><wrap arg=\"y\">#3</wrap><mo>⟩</mo></mrow>"
+      "2,3": "<mrow intent=\"group-presentation($gpa, $gpb)\"><mo>⟨</mo><wrap arg=\"gpb\">#1</wrap><mo stretchy=\"true\">|</mo><wrap arg=\"gpb\">#3</wrap><mo>⟩</mo></mrow>"
     }
   },
  "setbuilder": {
@@ -1693,7 +1713,7 @@ var dictionary = {
       "2,3": " set of #1 such that #3 endset "
     },
     "ruleML": {
-      "2,3": "<mrow intent=\"set-such-that($x, $y)\"><mo>{</mo><mrow arg=\"x\">#1</mrow><mo>|</mo><mrow arg=\"y\">#3</mrow><mo>}</mo></mrow>"
+      "2,3": "<mrow intent=\"set-such-that($sba, $sbb)\"><mo>{</mo><mrow arg=\"sba\">#1</mrow><mo>|</mo><mrow arg=\"sbb\">#3</mrow><mo>}</mo></mrow>"
     }
   }, 
   "braket": {
@@ -1708,7 +1728,7 @@ var dictionary = {
       "2,3": " bra-ket of #1 and #3 endbra-ket "
     },
     "ruleML": {
-      "2,3": "<mrow intent=\"bra-ket($x, $y)\"><mo>⟨</mo><wrap arg=\"x\">#1</wrap><mo>|</mo><wrap arg=\"y\">#3</wrap><mo>⟩</mo></mrow>"
+      "2,3": "<mrow intent=\"bra-ket($bka, $bkb)\"><mo>⟨</mo><wrap arg=\"bka\">#1</wrap><mo>|</mo><wrap arg=\"bkb\">#3</wrap><mo>⟩</mo></mrow>"
     }
   },
   "isom": {
@@ -1937,7 +1957,28 @@ var dictionary = {
       "1,2": " #2 conjugate "
     },
     "ruleML": {
-      "1,2": "<mover intent=\"conjugate($x)\"><wrap arg=\"x\">#2</wrap><mo accent=\"true\">-</mo></mover>"
+      "1,2": "<mover intent=\"conjugate($x)\"><mrow arg=\"x\">#2</mrow><mo accent=\"true\">-</mo></mover>"
+    }
+  },
+  "vec": {
+    "alternative": [ "conjugate" ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [
+        2
+      ]
+    },
+    "rule": {
+      "1,2": "\\overline{#2}"
+    },
+    "speech": {
+      "1,2": " vector quantityV #2 Vendquantity "
+    },
+    "ruleML": {
+   //   "1,2": "<mover intent=\"vector($x)\"><mrow arg=\"x\">#2</mrow><mo accent=\"true\">→</mo></mover>"
+   //   "1,2": "<mover intent=\"vector($x)\"><mrow arg=\"x\">#2</mrow><mo>→</mo></mover>"
+      "1,2": "<mrow intent=\"vector($va)\"><wrap mathvariant=\"bold\" arg=\"va\">#2</wrap></mrow>"
     }
   },
   "underline": {
@@ -2020,7 +2061,9 @@ var charactersymbols = [
     ["euro", "€"]
 ]
 
-var greedyfunctions = ["log", "ln", "lg", "abs", "det", "order", "card", "len", "length",
+var particulargreedyfunctions = ["log", "ln", "lg",
+                       "vec", "hat", "bar",
+                       "abs", "det", "order", "card", "len", "length", "norm",
                        "floor", "ceil", "ceiling"];
 
 // need to generate this automatically from: integrals, symbolswithlimits, ???
@@ -2042,6 +2085,13 @@ var triglikefunctions = [["sin","sine"],
 ["cosh","cosh"],
 ["tanh","tanch"]
 ];
+
+var greedyfunctions = particulargreedyfunctions.slice();
+    for (const letterpair of triglikefunctions) { 
+        greedyfunctions.push(letterpair[0])
+    }
+
+console.log("greedyfunctions", greedyfunctions);
 
 var greekletters = [["α","alpha"],
 ["β","beta"],
