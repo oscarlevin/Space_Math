@@ -280,8 +280,9 @@ function preprocessarithmetic(rawstring) {
 console.log("after preprocess fractions", str);
 
     for (const symbolname of greedyfunctions) {
-        var regExStrStub = "(\\$| )" + symbolname + " " + "([^ \$]+)";
-        var regExStr = regExStrStub + "( |\\$)";
+        var regExStrStub = "([\\$ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}\\$]+)";
+        var regExStr = regExStrStub + "([$ \\$\\(\\)\\[\\]\\{\\}])";
+// console.log("regExStr", regExStr);
         var regEx = new RegExp(regExStr, "g");
 // note that we wrap in brackets the user shoudl not write: ⁅⁆
         str = str.replace(regEx, '$1' + symbolname + '⁅$2⁆$3');
@@ -439,21 +440,19 @@ function preprocessfunctionpowers(rawstring) {
     let str = rawstring;
 console.log("looking for powers of functions");
 
-    basefunctions = greedyfunctions.slice();
-    for (const letterpair of triglikefunctions) {
-        basefunctions.push(letterpair[0])
-    }
-
-    for (let symbolname of basefunctions) {
+    for (let symbolname of greedyfunctions) {
         let slashsymbol = "\\\\?" + symbolname;
-        var regExStr = "(\\$| )" + slashsymbol + "\\\^❲([^❲❳]*)❳";
+// when we refactor to pull out the math pieces, allow more general
+// characters that "(" as in (log^2 x 
+        var regExStr = "([\\$ \\(\\[\\{])" + slashsymbol + "\\\^❲([^❲❳]*)❳";
 //first case is already have parentheses around function argument
         var regExStrPlus = regExStr + " *" + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
-console.log("regExStrPlus", regExStrPlus);
+// console.log("regExStrPlus", regExStrPlus);
         var regEx = new RegExp(regExStrPlus, "g");
         str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)$3❳');
 //second case is trig-like implied parentheses for function argument
-        regExStrPlus = regExStr  + " " + "([^ \$]+)";
+   // another place where maybe we can better handle what the greed funciton grabs
+        regExStrPlus = regExStr  + " " + "([^ \\$\\(\\)\\[\\]\\{\\}]+)";
         regEx = new RegExp(regExStrPlus, "g");
         str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)wrapper❲$3❳❳');
     }
