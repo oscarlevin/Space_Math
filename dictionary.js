@@ -1306,7 +1306,7 @@ var dictionary = {
       "1,6": " #2 from #3 to #4 of #5 d#6 "
     },
     "ruleML": {
-      "1,6": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mi>d</mi>#6</mrow>",
+      "1,6": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mo>&dd;</mo>#6</mrow>",
     }
    },
    "intlimsweight": {  // various integrals
@@ -1324,7 +1324,7 @@ var dictionary = {
       "1,7": " #2 from #3 to #4 of #5 d#6 over #7 "
     },
     "ruleML": {
-      "1,7": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mfrac><mrow><mi>d</mi>#6</mrow><mrow>#7</mrow></mfrac></mrow>"
+      "1,7": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mfrac><mrow><mo>&dd;</mo>#6</mrow><mrow>#7</mrow></mfrac></mrow>"
      }
     },  
     "intllimweight": {  // various integrals
@@ -1342,7 +1342,7 @@ var dictionary = {
       "1,6": " #2 over #3 of #4 d#5 over #6 "
     },
     "ruleML": {
-      "1,6": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mfrac><mrow><mi>d</mi>#5</mrow><mrow>#6</mrow></mfrac></mrow>"
+      "1,6": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mfrac><mrow><mo>&dd;</mo>#5</mrow><mrow>#6</mrow></mfrac></mrow>"
      }
    },
     "intllim": {  // various integrals
@@ -1360,7 +1360,7 @@ var dictionary = {
       "1,5": " #2 over #3 of #4 d#5 "
     },
     "ruleML": {
-      "1,5": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mi>d</mi>#5</</mrow>"
+      "1,5": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mo>&dd;</mo>#5</</mrow>"
      }
     },
   "int": {
@@ -1386,7 +1386,7 @@ var dictionary = {
     },
     "ruleML": {
       "1,2": "<mo>∫</mo>#2",
-      "1,3": "<mo>∫</mo>#2<mspace width=\"0.167em\"></mspace><mi>d</mi>#3"
+      "1,3": "<mo>∫</mo>#2<mspace width=\"0.167em\"></mspace><mo>&dd;</mo>#3"
     }
   },
   "oint": {

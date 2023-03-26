@@ -276,7 +276,9 @@ function preprocessarithmetic(rawstring) {
 
 // over-under fractions
     str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/)/g, '❲$1❳/');  // numerator
-    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/❲$1❳');  // denominator
+//    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/❲$1❳');  // denominator
+// greedy denominator.  When does that fail?
+    str = str.replace(/\/([^ \(\[{\/][^ \$]*)/g, '/❲$1❳');  // denominator
 console.log("after preprocess fractions", str);
 
     for (const symbolname of greedyfunctions) {
@@ -401,7 +403,9 @@ console.log("looking for limits: symbolname", symbolname);
 // the lower and upper limits might be in parentheses.  We handle these awkwardly
          var regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^() ]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
          var regExStr = regExStrStub + " d([a-z]+)" + "( |\\$)";
-         var regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
+  //       var regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
+  // switched grouping brackets
+         var regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\\$)";
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          var regExWeight = new RegExp(regExStrWeight, "g");
@@ -409,10 +413,11 @@ console.log("regExStrWeight", regExStrWeight);
          var regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1wrapper(intlims(' + symbol + ')($2)($3)($4)($5))$6');
 
-         // case of no () around limits
+         // case of no () around limits (but both lower and upper)
          regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?)";
          regExStr = regExStrStub + " d([a-z]+)" + "( |\\$)";
-         regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
+ //        regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\\$)";
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          regExWeight = new RegExp(regExStrWeight, "g");
@@ -421,9 +426,9 @@ console.log("regExStrWeight", regExStrWeight);
          str = str.replace(regEx, '$1wrapper(intlims(' + symbol + ')($2)($3)($4)($5))$6');
 
          // case of lower lim only, no () around lower limit (unless intended)
-         regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?) (.*?) d([a-z]+)";
-         regExStr = regExStrStub + "( |\\$)";
-         regExStrWeight = regExStrStub + "/([^ $]+)" + "( |\\$)";
+         regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?) (.*?)";
+         regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
          regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')($2)($3)($4)($5))$6');
          regEx = new RegExp(regExStr, "g");
