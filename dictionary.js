@@ -1245,7 +1245,7 @@ var dictionary = {
   },
   "functionpower": {  // like f^2 as in log^2(x), which literally means log(x)^2,
             // but that is not how people write it
-// currently messed up wrt number of arguments
+// currently messed up wrt number of arguments: not all of the below can happen
     "alternative": [ ],
     "type": "function",
     "priority": 55,
@@ -1273,6 +1273,25 @@ var dictionary = {
       "1,4": "<msup><mi>#2</mi><mrow>#3</mrow></msup><mo>&ApplyFunction;</mo><mrow>#4</mrow>",
 // experiment      "1,4": "<munder><mo>#2</mo><mrow>#3</mrow></munder>#4"
     }
+  },
+  "functionsubscript": {  // like J_0(x) or log_2(x)  (actually, only for special functions)
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,4": [ 2, 3 ],
+    },
+    "extraArgument": 2,
+    "rule": { 
+      "1,4": "#2^{#3}#4",
+// experiment      "1,4": "#2_{#3} #4"
+    },
+    "speech": {
+      "1,4": " #2 sub #3 of quantityF #4 Fendquantity ",
+    },
+    "ruleML": {
+      "1,4": "<msub><mi>#2</mi><mrow>#3</mrow></msub><mo>&ApplyFunction;</mo><mrow>#4</mrow>",
+    } 
   },
   "bigop": {  // large operators with no limits, such as \sum and \prod, but not integrals
     "alternative": [ ],

@@ -339,15 +339,15 @@ console.log("after implied number letter multiplicatin", str);
 
 //  having )( is not always multiplication:  J_(0)(x)
 //  these substitution are too simplistic, because there can be () in the sub/superscript
-    str = str.replace(/(_\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // subscripted function application
-    str = str.replace(/(\^\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // superscripted function application
+    str = str.replace(/(_[\(❲][^❲❳\(\)]+)[\)❳]\(/g, '$1) ⚡ ('); // subscripted function application
+    str = str.replace(/(\^[\(❲][^❲❳\(\)]+)[\)❳]\(/g, '$1) ⚡ ('); // superscripted function application
 // twice, because we have not separated the math part
-    str = str.replace(/(_\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // subscripted function application
-    str = str.replace(/(\^\([^\(\)]+)\)\(/g, '$1) ⚡ ('); // superscripted function application
+    str = str.replace(/(_[\(❲][^❲❳\(\)]+)[\)❳]\(/g, '$1) ⚡ ('); // subscripted function application
+    str = str.replace(/(\^[\(❲][^❲❳\(\)]+)[\)❳]\(/g, '$1) ⚡ ('); // superscripted function application
 // this is a bad hack, because it is specific do doubly wrapped sub- or superscripts.
 // need to go back and properly parse complicated sub- abd super
-    str = str.replace(/(_\(\([^\(\)]+)\)\)\(/g, '$1)) ⚡ ('); // subscripted (()) function application
-    str = str.replace(/(\^\(\([^\(\)]+)\)\)\(/g, '$1)) ⚡ ('); // superscripted (()) function application
+    str = str.replace(/(_\(\([^❲❳\(\)]+)\)\)\(/g, '$1)) ⚡ ('); // subscripted (()) function application
+    str = str.replace(/(\^\(\([^❲❳\(\)]+)\)\)\(/g, '$1)) ⚡ ('); // superscripted (()) function application
 
 // separatnig )( caused problems, so maybe need another way to recognize it as implies multiplication
 //    str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
@@ -443,7 +443,9 @@ console.log("did we find integral?", str);
 
 function preprocessfunctionpowers(rawstring) {
     let str = rawstring;
-console.log("looking for powers of functions");
+// this is for "known" funcitons like log and sin.
+// generic functions, like f^2(x), are handled differently
+console.log("looking for powers of known functions");
 
     for (let symbolname of greedyfunctions) {
         let slashsymbol = "\\\\?" + symbolname;
@@ -462,6 +464,23 @@ console.log("looking for powers of functions");
         str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)wrapper❲$3❳❳');
     }
 console.log("prodessed powers of functions", str);
+// redundant, consolidate
+    for (let symbolname of greedyfunctions) {
+        let slashsymbol = "\\\\?" + symbolname;
+// when we refactor to pull out the math pieces, allow more general
+// characters that "(" as in (log^2 x 
+        var regExStr = "([\\$ \\(\\[\\{])" + slashsymbol + "\\_❲([^❲❳]*)❳";
+//first case is already have parentheses around function argument
+        var regExStrPlus = regExStr + " *" + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
+// console.log("regExStrPlus", regExStrPlus);
+        var regEx = new RegExp(regExStrPlus, "g");
+        str = str.replace(regEx, '$1wrapper❲functionsubscript(' + "base" + symbolname + ')($2)$3❳');
+//second case is trig-like implied parentheses for function argument
+   // another place where maybe we can better handle what the greed funciton grabs
+        regExStrPlus = regExStr  + " " + "([^ \\$\\(\\)\\[\\]\\{\\}]+)";
+        regEx = new RegExp(regExStrPlus, "g");
+        str = str.replace(regEx, '$1wrapper❲functionsubscript(' + "base" + symbolname + ')($2)wrapper❲$3❳❳');
+    }
     return str
 }
 
