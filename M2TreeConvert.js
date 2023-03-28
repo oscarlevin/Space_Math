@@ -39,7 +39,10 @@ console.log("fullStr", "X"+fullStr+"X");
             let char = fullStr[counter];
             let endSearch = false;
             let breakSearch = false;
-            for (let quote of [["\"","\""],["\'","\'"]]){
+//  need multiple single quotes for f'' , so only allow " for quoted strings.
+//   (may need to implement smart quotes)
+//            for (let quote of [["\"","\""],["\'","\'"]]){
+            for (let quote of [["\"","\""]]){
                 if (char == quote[0]){
 console.log("found a quote");
                     let rpos = findPositionOfRightPair(fullStr,counter,quote[0],quote[1],[[quote[0]]]);

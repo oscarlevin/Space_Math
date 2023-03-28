@@ -242,6 +242,25 @@ var dictionary = {
    //   "2,3": " #1 to the quantityE #@3 Eendquantity "
     }
   },
+  "▲": {
+    "comment": [ ],
+    "alternative": [ ],
+    "type": "operator",
+    "priority": 30,
+    "script": true,
+    "rule": {
+      "2,3": "#1^{#@3}"
+    },
+    "offpair": {
+      "2,3": [ 3 ]
+    },
+    "ruleML": {
+      "2,3": "<msup><mrow>#1</mrow><mrow>#@3</mrow></msup>"
+    },
+    "speech": {
+      "2,3": " quantityV #1 Vendquantity derivative quantityE #@3 Eendquantity "
+    }
+  },
   "_": {
     "comment": [
       "´Ó",
@@ -516,6 +535,25 @@ var dictionary = {
     },
     "ruleML": {
       "1,1": "<mi>א</mi>"
+    }
+  },
+  "'": {
+    "comment": [
+      "ËùÒÔ"
+    ],
+    "alternative": [
+      "prime"
+    ],
+    "type": "symbol",
+    "priority": -1,
+    "rule": {
+      "1,1": "'"
+    },
+    "speech": {
+      "1,1": " prime "
+    },
+    "ruleML": {
+      "1,1": "<mo>&#x2032;</mo>"
     }
   },
   ":.": {
@@ -1245,7 +1283,7 @@ var dictionary = {
   },
   "functionpower": {  // like f^2 as in log^2(x), which literally means log(x)^2,
             // but that is not how people write it
-// currently messed up wrt number of arguments
+// currently messed up wrt number of arguments: not all of the below can happen
     "alternative": [ ],
     "type": "function",
     "priority": 55,
@@ -1273,6 +1311,25 @@ var dictionary = {
       "1,4": "<msup><mi>#2</mi><mrow>#3</mrow></msup><mo>&ApplyFunction;</mo><mrow>#4</mrow>",
 // experiment      "1,4": "<munder><mo>#2</mo><mrow>#3</mrow></munder>#4"
     }
+  },
+  "functionsubscript": {  // like J_0(x) or log_2(x)  (actually, only for special functions)
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,4": [ 2, 3 ],
+    },
+    "extraArgument": 2,
+    "rule": { 
+      "1,4": "#2^{#3}#4",
+// experiment      "1,4": "#2_{#3} #4"
+    },
+    "speech": {
+      "1,4": " #2 sub #3 of quantityF #4 Fendquantity ",
+    },
+    "ruleML": {
+      "1,4": "<msub><mi>#2</mi><mrow>#3</mrow></msub><mo>&ApplyFunction;</mo><mrow>#4</mrow>",
+    } 
   },
   "bigop": {  // large operators with no limits, such as \sum and \prod, but not integrals
     "alternative": [ ],
@@ -1306,7 +1363,7 @@ var dictionary = {
       "1,6": " #2 from #3 to #4 of #5 d#6 "
     },
     "ruleML": {
-      "1,6": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mi>d</mi>#6</mrow>",
+      "1,6": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mo>&dd;</mo>#6</mrow>",
     }
    },
    "intlimsweight": {  // various integrals
@@ -1324,7 +1381,7 @@ var dictionary = {
       "1,7": " #2 from #3 to #4 of #5 d#6 over #7 "
     },
     "ruleML": {
-      "1,7": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mfrac><mrow><mi>d</mi>#6</mrow><mrow>#7</mrow></mfrac></mrow>"
+      "1,7": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mfrac><mrow><mo>&dd;</mo>#6</mrow><mrow>#7</mrow></mfrac></mrow>"
      }
     },  
     "intllimweight": {  // various integrals
@@ -1342,7 +1399,7 @@ var dictionary = {
       "1,6": " #2 over #3 of #4 d#5 over #6 "
     },
     "ruleML": {
-      "1,6": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mfrac><mrow><mi>d</mi>#5</mrow><mrow>#6</mrow></mfrac></mrow>"
+      "1,6": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mfrac><mrow><mo>&dd;</mo>#5</mrow><mrow>#6</mrow></mfrac></mrow>"
      }
    },
     "intllim": {  // various integrals
@@ -1360,7 +1417,7 @@ var dictionary = {
       "1,5": " #2 over #3 of #4 d#5 "
     },
     "ruleML": {
-      "1,5": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mi>d</mi>#5</</mrow>"
+      "1,5": "<mrow><munder><mo>#2</mo><mrow>#3</mrow></munder>#4<mspace width=\"0.167em\"></mspace><mo>&dd;</mo>#5</</mrow>"
      }
     },
   "int": {
@@ -1386,7 +1443,7 @@ var dictionary = {
     },
     "ruleML": {
       "1,2": "<mo>∫</mo>#2",
-      "1,3": "<mo>∫</mo>#2<mspace width=\"0.167em\"></mspace><mi>d</mi>#3"
+      "1,3": "<mo>∫</mo>#2<mspace width=\"0.167em\"></mspace><mo>&dd;</mo>#3"
     }
   },
   "oint": {
