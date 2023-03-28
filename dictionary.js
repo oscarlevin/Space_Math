@@ -242,6 +242,25 @@ var dictionary = {
    //   "2,3": " #1 to the quantityE #@3 Eendquantity "
     }
   },
+  "▲": {
+    "comment": [ ],
+    "alternative": [ ],
+    "type": "operator",
+    "priority": 30,
+    "script": true,
+    "rule": {
+      "2,3": "#1^{#@3}"
+    },
+    "offpair": {
+      "2,3": [ 3 ]
+    },
+    "ruleML": {
+      "2,3": "<msup><mrow>#1</mrow><mrow>#@3</mrow></msup>"
+    },
+    "speech": {
+      "2,3": " quantityV #1 Vendquantity derivative quantityE #@3 Eendquantity "
+    }
+  },
   "_": {
     "comment": [
       "´Ó",
@@ -516,6 +535,25 @@ var dictionary = {
     },
     "ruleML": {
       "1,1": "<mi>א</mi>"
+    }
+  },
+  "'": {
+    "comment": [
+      "ËùÒÔ"
+    ],
+    "alternative": [
+      "prime"
+    ],
+    "type": "symbol",
+    "priority": -1,
+    "rule": {
+      "1,1": "'"
+    },
+    "speech": {
+      "1,1": " prime "
+    },
+    "ruleML": {
+      "1,1": "<mo>&#x2032;</mo>"
     }
   },
   ":.": {

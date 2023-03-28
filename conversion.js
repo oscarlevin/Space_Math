@@ -215,6 +215,7 @@ console.log("   starting to simplify", ans);
         ans = ans.replace(/<mrow>(<([a-z]+)>)([^<>]+)(<\/$2>)<\/mrow>/g, "$1$3$4");
 console.log("now ans", ans);
         ans = ans.replace(/<mrow>(<mi>)([^<>]+)(<\/mi>)<\/mrow>/g, "$1$2$3");
+        ans = ans.replace(/<mrow>(<mo>)([^<>]+)(<\/mo>)<\/mrow>/g, "$1$2$3");
         ans = ans.replace(/<mrow>(<mn>)([^<>]+)(<\/mn>)<\/mrow>/g, "$1$2$3");
 
 // next is quick and dirty: fails on some content. but note that we
@@ -261,7 +262,9 @@ function preprocessarithmetic(rawstring) {
     str = str.replace(/<--/g, 'longleftarrow');
     str = str.replace(/<-/g, 'from');
     str = str.replace(/(\$| |\(|\^|_)-([^ ])/g, '$1😑$2');  // negative sign
-    str = str.replace(/(^|\$|\() *-/, '$1😑');  // negative sign
+// why |.|.| instead of [...]
+// also a place where we need to be more clever about (word) boundaries
+    str = str.replace(/(^|\$|\(|\[|\{) *-/, '$1😑');  // negative sign
 
 // groupings which seem to be needed to overcome the implied left-to-right(?) precedence
 // should these be "wrapper" instead of literal parentheses?
@@ -293,6 +296,7 @@ console.log("after preprocess fractions", str);
 // need to preprocess integrals, summation, etc, before wrapping bases
 // (but we gave up on wrapping bases)
 
+    str = preprocessderivatives(str);
 console.log("before operators", str);
     str = preprocessintegrals(str);
     str = preprocesslargeoperators(str);
@@ -340,10 +344,10 @@ console.log("after implied number letter multiplicatin", str);
 //  having )( is not always multiplication:  J_(0)(x)
 //  these substitution are too simplistic, because there can be () in the sub/superscript
     str = str.replace(/(_[\(❲][^❲❳\(\)]+)[\)❳]\(/g, '$1) ⚡ ('); // subscripted function application
-    str = str.replace(/(\^[\(❲][^❲❳\(\)]+)[\)❳]\(/g, '$1) ⚡ ('); // superscripted function application
+    str = str.replace(/([\^▲][\(❲][^❲❳\(\)]+)[\)❳]\(/g, '$1) ⚡ ('); // superscripted function application
 // twice, because we have not separated the math part
     str = str.replace(/(_[\(❲][^❲❳\(\)]+)[\)❳]\(/g, '$1) ⚡ ('); // subscripted function application
-    str = str.replace(/(\^[\(❲][^❲❳\(\)]+)[\)❳]\(/g, '$1) ⚡ ('); // superscripted function application
+    str = str.replace(/([\^▲][\(❲][^❲❳\(\)]+)[\)❳]\(/g, '$1) ⚡ ('); // superscripted function application
 // this is a bad hack, because it is specific do doubly wrapped sub- or superscripts.
 // need to go back and properly parse complicated sub- abd super
     str = str.replace(/(_\(\([^❲❳\(\)]+)\)\)\(/g, '$1)) ⚡ ('); // subscripted (()) function application
@@ -388,6 +392,15 @@ console.log("did we find vector?", str);
     str = str.replace(/(\$| )<([^ ][^,<>]*)\,([^ ][^<>]*)>/g, '$1($2) innerproduct ($3)');
 // catch all for every other case <...> of unknown meaning
     str = str.replace(/(\$| )<([^<>]+)>/g, '$1anglebrackets($2)');
+
+    return str
+}
+
+function preprocessderivatives(rawstring) {
+//  need special case for \sum'
+    let str = rawstring;
+
+    str = str.replace(/([^\^\(\[\{❲])(\'+)/g, '$1▲❲$2❳');
 
     return str
 }
