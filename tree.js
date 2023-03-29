@@ -39,16 +39,16 @@ class TreeNode {
     this.pair = [];
     this.noPriority = false;
     this.exPriority = false;
-console.log("in TreeNode, this.conversiontype", this.conversiontype);
+// console.log("in TreeNode, this.conversiontype", this.conversiontype);
 if(true || this.conversiontype === undefined) {
-   console.log("making a TreeNode", this.position, "a",  value, "b",  key, "c", this.parent,"d",this.conversiontype);
+//    console.log("making a TreeNode", this.position, "a",  value, "b",  key, "c", this.parent,"d",this.conversiontype);
 }
   }
 
   insert(value, key = value) {
-  console.log("TreNode 1 ", this);
+//   console.log("TreNode 1 ", this);
     this.children.push(new TreeNode(this.children.length,value, key, this, this.conversiontype));
-  console.log("TreNode 1 again ", this);
+//   console.log("TreNode 1 again ", this);
     return true;
   }
 
@@ -58,7 +58,7 @@ if(true || this.conversiontype === undefined) {
     node.parent = this;
     node.position = this.children.length;
     this.children.push(node);
-console.log("TreNode 2 again", node,"   ", this);
+// console.log("TreNode 2 again", node,"   ", this);
 
     return true;
   }
@@ -299,12 +299,13 @@ console.log("dictionary[this.key].offpair", dictionary[this.key].offpair, "looki
       }
 
       if (this.pair && this.pair.length > 0){
-//  The \{ should only be fore LaTeX output.
+//  The \{ should only be for LaTeX output.
 //  Also need special cases for implied brackets.
 console.log("this.pair[0]", this.pair[0]);
             this.pair[0] = adjustBrackets(this.pair, this.conversiontype);
+            if (this.pair[0].length > 0) {  // if the brackets have not been adjusted away
 console.log("this.pair[0]", this.pair[0]);
-            for (let p of this.pair){
+              for (let p of this.pair){
   //              if (p[0] == "{"){
   //                  p[0] = ["\\{"];
   //              }
@@ -336,6 +337,7 @@ console.log("adding quantity", this);
                 }
             }
             this.pair = [];
+          }  // if the readjusted pair still exists
       }
   }
 
@@ -511,9 +513,10 @@ console.log("adjusting brackets", p);
         if (p[0] == "{"){ p[0] = ["\\{"] }
         if (p[1] == "}"){ p[1] = ["\\}"] }
     }
-    if (p[0] == "⁅"){ p[0] = ["("] }   // assumed brackets on greedy functions
-    if (p[1] == "⁆"){ p[1] = [")"] }
-    if (p[0] == "❲"){ p[0] = [""] }    // assumed brackets on trig-like and grouping functions
+//    if (p[0] == "⁅"){ p[0] = [""] }   // assumed brackets on greedy functions  (and trig-like)
+//    if (p[1] == "⁆"){ p[1] = [""] }
+    if (p[0] == "⁅"){ p=[] }
+    if (p[0] == "❲"){ p[0] = [""] }    // assumed brackets on grouping functions
     if (p[1] == "❳"){ p[1] = [""] }
     return p
 }

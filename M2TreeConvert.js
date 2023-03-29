@@ -54,7 +54,7 @@ console.log("found a quote");
                         // it is a bad sign that this is the only place where conversiontype is used in this function
                         // what will we do when we combine all the conversion methods?
                         if(conversiontype == "SpaceMath2MathML") {
-                            qNode = new TreeNode(0,"<mspace width=\"0.5em\"/></mspace><mtext>"+children[1]+"</mtext><mspace width=\"0.5em\"/></mspace>",null,null, conversiontype);
+                            qNode = new TreeNode(0,"<mspace width=\"0.8em\"/></mspace><mtext>"+children[1]+"</mtext><mspace width=\"0.8em\"/></mspace>",null,null, conversiontype);
                         } else if(conversiontype == "SpaceMath2speech") {
                             qNode = new TreeNode(0,"text "+children[1]+" endtext",null,null, conversiontype);
                         }

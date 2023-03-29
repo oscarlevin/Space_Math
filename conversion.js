@@ -281,9 +281,10 @@ function preprocessarithmetic(rawstring) {
     str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/)/g, '❲$1❳/');  // numerator
 //    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/❲$1❳');  // denominator
 // greedy denominator.  When does that fail?
-    str = str.replace(/\/([^ \(\[{\/][^ \$]*)/g, '/❲$1❳');  // denominator
+    str = str.replace(/\/([^ \(\[{\/][^ \n\$]*)/g, '/❲$1❳');  // denominator
 console.log("after preprocess fractions", str);
 
+// wrap argument of greedy function in fake parentheses
     for (const symbolname of greedyfunctions) {
         var regExStrStub = "([\\$ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}\\$]+)";
         var regExStr = regExStrStub + "([$ \\$\\(\\)\\[\\]\\{\\}])";
@@ -389,7 +390,8 @@ console.log("did we find span?", str);
 console.log("looking for vector", str);
     str = str.replace(/(\$| )<([^ ,<>\$][^,<>\$]*)\, ([^<>\$]+)>/g, '$1vector($2, $3)');
 console.log("did we find vector?", str);
-    str = str.replace(/(\$| )<([^ ][^,<>]*)\,([^ ][^<>]*)>/g, '$1($2) innerproduct ($3)');
+// another place where \n can start an expression
+    str = str.replace(/(\$| |\n)<([^ ][^,<>]*)\,([^ ][^<>]*)>/g, '$1($2) innerproduct ($3)');
 // catch all for every other case <...> of unknown meaning
     str = str.replace(/(\$| )<([^<>]+)>/g, '$1anglebrackets($2)');
 
@@ -415,10 +417,10 @@ console.log("looking for limits: symbolname", symbolname);
          symbolname = "\\\\?" + symbolname;  // hack to be partially backward compatible with TeX
 // the lower and upper limits might be in parentheses.  We handle these awkwardly
          var regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^() ]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
-         var regExStr = regExStrStub + " d([a-z]+)" + "( |\\$)";
+         var regExStr = regExStrStub + " d([a-z]+)" + "( |\n|\\$)";
   //       var regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
   // switched grouping brackets
-         var regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\\$)";
+         var regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|\\$)";
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          var regExWeight = new RegExp(regExStrWeight, "g");
@@ -428,9 +430,9 @@ console.log("regExStrWeight", regExStrWeight);
 
          // case of no () around limits (but both lower and upper)
          regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?)";
-         regExStr = regExStrStub + " d([a-z]+)" + "( |\\$)";
+         regExStr = regExStrStub + " d([a-z]+)" + "( |\n|\\$)";
  //        regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
-         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|\\$)";
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          regExWeight = new RegExp(regExStrWeight, "g");
@@ -477,7 +479,7 @@ console.log("looking for powers of known functions");
         str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)wrapper❲$3❳❳');
     }
 console.log("prodessed powers of functions", str);
-// redundant, consolidate
+// subscripts (redundant, consolidate)
     for (let symbolname of greedyfunctions) {
         let slashsymbol = "\\\\?" + symbolname;
 // when we refactor to pull out the math pieces, allow more general

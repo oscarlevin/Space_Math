@@ -500,6 +500,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "\\emptyset"
+    },
+    "speech": {
+      "1,1": " empty set "
+    },
+    "ruleML": {
+      "1,1": "<mi>∅</mi>"
     }
   },
   "infty": {
@@ -988,7 +994,7 @@ var dictionary = {
       "1,2": "\\{#2\\}"
     },
     "speech": {
-      "1,2": "set #2"
+      "1,2": "set #2 endset "
     },
     "ruleML": {
       "1,2": "<mrow intent=\"set($d)\"><mo>{</mo><mrow arg=\"d\">#2</mrow><mo>}</mo></mrow>"
@@ -1086,6 +1092,7 @@ var dictionary = {
       "1,2": "ln"
     }
   },
+/*
   "sin": {   // ??? delete this and cos because handled as a category
     "alternative": [
       "sine"
@@ -1112,6 +1119,7 @@ var dictionary = {
       "1,2": "\\cos #2"
     }
   },
+*/
   "root": {
     "alternative": [],
     "type": "function",
@@ -1321,7 +1329,7 @@ var dictionary = {
     },
     "extraArgument": 2,
     "rule": { 
-      "1,4": "#2^{#3}#4",
+      "1,4": "#2_{#3}#4",
 // experiment      "1,4": "#2_{#3} #4"
     },
     "speech": {
@@ -1363,7 +1371,7 @@ var dictionary = {
       "1,6": " #2 from #3 to #4 of #5 d#6 "
     },
     "ruleML": {
-      "1,6": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mo>&dd;</mo>#6</mrow>",
+      "1,6": "<mrow><munderover>#2<mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mo>&dd;</mo>#6</mrow>",
     }
    },
    "intlimsweight": {  // various integrals
@@ -1381,7 +1389,7 @@ var dictionary = {
       "1,7": " #2 from #3 to #4 of #5 d#6 over #7 "
     },
     "ruleML": {
-      "1,7": "<mrow><munderover><mo>#2</mo><mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mfrac><mrow><mo>&dd;</mo>#6</mrow><mrow>#7</mrow></mfrac></mrow>"
+      "1,7": "<mrow><munderover>#2<mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mfrac><mrow><mo>&dd;</mo>#6</mrow><mrow>#7</mrow></mfrac></mrow>"
      }
     },  
     "intllimweight": {  // various integrals
@@ -1493,7 +1501,7 @@ var dictionary = {
     }
   },
   "in": {
-    "alternative": [],
+    "alternative": [ "element" ],
     "type": "relation",
     "priority": 0,
     "rule": {
@@ -1518,6 +1526,20 @@ var dictionary = {
     },
     "ruleML": {
       "2,3": "#1<mo>∉</mo>#3"
+    }
+  },
+  "subset": {
+    "alternative": [ "subset" ],
+    "type": "relation",
+    "priority": 0,
+    "rule": {
+      "2,3": "#1 \\subset #3"
+    },
+    "speech": {
+      "2,3": "#1 subset #3"
+    },  
+    "ruleML": {
+      "2,3": "#1<mo>⊂</mo>#3"
     }
   },
   "neq": {
@@ -2210,10 +2232,12 @@ for (const letterpair of triglikefunctions) {
       "1,2": "\\" + letterpair[0] + " #2"
     },
     "speech": {
-      "1,2": letterpair[1] + " quantityT #2 Tendquantity "
+  //    "1,2": letterpair[1] + " quantityT #2 Tendquantity "
+      "1,2": letterpair[1] + " #2 "
     },
     "ruleML": {
-      "1,2": "<mi>" + letterpair[0] + "</mi><mo>&ApplyFunction;</mo><mrow>#2</mrow>"
+  //    "1,2": "<mi>" + letterpair[0] + "</mi><mo>&ApplyFunction;</mo><mrow>#2</mrow>"
+      "1,2": "<mi>" + letterpair[0] + "</mi><mo>&ApplyFunction;</mo>#2"
     } 
   };
 
