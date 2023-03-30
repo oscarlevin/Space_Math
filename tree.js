@@ -420,7 +420,7 @@ oooooo
   combineSubSup() {
 // convert  a_b^c  from [a sub b] sup c  to  a subsup b c
     for (let node of this.preOrderTraversal()) {
-console.log("trying subsup on", node);
+// console.log("trying subsup on", node);
       if (node.value === "" && node.key === "^" && node.position == 0) {
 //   console.log("found ^ in position", node.position, "and childrev with values and keys");
         if(node.children.length > 1 && node.children[0].key == "_") {
@@ -525,7 +525,7 @@ function visStr(str) {
     if(str === undefined) { return "undefined" }
     if(str === null) { return "null" }
     if(str == "") { return "es" }
-    return str.replace(" ","␣")
+    return str.replaceAll(" ","␣")
 }
 
 function printTree(node, indentationlevel) {

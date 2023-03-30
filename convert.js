@@ -22,6 +22,12 @@ function convert(str,conversiontype) {
   str = str.replace(/(\$| )\( ([^,()]+)\, *([^,()]+) \)/, '$1($2) gcd ($3)');  //open interval
   str = str.replace(/(\$| )\(([^ ][^,()]*)\,+([^ ][^,()]*)\)/, '$1($2) cartesianpoint ($3)');  //open interval
 */
+
+// text in math is not parsed properly (see comment in M2Tree).
+// temporary hack to remove spaces around quotes (note: this messes up quotes outside math)
+  str = str.replace(/ +"/g, '"');
+  str = str.replace(/" +/g, '"');
+
   str = str.replaceAll('\\$', '%24%'); //replacement on all special characters, Using HTML UTF conversion here (see https://www.w3schools.com/tags/ref_urlencode.ASP)
 console.log("input is now", str);
   if (conversiontype == "LaTeX2MathJax"){
@@ -40,7 +46,9 @@ console.log("   in convert, str = ", str);
       str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
       str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
       str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
+      str = str.replace(/\$\$(.+?)\$\$/sg, "\n<em>$1</em>\n");
       str = str.replace(/\\,/g, " ");
+      str = str.replace(/␣/g, " ");
       str = str.replace(/∏/g, "product");
       str = str.replace(/∑/g, "sum");
   } else if(conversiontype == "SpaceMath2MathML") {

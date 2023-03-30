@@ -48,19 +48,26 @@ console.log("found a quote");
                     let rpos = findPositionOfRightPair(fullStr,counter,quote[0],quote[1],[[quote[0]]]);
                     if (rpos != -1){ 
                         let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
+console.log("children are", children);
                         currentNode.value = "";
                        
-                        let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\",null,null, conversiontype);
+              //          let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\",null,null, conversiontype);
+                        let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\","justatest",null, conversiontype);
                         // it is a bad sign that this is the only place where conversiontype is used in this function
                         // what will we do when we combine all the conversion methods?
                         if(conversiontype == "SpaceMath2MathML") {
-                            qNode = new TreeNode(0,"<mspace width=\"0.8em\"/></mspace><mtext>"+children[1]+"</mtext><mspace width=\"0.8em\"/></mspace>",null,null, conversiontype);
+              //              qNode = new TreeNode(0,"<mspace width=\"0.8em\"/></mspace><mtext>"+children[1]+"</mtext><mspace width=\"0.8em\"/></mspace>",null,null, conversiontype);
+                            qNode = new TreeNode(0,"<mspace width=\"0.8em\"/></mspace><mtext>"+children[1]+"</mtext><mspace width=\"0.8em\"/></mspace>","quote",null, conversiontype);
                         } else if(conversiontype == "SpaceMath2speech") {
-                            qNode = new TreeNode(0,"text "+children[1]+" endtext",null,null, conversiontype);
+                            qNode = new TreeNode(0,"␣text "+children[1]+" endtext␣",null,null, conversiontype);
                         }
 
+console.log("qNode was", qNode, "with children", qNode.children);
                         qNode = combinePrev(children[0],qNode, conversiontype); // there are something before the pair, consider multiplication/compositio
+console.log("qNode is", qNode, "with children", qNode.children);
+console.log("stackedTreeNode was", stackedTreeNode);
                         stackedTreeNode = stackNode(stackedTreeNode, qNode, conversiontype); // put the symbol node on the stack
+console.log("stackedTreeNode is", stackedTreeNode, "with children", stackedTreeNode.children);
 
                         if (extraArgument.length > 0){ // treat space differently if we run into extra argument case
                             stackedTreeNode.key = extraArgument[0][0].children[0].key;
