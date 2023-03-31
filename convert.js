@@ -25,8 +25,10 @@ function convert(str,conversiontype) {
 
 // text in math is not parsed properly (see comment in M2Tree).
 // temporary hack to remove spaces around quotes (note: this messes up quotes outside math)
-  str = str.replace(/ +"/g, '"');
-  str = str.replace(/" +/g, '"');
+// LATER:  took away this hack, because it messed up parsing.
+// need to go back and figure out to not have implied multiplication of quoted strings
+//  str = str.replace(/ +"/g, '"');
+//  str = str.replace(/" +/g, '"');
 
   str = str.replaceAll('\\$', '%24%'); //replacement on all special characters, Using HTML UTF conversion here (see https://www.w3schools.com/tags/ref_urlencode.ASP)
 console.log("input is now", str);

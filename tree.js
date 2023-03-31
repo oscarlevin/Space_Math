@@ -267,13 +267,18 @@ console.log("                      SpaceMath2MathML conversion failed on", newVa
                   }
                   if (params.includes("caseEnvironment")){
                       newValue = newValue.replace("#&","&");
+                      newOutputValue = newOutputValue.replace("#&","&");
                   } else {
                       newValue = newValue.replace("#&\\text{","\\text{ ");
                       newValue = newValue.replace("#&","");
+                      newOutputValue = newOutputValue.replace("#&\\text{","\\text{ ");
+                      newOutputValue = newOutputValue.replace("#&","");
                   }
                   newValue = newValue.replace("#"+(i+1)+"@1", childValue[0]);
                   newValue = newValue.replace("#"+(i+1)+"@-1", childValue.substring(1));
                   newValue = newValue.replace("#"+(i+1), childValue);
+                  newOutputValue = newOutputValue.replace("#"+(i+1)+"@1", childOutputValue[0]);
+                  newOutputValue = newOutputValue.replace("#"+(i+1)+"@-1", childOutputValue.substring(1));
                   newOutputValue = newOutputValue.replace("#"+(i+1), childOutputValue);
               }
           }

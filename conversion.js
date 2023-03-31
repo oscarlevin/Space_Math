@@ -261,10 +261,10 @@ function preprocessarithmetic(rawstring) {
     str = str.replace(/->/g, 'to');
     str = str.replace(/<--/g, 'longleftarrow');
     str = str.replace(/<-/g, 'from');
-    str = str.replace(/(\$| |\(|\^|_)-([^ ])/g, '$1😑$2');  // negative sign
+    str = str.replace(/(\$| |\(|\^|_)[\-\−]([^ ])/g, '$1😑$2');  // ascii dash o2negative sign
 // why |.|.| instead of [...]
 // also a place where we need to be more clever about (word) boundaries
-    str = str.replace(/(^|\$|\(|\[|\{) *-/, '$1😑');  // negative sign
+    str = str.replace(/(^|\$|\(|\[|\{) *[\-\−]/, '$1😑');
 
 // groupings which seem to be needed to overcome the implied left-to-right(?) precedence
 // should these be "wrapper" instead of literal parentheses?
@@ -323,12 +323,12 @@ console.log("before sub and sup grouping", str);
 
 // go back and see how e^x^2/2 is working
 
-    str = str.replace(/\^([^ ❲❳\/\(\[{][^ ❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
+    str = str.replace(/\^([^ ❲❳\/\(\[{][^ \"❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents once ", str);
-    str = str.replace(/\^([^ ❲❳\/\(\[{][^ ❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
+    str = str.replace(/\^([^ ❲❳\/\(\[{][^ \"❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents twice", str);
-    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ ❲❳\/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
-    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ ❲❳\/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
+    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ \"❲❳\/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
+    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ \"❲❳\/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
 console.log("after subscript twice", str);
 
 // do after the implied grouping for exponents
@@ -416,7 +416,7 @@ console.log("looking for limits: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;  // hack to be partially backward compatible with TeX
 // the lower and upper limits might be in parentheses.  We handle these awkwardly
-         var regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^() ]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
+         var regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^()]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
          var regExStr = regExStrStub + " d([a-z]+)" + "( |\n|\\$)";
   //       var regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
   // switched grouping brackets
@@ -439,6 +439,25 @@ console.log("regExStrWeight", regExStrWeight);
          str = str.replace(regExWeight, '$1wrapper(intlimsweight(' + symbol + ')($2)($3)($4)($5)($6))$7');
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1wrapper(intlims(' + symbol + ')($2)($3)($4)($5))$6');
+
+         // case of lower lim only, () around lower limit
+         // done poorly now, because int_((c)) is tricky
+         // we do a special case for that
+         regExStrStub = "(\\$| )" + symbolname + "\\_\\(\\(([^()]+?)\\)\\) (.*?)";
+         regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
+         regExWeight = new RegExp(regExStrWeight, "g");
+         str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')(($2))($3)($4)($5))$6');
+         regEx = new RegExp(regExStr, "g");
+         str = str.replace(regEx, '$1wrapper(intllim(' + symbol + ')(($2))($3)($4))$5');
+         // now only () around lower limit
+         regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^()]+?)\\) (.*?)";
+         regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
+         regExWeight = new RegExp(regExStrWeight, "g");
+         str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')($2)($3)($4)($5))$6');
+         regEx = new RegExp(regExStr, "g");
+         str = str.replace(regEx, '$1wrapper(intllim(' + symbol + ')($2)($3)($4))$5');
 
          // case of lower lim only, no () around lower limit (unless intended)
          regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?) (.*?)";
@@ -558,6 +577,9 @@ function preprocessother(rawstring) {
     str = str.replace(/([^\$\|]+) cong(ruent)* ([^\$]+) mod ([^\$\{\}]+)/g,  // note: assumes an isolated equation
                                                    // or maybe a condition in set builder
                "congruentmod($1)($3)($4)");
+   // how to we smoothly handle negated relations?
+    str = str.replace(/([^\$\|]+) !cong(ruent)* ([^\$]+) mod ([^\$\{\}]+)/g,
+               "notcongruentmod($1)($3)($4)");
 
     return str
 }
