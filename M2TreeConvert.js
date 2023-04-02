@@ -429,6 +429,7 @@ console.log("now have currentNode", currentNode);
                     stackedTreeNode = stackNode(stackedTreeNode, mNode, conversiontype); // put the symbol node on the stack
                     currentNode.value = splitStr[2];
                     exParam = key;
+console.log("----------- just set exParam = ", exParam);
                     break;
                 case "UNUSED":   // probably wrong
                     splitStr = [fullStr.substring(0,startKey), key, fullStr.substring(counter+1)];

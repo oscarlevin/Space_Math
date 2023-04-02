@@ -211,7 +211,7 @@ console.log("   starting to simplify", ans);
 
         ans = ans.replace(/(^| )quantity([A-Z]?) +([^ ]+) +([A-Z]?)endquantity/g, " $3 ");
         ans = ans.replace(/(^| )quantity([A-Z]?) +(negative +[^ ]+) +([A-Z]?)endquantity/g, " $3 ");
-        ans = ans.replace(/<mrow ([^<>]+)><([a-z]+)>([^<>]+)(<\/$2>)<\/mrow>/g, "<$2 $1>$3$4");
+        ans = ans.replace(/<mrow ([^<>]+)><(mi|mo|mn)>([^<>]+)(<\/(mi|mo|mn)>)<\/mrow>/g, "<$2 $1>$3$4");
         ans = ans.replace(/<mrow>(<([a-z]+)>)([^<>]+)(<\/$2>)<\/mrow>/g, "$1$3$4");
 console.log("now ans", ans);
         ans = ans.replace(/<mrow>(<mi>)([^<>]+)(<\/mi>)<\/mrow>/g, "$1$2$3");

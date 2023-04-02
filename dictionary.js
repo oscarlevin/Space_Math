@@ -2012,7 +2012,7 @@ var dictionary = {
     "emptyLineBeforeIndent": true,
     "note": "align*"
   },
-  "linearsystem:": {
+  "linearsystem:": {   // not actually implemented yet
     "alternative": [],
     "type": "multiline",
     "seperateOut": true,
@@ -2133,6 +2133,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "#&\\text{if }"
+    },
+    "speech": {
+      "1,1": " if "
+    },
+    "ruleML": {
+      "1,1": "<mtd><mtext>if</mtext></mtd>"
     }
   },
   "otherwise": {
@@ -2141,6 +2147,12 @@ var dictionary = {
     "priority": -1,
     "rule": {
       "1,1": "#&\\text{otherwise}"
+    },
+    "speech": {
+      "1,1": " otherwise "
+    },
+    "ruleML": {
+      "1,1": "<mtd><mtext>otherwise</mtext></mtd>"
     }
   },
   "when": {

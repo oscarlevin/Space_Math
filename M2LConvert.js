@@ -46,16 +46,27 @@ function M2LConvert(str,lp,rp, conversiontype){
     let paramStack = [];
     let lastLine = "";
     while (splitStr.length > 0){
-        let params = [];
+        let params = [];   // are parames only for multiline constructions?
         if (paramStack[0] && dictionary[paramStack[0]].params){
             params = dictionary[paramStack[0]].params;
         }
+console.log("top of loop  ",splitStr);
+console.log("params = ",params);
+
    // this is the key parsing step, when one meaningful string is parsed into a tree
-        let temp = M2TreeConvert(splitStr[0],params, conversiontype);
+// 4/1/23 added .trim(); may need to rethink, if the indentation level is relevant
+        let temp = M2TreeConvert(splitStr[0].trim(),params, conversiontype);
         let tree = temp[0];
         let exParam = temp[1];
         let response = temp[2];
         let latexLine = combineTree2Latex(tree,params);
+        if (params.length && params[0] == "caseEnvironment") {
+            if (conversiontype == "SpaceMath2MathML") {
+                latexLine = "<mtr>" + latexLine
+            } else if (conversiontype == "SpaceMath2speech") {
+                latexLine = " case " + latexLine
+            }
+        }
         if (splitStr.length > 0 && exParam.length == 0){
             if (paramStack.length > 0 && ((!dictionary[paramStack[0]].absorbEmptyLine) || splitStr[0].trim().length > 0)){
                 if ((dictionary[paramStack[0]].absorbEmptyLine && splitStr.length > 1 && splitStr[1].trim().length > 0) || (splitStr.length == 2 && splitStr[1].trim().length == 0) || splitStr.length == 1){
@@ -64,7 +75,13 @@ function M2LConvert(str,lp,rp, conversiontype){
                     if (dictionary[paramStack[0]].changeLineTurn){
                         latexLine += dictionary[paramStack[0]].changeLineTurn + "\n";
                     } else {
+                      if (conversiontype == "SpaceMath2MathML") {
+                        latexLine += "</mtr>\n"
+                      } else if (conversiontype == "SpaceMath2speech") {
+                        latexLine += " end case ";
+                      } else {
                         latexLine += "\\\\\n";
+                }
                     }
                 }
                 
@@ -84,6 +101,7 @@ function M2LConvert(str,lp,rp, conversiontype){
         }
         lastLine = splitStr[0];
         splitStr.shift();
+console.log("============ exParam", exParam);
         if (dictionary[exParam]){
             if (dictionary[exParam].seperateOut){
                 latexLine += rp;
@@ -91,7 +109,15 @@ function M2LConvert(str,lp,rp, conversiontype){
             if (dictionary[exParam].noBeginEnd){
                 latexLine += dictionary[exParam].note+"{";
             } else {
-                latexLine += "\\begin{"+dictionary[exParam].note+"}";
+                if (conversiontype == "SpaceMath2MathML") {
+                    if (exParam == "cases:") {
+                        latexLine += "<mrow><mo>{</mo>"   // + latexLine;  // where does the intent go"
+                    }
+                    latexLine += "<mtable intent=\"" + dictionary[exParam].note + "\">\n";
+              //      if (params[0] == "caseEnvironment") {
+                } else {
+                    latexLine += "\\begin{"+dictionary[exParam].note+"}";
+                }
             }
             
             paramStack.push(exParam);
@@ -102,7 +128,7 @@ function M2LConvert(str,lp,rp, conversiontype){
                 if (dictionary[paramStack[0]].noBeginEnd){
                     latexLine += "}";
                 } else {
-                    latexLine += "\\end{"+dictionary[paramStack[0]].note+"}";
+                    latexLine += "AA\\end{"+dictionary[paramStack[0]].note+"}";
                 }
                 
                 if (dictionary[paramStack[0]].lineBreak){
@@ -121,7 +147,14 @@ function M2LConvert(str,lp,rp, conversiontype){
         if (dictionary[paramStack[0]].noBeginEnd){
             latexStr += "}";
         } else {
-            latexStr += "\\end{"+dictionary[paramStack[0]].note+"}";
+                if (conversiontype == "SpaceMath2MathML") {
+                    latexStr += "</mtable><!-- " + dictionary[paramStack[0]].note + " -->\n";
+       //             if (params[0] == "caseEnvironment") {
+                        latexStr += "</mrow>";  // because of the mrow supplying the big left curly bracket
+       //             }
+                } else {
+                    latexStr += "\\end{"+dictionary[paramStack[0]].note+"}";
+                }
         }
         if (dictionary[paramStack[0]].seperateOut){
             latexStr += lp;
