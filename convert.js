@@ -61,7 +61,7 @@ console.log("   in convert, str = ", str);
       str = str.replace(/\\,/g, "");
 // We use "wrap" to add attributes to a child, but don't know if there is
 // a single child.  When there is, transfer the attributes to the single child
-// refactor to imporve and reconcile this with "simplify" in conversion.js
+// refactor to imporve and reconcile this with "simplifyAnswer" in conversion.js
       str = str.replace(/<wrap([^>]+)>(<m[a-z]+[^<>]*)(>[^<>]*<\/m[a-z]+>)<\/wrap>/g, "$2$1$3");
       str = str.replace(/<wrap /g, "<mrow ");
       str = str.replace(/<\/wrap>/g, "</mrow>");
@@ -70,7 +70,7 @@ console.log("   in convert, str = ", str);
 */
   }
 console.log("str was", str);
-  str = simplify(str)
+  str = simplifyAnswer(str)
 //  str = str.replace(/<mrow>/g, "\n<mrow>");
 //  str = str.replace(/<\/mrow>/g, "</mrow>\n");
   str = str.replace(/\n+/g, "\n");
