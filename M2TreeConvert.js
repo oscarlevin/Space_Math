@@ -128,7 +128,7 @@ console.log("just made stackedTreeNode", stackedTreeNode);
             }
 
             if (char == "<" && fullStr[counter+1] != " "){
-console.log("looking fo an angle pair");
+console.log("looking for an angle pair");
                 let rpos = findPositionOfRightAngle(fullStr,counter);
                 if (rpos != -1){ 
                     let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
@@ -161,17 +161,21 @@ console.log("keyType", keyType);
                 }
             }
 
-            let j = startCounter;
-console.log("j", j, "on", "X"+fullStr+"X");
+//            let j = startCounter;  // is this unused, left around from a code change?
+console.debug("OUT j", startCounter, "on", "X"+fullStr+"X", "woith counter", counter);
 // this for loop seems to check of the string ends with a symbol name.
 // for example: breta matches br+eta.
 // is this an unwanted backward compatibility with AsciiMath?
 //   attempt to disable this feature, but recheck later
-      //      for (let j = startCounter; j <= startCounter; j++){
+      //      for (let j = counter; j <= counter; j++){
             for (let j = startCounter; j <= counter; j++) {
+console.debug("inner j", j, "on", "X"+fullStr+"X", "counter", counter);
 // do the g's in these matches actually do anything, since the match is on a single character?
 // if the user enters a greek letter, will this part fail?
-                if (fullStr[counter+1] && fullStr[counter].match(/[A-Za-z]/g) && fullStr[counter+1].match(/[A-Za-z]/g)){
+  //              if (fullStr[counter+1] && fullStr[counter].match(/[A-Za-z]/g) && fullStr[counter+1].match(/[A-Za-z]/g)){
+       // added ␣ as a special character for spaces in multiword quoted strings
+                if (fullStr[counter+1] && fullStr[counter].match(/[A-Za-z␣]/g) && fullStr[counter+1].match(/[A-Za-z␣]/g)){
+console.debug("  contuing because building up a word on", fullStr[counter], "and", fullStr[counter+1], "so far", fullStr.substring(j,counter+1));
                     continue; //we do not split keyword if it ends with letter and directly followed by letter
                 }
                 let subStr = fullStr.substring(j,counter+1);
@@ -182,7 +186,7 @@ console.log("subStr", subStr, "type", type);
                     startKey = j;
                     keyType = type;
                     breakSearch = true;
-console.log("A keyType", keyType, "with key", "X"+key+"X");
+console.log("A keyType", keyType, "with key", "X"+key+"X", "from subStr", subStr);
                     break;
                 }
                 if (subStr == " " && (counter >= 1 || (currentNode.parent && currentNode.parent.children.length == 2 && currentNode.position == 1) || stackedTreeNode) && !containOperatorOrRelationPure(findNextWord(fullStr,counter))){
@@ -193,10 +197,18 @@ console.log("A keyType", keyType, "with key", "X"+key+"X");
 console.log("B keyType", keyType);
                     break;
                 }
+                else
+                {
+//     // another attempt to stop breta matches br+eta.
+ console.debug("     maybe breaking on multiword subStr", subStr);
+             // not currently used, because of the hack of including ␣ in quoted strings
+       //             if (subStr.includes("␣")) { breakSearch = true; break }
+                }
             }
             if (breakSearch){
                 break;
             }
+
             if (!endSearch){
                 counter++;
                 if (char.match(/[\s\d]/g)){ //we won't have number/space in keyword, so we can eliminate the possibility of happen a keyword on the left.

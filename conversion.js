@@ -239,6 +239,7 @@ console.log("now ans", ans);
 function preprocess(rawstring) {
     let str = rawstring;
 
+    str = preprocessquotes(str);
     str = preprocessarithmetic(str);
 console.log("after preprocessarithmetic", str);
     str = preprocessparentheses(str);
@@ -252,6 +253,18 @@ console.log("before other", str);
 console.log("after other", str);
 
     return str
+}
+
+function preprocessquotes(rawstring) {
+    let str = rawstring;
+
+//    str = str.replace(/(\s)"(\S[^"]+)"(\s|$)/g, '$1quote($2)$3');
+    str = str.replace(/(\s)"(\S[^"]+)"(\s|$)/g, wrapquotes);
+
+    return str
+}
+function wrapquotes(match, before, thequote, after, offset, string) {
+    return before + "quote(␣" + thequote.replaceAll(" ", "␣") + "␣)" + after
 }
 
 function preprocessarithmetic(rawstring) {

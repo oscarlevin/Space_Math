@@ -74,6 +74,7 @@ console.log("str was", str);
 //  str = str.replace(/<mrow>/g, "\n<mrow>");
 //  str = str.replace(/<\/mrow>/g, "</mrow>\n");
   str = str.replace(/\n+/g, "\n");
+  str = str.replace(/␣/g, " ");
   return str
 }
 

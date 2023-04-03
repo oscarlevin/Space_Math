@@ -791,6 +791,44 @@ var dictionary = {
       "1,2": "<msqrt><mrow>#2</mrow></msqrt>"
     } 
   },
+  "sqrt": {
+    "alternative": [],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [
+        2
+      ]
+    },
+    "rule": {
+      "1,2": "\\sqrt{#2}"
+    },
+    "speech": {
+      "1,2": " square root of quantityZ #2 Zendquantity "
+    },
+    "ruleML": {
+      "1,2": "<msqrt><mrow>#2</mrow></msqrt>"
+    }
+  },
+  "quote": {
+    "alternative": [],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,2": [
+        2
+      ]
+    },
+    "rule": {
+      "1,2": "\\text{ #2 }"
+    },
+    "speech": {
+      "1,2": " #2 "
+    },
+    "ruleML": {
+      "1,2": "<mspace width=\"0.5em\"></mspace><mtext>#2</mtext><mspace width=\"0.5em\"></mspace>"
+    }
+  },
   "gcd": {
     "alternative": [],
     "type": "function",
@@ -2001,6 +2039,24 @@ var dictionary = {
     ],
     "note": "cases"
   },
+  "casesline": {  // as in    x+1 if x < 8
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,4": [ 1, 2, 3, 4 ]
+    },
+    "extraArgument": 2,
+    "rule": {
+      "1,4": "#2 & \\text{ #3 } #4"
+    },
+    "speech": {
+      "1,4": "#2 #3 #4 "
+    },
+    "ruleML": {
+      "1,4": "<mtr><mtd>#2</mtd><mtd style=\"text-align: left\"><mspace width=\"1em\"></mspace><mtext>#3</mtext><mspace width=\"0.5em\"></mspace>#4</mtd></mtr>"
+    }
+  },
   "system:": {
     "alternative": [],
     "type": "multiline",
@@ -2127,18 +2183,20 @@ var dictionary = {
       "1,2": "\\underline{#2}"
     }
   },
-  "if": {
+  "if": {    // currently "if" and "otherwise" only work in the case environment,
+             // which supplies all the surrounding tags
     "alternative": [],
     "type": "symbol",
     "priority": -1,
     "rule": {
-      "1,1": "#&\\text{if }"
+      "1,1": "if"
     },
     "speech": {
       "1,1": " if "
     },
     "ruleML": {
-      "1,1": "<mtd><mtext>if</mtext></mtd>"
+   //   "1,1": "<mtd><mtext>if</mtext></mtd>"
+      "1,1": "if"
     }
   },
   "otherwise": {
@@ -2146,13 +2204,14 @@ var dictionary = {
     "type": "symbol",
     "priority": -1,
     "rule": {
-      "1,1": "#&\\text{otherwise}"
+      "1,1": "otherwise"
     },
     "speech": {
       "1,1": " otherwise "
     },
     "ruleML": {
-      "1,1": "<mtd><mtext>otherwise</mtext></mtd>"
+ //     "1,1": "<mtd><mtext>otherwise</mtext></mtd>"
+      "1,1": "otherwise"
     }
   },
   "when": {

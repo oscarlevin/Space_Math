@@ -50,19 +50,35 @@ function M2LConvert(str,lp,rp, conversiontype){
         if (paramStack[0] && dictionary[paramStack[0]].params){
             params = dictionary[paramStack[0]].params;
         }
+console.log("  ++  ++  ++  ++  ++  ++  ++  ++  ++  ++ ");
 console.log("top of loop  ",splitStr);
 console.log("params = ",params);
+console.log("thisEnvironment = ",thisEnvironment);
+
+   // sort of a hack, but working toward better multiline expressions
+    if (params.length > 0 && params[0] == "caseEnvironment") {
+        let thisLine = splitStr[0];
+        let thisLinePieces = thisLine.split(/(if|when|unless|otherwise)/g);
+        if (thisLinePieces.length != 3) { console.error("invalid cases line", thisLine) }
+        else {
+            thisLine = "casesline(" + thisLinePieces[0] + ")(" + thisLinePieces[1] + ")(" + thisLinePieces[2] + ")";
+            splitStr[0] = thisLine;
+        }
+console.log("thisLinePieces", thisLinePieces);
+    }
 
    // this is the key parsing step, when one meaningful string is parsed into a tree
 // 4/1/23 added .trim(); may need to rethink, if the indentation level is relevant
         let temp = M2TreeConvert(splitStr[0].trim(),params, conversiontype);
+console.log("temp");
         let tree = temp[0];
         let exParam = temp[1];
         let response = temp[2];
         let latexLine = combineTree2Latex(tree,params);
         if (params.length && params[0] == "caseEnvironment") {
+            thisEnvironment = "cases";
             if (conversiontype == "SpaceMath2MathML") {
-                latexLine = "<mtr>" + latexLine
+    //            latexLine = "<mtr>" + latexLine
             } else if (conversiontype == "SpaceMath2speech") {
                 latexLine = " case " + latexLine
             }
@@ -76,7 +92,7 @@ console.log("params = ",params);
                         latexLine += dictionary[paramStack[0]].changeLineTurn + "\n";
                     } else {
                       if (conversiontype == "SpaceMath2MathML") {
-                        latexLine += "</mtr>\n"
+     //                   latexLine += "</mtr>\n"
                       } else if (conversiontype == "SpaceMath2speech") {
                         latexLine += " end case ";
                       } else {
@@ -111,9 +127,9 @@ console.log("============ exParam", exParam);
             } else {
                 if (conversiontype == "SpaceMath2MathML") {
                     if (exParam == "cases:") {
-                        latexLine += "<mrow><mo>{</mo>"   // + latexLine;  // where does the intent go"
+                        latexLine += "<mrow intent=\"$table\"><mo>{</mo>"   // + latexLine;  // where does the intent go"
                     }
-                    latexLine += "<mtable intent=\"" + dictionary[exParam].note + "\">\n";
+                    latexLine += "<mtable $arg=\"table\" intent=\":" + dictionary[exParam].note + "\">\n";
               //      if (params[0] == "caseEnvironment") {
                 } else {
                     latexLine += "\\begin{"+dictionary[exParam].note+"}";

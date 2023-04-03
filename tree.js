@@ -77,6 +77,10 @@ console.log("   adding leaf markup with key, val, oval", this.key,"a,a", this.va
           } else {
                this.outputvalue = markAtomicItem(this.value, this.conversiontype);
           }
+      } else if(this.key == "quote") {
+          if(this.position == 1) {
+              this.outputvalue = this.value
+          }
       } else if(this.key == "") {
           console.log("item with empty key.  Is this function apply?", this)
           if(this.position == 1) {
