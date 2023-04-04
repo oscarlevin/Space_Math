@@ -55,8 +55,9 @@ console.log("top of loop  ",splitStr);
 console.log("params = ",params);
 console.log("thisEnvironment = ",thisEnvironment);
 
+      if (splitStr[0].trim() == "") {console.log("skipping empty string");  splitStr.shift();  continue }  // may need this as an indicator in some cases
    // sort of a hack, but working toward better multiline expressions
-    if (params.length > 0 && params[0] == "caseEnvironment") {
+      if (params.length > 0 && params[0] == "caseEnvironment") {
         let thisLine = splitStr[0];
         let thisLinePieces = thisLine.split(/(if|when|unless|otherwise)/g);
         if (thisLinePieces.length != 3) { console.error("invalid cases line", thisLine) }
@@ -94,7 +95,8 @@ console.log("temp");
                       if (conversiontype == "SpaceMath2MathML") {
      //                   latexLine += "</mtr>\n"
                       } else if (conversiontype == "SpaceMath2speech") {
-                        latexLine += " end case ";
+   // why is this here and not in dictionary?
+                        latexLine += " end_case ";
                       } else {
                         latexLine += "\\\\\n";
                 }
@@ -130,7 +132,9 @@ console.log("============ exParam", exParam);
                         latexLine += "<mrow intent=\"$table\"><mo>{</mo>"   // + latexLine;  // where does the intent go"
                     }
                     latexLine += "<mtable $arg=\"table\" intent=\":" + dictionary[exParam].note + "\">\n";
-              //      if (params[0] == "caseEnvironment") {
+              //      if (params[0] == "caseEnvironment") 
+                } else if (conversiontype == "SpaceMath2speech") {
+                    latexLine += " begin " + dictionary[exParam].note;
                 } else {
                     latexLine += "\\begin{"+dictionary[exParam].note+"}";
                 }
@@ -165,9 +169,12 @@ console.log("============ exParam", exParam);
         } else {
                 if (conversiontype == "SpaceMath2MathML") {
                     latexStr += "</mtable><!-- " + dictionary[paramStack[0]].note + " -->\n";
-       //             if (params[0] == "caseEnvironment") {
+       //             if (params[0] == "caseEnvironment") 
                         latexStr += "</mrow>";  // because of the mrow supplying the big left curly bracket
        //             }
+                } else if (conversiontype == "SpaceMath2speech") {
+         // it seems anomalous that we need to stick in end_case here
+                    latexStr += "end_case  end-" + dictionary[paramStack[0]].note;
                 } else {
                     latexStr += "\\end{"+dictionary[paramStack[0]].note+"}";
                 }

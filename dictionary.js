@@ -2054,7 +2054,7 @@ var dictionary = {
       "1,4": "#2 #3 #4 "
     },
     "ruleML": {
-      "1,4": "<mtr><mtd>#2</mtd><mtd style=\"text-align: left\"><mspace width=\"1em\"></mspace><mtext>#3</mtext><mspace width=\"0.5em\"></mspace>#4</mtd></mtr>"
+      "1,4": "<mtr><mtd>#2</mtd><mtd style=\"text-align: left\"><mspace width=\"1em\"></mspace><mtext>#3</mtext><mspace width=\"0.5em\"></mspace>#4</mtd></mtr>\n"
     }
   },
   "system:": {
