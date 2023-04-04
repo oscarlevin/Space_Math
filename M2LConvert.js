@@ -57,7 +57,7 @@ console.log("top of loop  ",splitStr);
 console.log("params = ",params);
 console.log("thisEnvironment = ",thisEnvironment);
 
-      if (splitStr[0].trim() == "" && !params.includes("system")) {console.info("skipping empty string");  splitStr.shift();  continue }  // may need this as an indicator in some cases
+      if (splitStr[0].trim() == "" && !params.includes("system")) {console.info("skipping empty string");  splitStr.shift();  continue }  // may need this as an indicator in some cases ??
    // sort of a hack, but working toward better multiline expressions
       if (params.length > 0 && params.includes("caseEnvironment")) {
         let thisLine = splitStr[0];
@@ -71,6 +71,11 @@ console.log("thisEnvironment = ",thisEnvironment);
 console.log("thisLinePieces", thisLinePieces);
       } else if (params.length > 0 && params.includes("system")) {
         let thisLine = splitStr[0];
+        // a if the next line is not blank, it is a ontinuation of the current line
+        while (splitStr.length > 1 && splitStr[1].trim() != "") {
+            thisLine += splitStr[1];
+            splitStr.splice(1,1);
+        }
   // move the relations to dictionary
         let thisLinePieces = thisLine.split(/(<=|>=|:=|<|>|=).*?/);
         // maybe more than one relation on the line
@@ -81,10 +86,10 @@ console.log("thisLinePieces", thisLinePieces);
         }
         if (thisLinePieces.length != 3) { console.error("invalid system line", thisLine, "with pieces", thisLinePieces) }
         else {      
-            thisLine = "systemline(" + thisLinePieces[0] + ")(" + thisLinePieces[1] + ")(" + thisLinePieces[2] + ")";
+            thisLine = "systemline(" + thisLinePieces[0].trim() + ")(" + thisLinePieces[1].trim() + ")(" + thisLinePieces[2].trim() + ")";
             splitStr[0] = thisLine;
         }   
-console.log("thisLinePieces", thisLinePieces);
+console.log("thisLine", thisLine, "thisLinePieces", thisLinePieces);
       }
 
    // this is the key parsing step, when one meaningful string is parsed into a tree
@@ -102,6 +107,13 @@ console.log("temp");
             } else if (conversiontype == "SpaceMath2speech") {
                 latexLine = " case " + latexLine
             }
+        } else if (params.length && params.includes("system")) {
+            thisEnvironment = "system";
+            if (conversiontype == "SpaceMath2MathML") {
+    //            latexLine = "<mtr>" + latexLine
+            } else if (conversiontype == "SpaceMath2speech") {
+                latexLine = " line " + latexLine
+            }
         }
         if (splitStr.length > 0 && exParam.length == 0){
             if (paramStack.length > 0 && ((!dictionary[paramStack[0]].absorbEmptyLine) || splitStr[0].trim().length > 0)){
@@ -115,7 +127,8 @@ console.log("temp");
      //                   latexLine += "</mtr>\n"
                       } else if (conversiontype == "SpaceMath2speech") {
    // why is this here and not in dictionary?
-                        latexLine += " end_case ";
+                        if (thisEnvironment == "cases") {latexLine += " end_case\n"}
+                        if (thisEnvironment == "system") {latexLine += " end_line\n"}
                       } else {
                         latexLine += "\\\\\n";
                 }
@@ -153,7 +166,7 @@ console.log("============ exParam", exParam);
                     }
                     latexLine += "<mtable arg=\"table\" intent=\":" + dictionary[exParam].MathMLnote + "\">\n";
                 } else if (conversiontype == "SpaceMath2speech") {
-                    latexLine += " begin " + dictionary[exParam].note;
+                    latexLine += " begin-" + dictionary[exParam].note + " ";
                 } else {
                     latexLine += "\\begin{"+dictionary[exParam].note+"}";
                 }
@@ -193,7 +206,9 @@ console.log("============ exParam", exParam);
                     }
                 } else if (conversiontype == "SpaceMath2speech") {
          // it seems anomalous that we need to stick in end_case here
-                    latexStr += "end_case  end-" + dictionary[paramStack[0]].note;
+                    if (dictionary[paramStack[0]].note == "cases") { latexStr += "end_case " }
+                    if (dictionary[paramStack[0]].note == "align") { latexStr += "end_line " }
+                    latexStr += "end-" + dictionary[paramStack[0]].note;
                 } else {
                     latexStr += "\\end{"+dictionary[paramStack[0]].note+"}";
                 }
@@ -204,5 +219,5 @@ console.log("============ exParam", exParam);
         paramStack.shift();
     } //no indent
     console.log("latexStr", latexStr);
-    return trimSpaces(latexStr);
+    return trimSpaces(latexStr)
 }

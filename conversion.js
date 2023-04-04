@@ -167,7 +167,7 @@ console.log("markAtomicItem of", ans, "endans", symbolQ(str));
       ans = "<mo>"+ans+"</mo>"
     } else if(str.includes("mtext")) {  // probably text in math
       // do nothing
-    } else {
+    } else if (ans != "") {  // this is a hack, because there are many places where an empty string should be handled properly.
       ans = "<unknown>"+ans+"</unknown>"
 console.warn("unknown type", "X"+ans+"X")
     }
