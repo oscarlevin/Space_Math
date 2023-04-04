@@ -30,6 +30,8 @@ fetch("dictionary.json").then(
 
 var theSpaceMathInML;
 
+var thisEnvironment = "";  // bad idea, not used
+
 if (sourceTextArea.addEventListener) {
   sourceTextArea.addEventListener('input', function() {
 /*

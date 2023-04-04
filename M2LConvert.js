@@ -11,6 +11,7 @@ Description: A helper function which generalize several steps to take the origin
 */
 function M2LConvert(str,lp,rp, conversiontype){
     //preprocessing for inline structure
+console.log("M2LConvert(str,lp,rp, conversiontype)", str,lp,rp, conversiontype);
     for (let key of translateTable.getAllMultiLine()) { // iterate through dictionary
         let index = str.indexOf(key.slice(0, -1)+"(");
         while (index != -1){
@@ -46,16 +47,74 @@ function M2LConvert(str,lp,rp, conversiontype){
     let paramStack = [];
     let lastLine = "";
     while (splitStr.length > 0){
-        let params = [];
+        var params = [];   // are params only for multiline constructions?
+                           //sort of a hack because we need params after this loop
         if (paramStack[0] && dictionary[paramStack[0]].params){
             params = dictionary[paramStack[0]].params;
         }
+console.log("  ++  ++  ++  ++  ++  ++  ++  ++  ++  ++ ");
+console.log("top of loop  ",splitStr);
+console.log("params = ",params);
+console.log("thisEnvironment = ",thisEnvironment);
+
+      if (splitStr[0].trim() == "" && !params.includes("system")) {console.info("skipping empty string");  splitStr.shift();  continue }  // may need this as an indicator in some cases ??
+   // sort of a hack, but working toward better multiline expressions
+      if (params.length > 0 && params.includes("caseEnvironment")) {
+        let thisLine = splitStr[0];
+  // move the keywords to dictionary
+        let thisLinePieces = thisLine.split(/(if|when|unless|otherwise)/g);
+        if (thisLinePieces.length != 3) { console.error("invalid cases line", thisLine) }
+        else {
+            thisLine = "casesline(" + thisLinePieces[0] + ")(" + thisLinePieces[1] + ")(" + thisLinePieces[2] + ")";
+            splitStr[0] = thisLine;
+        }
+console.log("thisLinePieces", thisLinePieces);
+      } else if (params.length > 0 && params.includes("system")) {
+        let thisLine = splitStr[0];
+        // a if the next line is not blank, it is a ontinuation of the current line
+        while (splitStr.length > 1 && splitStr[1].trim() != "") {
+            thisLine += splitStr[1];
+            splitStr.splice(1,1);
+        }
+  // move the relations to dictionary
+        let thisLinePieces = thisLine.split(/(<=|>=|:=|<|>|=).*?/);
+        // maybe more than one relation on the line
+        if (thisLinePieces.length > 3) {
+            let newthirdpiece = "";
+            while (thisLinePieces.length >= 3) { newthirdpiece = thisLinePieces.pop() + newthirdpiece }
+            thisLinePieces[2] = newthirdpiece;
+        }
+        if (thisLinePieces.length != 3) { console.error("invalid system line", thisLine, "with pieces", thisLinePieces) }
+        else {      
+            thisLine = "systemline(" + thisLinePieces[0].trim() + ")(" + thisLinePieces[1].trim() + ")(" + thisLinePieces[2].trim() + ")";
+            splitStr[0] = thisLine;
+        }   
+console.log("thisLine", thisLine, "thisLinePieces", thisLinePieces);
+      }
+
    // this is the key parsing step, when one meaningful string is parsed into a tree
-        let temp = M2TreeConvert(splitStr[0],params, conversiontype);
+// 4/1/23 added .trim(); may need to rethink, if the indentation level is relevant
+        let temp = M2TreeConvert(splitStr[0].trim(),params, conversiontype);
+console.log("temp");
         let tree = temp[0];
         let exParam = temp[1];
         let response = temp[2];
         let latexLine = combineTree2Latex(tree,params);
+        if (params.length && params.includes("caseEnvironment")) {
+            thisEnvironment = "cases";
+            if (conversiontype == "SpaceMath2MathML") {
+    //            latexLine = "<mtr>" + latexLine
+            } else if (conversiontype == "SpaceMath2speech") {
+                latexLine = " case " + latexLine
+            }
+        } else if (params.length && params.includes("system")) {
+            thisEnvironment = "system";
+            if (conversiontype == "SpaceMath2MathML") {
+    //            latexLine = "<mtr>" + latexLine
+            } else if (conversiontype == "SpaceMath2speech") {
+                latexLine = " line " + latexLine
+            }
+        }
         if (splitStr.length > 0 && exParam.length == 0){
             if (paramStack.length > 0 && ((!dictionary[paramStack[0]].absorbEmptyLine) || splitStr[0].trim().length > 0)){
                 if ((dictionary[paramStack[0]].absorbEmptyLine && splitStr.length > 1 && splitStr[1].trim().length > 0) || (splitStr.length == 2 && splitStr[1].trim().length == 0) || splitStr.length == 1){
@@ -64,12 +123,21 @@ function M2LConvert(str,lp,rp, conversiontype){
                     if (dictionary[paramStack[0]].changeLineTurn){
                         latexLine += dictionary[paramStack[0]].changeLineTurn + "\n";
                     } else {
+                      if (conversiontype == "SpaceMath2MathML") {
+     //                   latexLine += "</mtr>\n"
+                      } else if (conversiontype == "SpaceMath2speech") {
+   // why is this here and not in dictionary?
+                        if (thisEnvironment == "cases") {latexLine += " end_case\n"}
+                        if (thisEnvironment == "system") {latexLine += " end_line\n"}
+                      } else {
                         latexLine += "\\\\\n";
+                }
                     }
                 }
                 
                 // treating cases where response show some requirements are not fulfilled
-                if (dictionary[paramStack[0]].params && dictionary[paramStack[0]].params.includes("&beforeFirstRelation") && !response["&beforeFirstRelation"] && lastLine.trim().length == 0){
+// turned off while debugging system
+                if (false && dictionary[paramStack[0]].params && dictionary[paramStack[0]].params.includes("&beforeFirstRelation") && !response["&beforeFirstRelation"] && lastLine.trim().length == 0){
                     latexLine = "& \\;" + latexLine;
                 }
             } else {
@@ -84,14 +152,24 @@ function M2LConvert(str,lp,rp, conversiontype){
         }
         lastLine = splitStr[0];
         splitStr.shift();
+console.log("============ exParam", exParam);
         if (dictionary[exParam]){
-            if (dictionary[exParam].seperateOut){
+            if (dictionary[exParam].seperateOut){  // don;t know why?
                 latexLine += rp;
             }
             if (dictionary[exParam].noBeginEnd){
                 latexLine += dictionary[exParam].note+"{";
             } else {
-                latexLine += "\\begin{"+dictionary[exParam].note+"}";
+                if (conversiontype == "SpaceMath2MathML") {
+                    if (exParam == "cases:") {
+                        latexLine += "<mrow intent=\"$table\"><mo>{</mo>"   // + latexLine;  // where does the intent go"
+                    }
+                    latexLine += "<mtable arg=\"table\" intent=\":" + dictionary[exParam].MathMLnote + "\">\n";
+                } else if (conversiontype == "SpaceMath2speech") {
+                    latexLine += " begin-" + dictionary[exParam].note + " ";
+                } else {
+                    latexLine += "\\begin{"+dictionary[exParam].note+"}";
+                }
             }
             
             paramStack.push(exParam);
@@ -102,13 +180,13 @@ function M2LConvert(str,lp,rp, conversiontype){
                 if (dictionary[paramStack[0]].noBeginEnd){
                     latexLine += "}";
                 } else {
-                    latexLine += "\\end{"+dictionary[paramStack[0]].note+"}";
+                    latexLine += "AA\\end{"+dictionary[paramStack[0]].note+"}";
                 }
                 
                 if (dictionary[paramStack[0]].lineBreak){
                     latexLine += "\n";
                 }
-                if (dictionary[paramStack[0]].seperateOut){
+                if (dictionary[paramStack[0]].seperateOut){  // don;t know wy this is here
                     latexLine += lp;
                 }
                 paramStack.shift();
@@ -121,13 +199,25 @@ function M2LConvert(str,lp,rp, conversiontype){
         if (dictionary[paramStack[0]].noBeginEnd){
             latexStr += "}";
         } else {
-            latexStr += "\\end{"+dictionary[paramStack[0]].note+"}";
+                if (conversiontype == "SpaceMath2MathML") {
+                    latexStr += "</mtable><!-- " + dictionary[paramStack[0]].MathMLnote + " -->\n";
+                    if (params.length && params.includes("caseEnvironment")) {
+                        latexStr += "</mrow>";  // because of the mrow supplying the big left curly bracket
+                    }
+                } else if (conversiontype == "SpaceMath2speech") {
+         // it seems anomalous that we need to stick in end_case here
+                    if (dictionary[paramStack[0]].note == "cases") { latexStr += "end_case " }
+                    if (dictionary[paramStack[0]].note == "align") { latexStr += "end_line " }
+                    latexStr += "end-" + dictionary[paramStack[0]].note;
+                } else {
+                    latexStr += "\\end{"+dictionary[paramStack[0]].note+"}";
+                }
         }
-        if (dictionary[paramStack[0]].seperateOut){
+        if (dictionary[paramStack[0]].seperateOut){  // don;t know why?
             latexStr += lp;
         }
         paramStack.shift();
     } //no indent
     console.log("latexStr", latexStr);
-    return trimSpaces(latexStr);
+    return trimSpaces(latexStr)
 }

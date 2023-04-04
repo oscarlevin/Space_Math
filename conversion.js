@@ -167,8 +167,9 @@ console.log("markAtomicItem of", ans, "endans", symbolQ(str));
       ans = "<mo>"+ans+"</mo>"
     } else if(str.includes("mtext")) {  // probably text in math
       // do nothing
-    } else {
+    } else if (ans != "") {  // this is a hack, because there are many places where an empty string should be handled properly.
       ans = "<unknown>"+ans+"</unknown>"
+console.warn("unknown type", "X"+ans+"X")
     }
   } else {
   }
@@ -200,10 +201,10 @@ console.log("aDDing qUAntity",str);
 
 // remove redundancies and un-necessary markup.  For example:
 // <mrow><mi>x</mi></mrow> --> <mi>x</mi>
-function simplify(str) {
+function simplifyAnswer(str) {
     ans = str;
 
-console.log("   starting to simplify", ans);
+console.log("   starting to simplify Answer", ans);
     for (let i=0; i <= 2; ++i) {
         ans = ans.replace(/to the quantity([A-Z]?) +negative 1 +([A-Z]?)endquantity/g, "inverse");
         ans = ans.replace(/to the quantity([A-Z]?) +2 +([A-Z]?)endquantity/g, "squared");
@@ -211,7 +212,7 @@ console.log("   starting to simplify", ans);
 
         ans = ans.replace(/(^| )quantity([A-Z]?) +([^ ]+) +([A-Z]?)endquantity/g, " $3 ");
         ans = ans.replace(/(^| )quantity([A-Z]?) +(negative +[^ ]+) +([A-Z]?)endquantity/g, " $3 ");
-        ans = ans.replace(/<mrow ([^<>]+)><([a-z]+)>([^<>]+)(<\/$2>)<\/mrow>/g, "<$2 $1>$3$4");
+        ans = ans.replace(/<mrow ([^<>]+)><(mi|mo|mn)>([^<>]+)(<\/(mi|mo|mn)>)<\/mrow>/g, "<$2 $1>$3$4");
         ans = ans.replace(/<mrow>(<([a-z]+)>)([^<>]+)(<\/$2>)<\/mrow>/g, "$1$3$4");
 console.log("now ans", ans);
         ans = ans.replace(/<mrow>(<mi>)([^<>]+)(<\/mi>)<\/mrow>/g, "$1$2$3");
@@ -239,6 +240,7 @@ console.log("now ans", ans);
 function preprocess(rawstring) {
     let str = rawstring;
 
+    str = preprocessquotes(str);
     str = preprocessarithmetic(str);
 console.log("after preprocessarithmetic", str);
     str = preprocessparentheses(str);
@@ -252,6 +254,18 @@ console.log("before other", str);
 console.log("after other", str);
 
     return str
+}
+
+function preprocessquotes(rawstring) {
+    let str = rawstring;
+
+//    str = str.replace(/(\s)"(\S[^"]+)"(\s|$)/g, '$1quote($2)$3');
+    str = str.replace(/(\s)"(\S[^"]+)"(\s|$)/g, wrapquotes);
+
+    return str
+}
+function wrapquotes(match, before, thequote, after, offset, string) {
+    return before + "quote(␣" + thequote.replaceAll(" ", "␣") + "␣)" + after
 }
 
 function preprocessarithmetic(rawstring) {

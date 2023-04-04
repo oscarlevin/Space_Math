@@ -40,7 +40,7 @@ console.log("input is now", str);
   
   str = str.replaceAll('%24%', '\\$'); //put the special characters back
 
-console.log("   in convert, str = ", str);
+console.log("   in convert, str: ", str);
 
   str = str.trim();
 
@@ -61,7 +61,7 @@ console.log("   in convert, str = ", str);
       str = str.replace(/\\,/g, "");
 // We use "wrap" to add attributes to a child, but don't know if there is
 // a single child.  When there is, transfer the attributes to the single child
-// refactor to imporve and reconcile this with "simplify" in conversion.js
+// refactor to imporve and reconcile this with "simplifyAnswer" in conversion.js
       str = str.replace(/<wrap([^>]+)>(<m[a-z]+[^<>]*)(>[^<>]*<\/m[a-z]+>)<\/wrap>/g, "$2$1$3");
       str = str.replace(/<wrap /g, "<mrow ");
       str = str.replace(/<\/wrap>/g, "</mrow>");
@@ -70,10 +70,11 @@ console.log("   in convert, str = ", str);
 */
   }
 console.log("str was", str);
-  str = simplify(str)
+  str = simplifyAnswer(str)
 //  str = str.replace(/<mrow>/g, "\n<mrow>");
 //  str = str.replace(/<\/mrow>/g, "</mrow>\n");
   str = str.replace(/\n+/g, "\n");
+  str = str.replace(/␣/g, " ");
   return str
 }
 
@@ -93,9 +94,7 @@ Description: use BNF grammar to split user input into text and math part, call M
 2022.10.28 modified to support case when user types one half of deliminator
 */
 function convert2(str,p, conversiontype) {
-/*
-  console.log("starting conversiontype", conversiontype);
-*/
+console.log("starting conversiontype", conversiontype, p, "on", str);
   let splitStr = [];
   let newStr = "";
   let deliminators = [["\\[","\\]"],["$$","$$"],["\\(","\\)"],["$","$"]]; //all tokens that will be seen as math mode, in priority (left to right)
@@ -122,6 +121,7 @@ function convert2(str,p, conversiontype) {
           convertedStr = M2LConvert(convertedStr,d[0],d[1], conversiontype);
           convertedStr = d[0] + convertedStr + d[1];
           convertedStr = convertedStr.replaceAll(d[0]+d[1],"");
+console.log("convertedStr", convertedStr);
           return convert2(str.substring(0,counter),p+1, conversiontype) + convertedStr + convert2(str.substring(right+d[1].length),p, conversiontype);
       } else {
           p += 1;
