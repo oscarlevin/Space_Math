@@ -169,6 +169,7 @@ console.log("markAtomicItem of", ans, "endans", symbolQ(str));
       // do nothing
     } else {
       ans = "<unknown>"+ans+"</unknown>"
+console.warn("unknown type", "X"+ans+"X")
     }
   } else {
   }

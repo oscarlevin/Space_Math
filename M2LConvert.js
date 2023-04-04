@@ -11,6 +11,7 @@ Description: A helper function which generalize several steps to take the origin
 */
 function M2LConvert(str,lp,rp, conversiontype){
     //preprocessing for inline structure
+console.log("M2LConvert(str,lp,rp, conversiontype)", str,lp,rp, conversiontype);
     for (let key of translateTable.getAllMultiLine()) { // iterate through dictionary
         let index = str.indexOf(key.slice(0, -1)+"(");
         while (index != -1){
@@ -46,7 +47,8 @@ function M2LConvert(str,lp,rp, conversiontype){
     let paramStack = [];
     let lastLine = "";
     while (splitStr.length > 0){
-        let params = [];   // are parames only for multiline constructions?
+        var params = [];   // are params only for multiline constructions?
+                           //sort of a hack because we need params after this loop
         if (paramStack[0] && dictionary[paramStack[0]].params){
             params = dictionary[paramStack[0]].params;
         }
@@ -55,10 +57,11 @@ console.log("top of loop  ",splitStr);
 console.log("params = ",params);
 console.log("thisEnvironment = ",thisEnvironment);
 
-      if (splitStr[0].trim() == "") {console.log("skipping empty string");  splitStr.shift();  continue }  // may need this as an indicator in some cases
+      if (splitStr[0].trim() == "" && !params.includes("system")) {console.info("skipping empty string");  splitStr.shift();  continue }  // may need this as an indicator in some cases
    // sort of a hack, but working toward better multiline expressions
-      if (params.length > 0 && params[0] == "caseEnvironment") {
+      if (params.length > 0 && params.includes("caseEnvironment")) {
         let thisLine = splitStr[0];
+  // move the keywords to dictionary
         let thisLinePieces = thisLine.split(/(if|when|unless|otherwise)/g);
         if (thisLinePieces.length != 3) { console.error("invalid cases line", thisLine) }
         else {
@@ -66,7 +69,23 @@ console.log("thisEnvironment = ",thisEnvironment);
             splitStr[0] = thisLine;
         }
 console.log("thisLinePieces", thisLinePieces);
-    }
+      } else if (params.length > 0 && params.includes("system")) {
+        let thisLine = splitStr[0];
+  // move the relations to dictionary
+        let thisLinePieces = thisLine.split(/(<=|>=|:=|<|>|=).*?/);
+        // maybe more than one relation on the line
+        if (thisLinePieces.length > 3) {
+            let newthirdpiece = "";
+            while (thisLinePieces.length >= 3) { newthirdpiece = thisLinePieces.pop() + newthirdpiece }
+            thisLinePieces[2] = newthirdpiece;
+        }
+        if (thisLinePieces.length != 3) { console.error("invalid system line", thisLine, "with pieces", thisLinePieces) }
+        else {      
+            thisLine = "systemline(" + thisLinePieces[0] + ")(" + thisLinePieces[1] + ")(" + thisLinePieces[2] + ")";
+            splitStr[0] = thisLine;
+        }   
+console.log("thisLinePieces", thisLinePieces);
+      }
 
    // this is the key parsing step, when one meaningful string is parsed into a tree
 // 4/1/23 added .trim(); may need to rethink, if the indentation level is relevant
@@ -76,7 +95,7 @@ console.log("temp");
         let exParam = temp[1];
         let response = temp[2];
         let latexLine = combineTree2Latex(tree,params);
-        if (params.length && params[0] == "caseEnvironment") {
+        if (params.length && params.includes("caseEnvironment")) {
             thisEnvironment = "cases";
             if (conversiontype == "SpaceMath2MathML") {
     //            latexLine = "<mtr>" + latexLine
@@ -104,7 +123,8 @@ console.log("temp");
                 }
                 
                 // treating cases where response show some requirements are not fulfilled
-                if (dictionary[paramStack[0]].params && dictionary[paramStack[0]].params.includes("&beforeFirstRelation") && !response["&beforeFirstRelation"] && lastLine.trim().length == 0){
+// turned off while debugging system
+                if (false && dictionary[paramStack[0]].params && dictionary[paramStack[0]].params.includes("&beforeFirstRelation") && !response["&beforeFirstRelation"] && lastLine.trim().length == 0){
                     latexLine = "& \\;" + latexLine;
                 }
             } else {
@@ -121,7 +141,7 @@ console.log("temp");
         splitStr.shift();
 console.log("============ exParam", exParam);
         if (dictionary[exParam]){
-            if (dictionary[exParam].seperateOut){
+            if (dictionary[exParam].seperateOut){  // don;t know why?
                 latexLine += rp;
             }
             if (dictionary[exParam].noBeginEnd){
@@ -131,8 +151,7 @@ console.log("============ exParam", exParam);
                     if (exParam == "cases:") {
                         latexLine += "<mrow intent=\"$table\"><mo>{</mo>"   // + latexLine;  // where does the intent go"
                     }
-                    latexLine += "<mtable $arg=\"table\" intent=\":" + dictionary[exParam].note + "\">\n";
-              //      if (params[0] == "caseEnvironment") 
+                    latexLine += "<mtable arg=\"table\" intent=\":" + dictionary[exParam].MathMLnote + "\">\n";
                 } else if (conversiontype == "SpaceMath2speech") {
                     latexLine += " begin " + dictionary[exParam].note;
                 } else {
@@ -154,7 +173,7 @@ console.log("============ exParam", exParam);
                 if (dictionary[paramStack[0]].lineBreak){
                     latexLine += "\n";
                 }
-                if (dictionary[paramStack[0]].seperateOut){
+                if (dictionary[paramStack[0]].seperateOut){  // don;t know wy this is here
                     latexLine += lp;
                 }
                 paramStack.shift();
@@ -168,10 +187,10 @@ console.log("============ exParam", exParam);
             latexStr += "}";
         } else {
                 if (conversiontype == "SpaceMath2MathML") {
-                    latexStr += "</mtable><!-- " + dictionary[paramStack[0]].note + " -->\n";
-       //             if (params[0] == "caseEnvironment") 
+                    latexStr += "</mtable><!-- " + dictionary[paramStack[0]].MathMLnote + " -->\n";
+                    if (params.length && params.includes("caseEnvironment")) {
                         latexStr += "</mrow>";  // because of the mrow supplying the big left curly bracket
-       //             }
+                    }
                 } else if (conversiontype == "SpaceMath2speech") {
          // it seems anomalous that we need to stick in end_case here
                     latexStr += "end_case  end-" + dictionary[paramStack[0]].note;
@@ -179,7 +198,7 @@ console.log("============ exParam", exParam);
                     latexStr += "\\end{"+dictionary[paramStack[0]].note+"}";
                 }
         }
-        if (dictionary[paramStack[0]].seperateOut){
+        if (dictionary[paramStack[0]].seperateOut){  // don;t know why?
             latexStr += lp;
         }
         paramStack.shift();

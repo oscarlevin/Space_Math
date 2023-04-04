@@ -40,7 +40,7 @@ console.log("input is now", str);
   
   str = str.replaceAll('%24%', '\\$'); //put the special characters back
 
-console.log("   in convert, str = ", str);
+console.log("   in convert, str: ", str);
 
   str = str.trim();
 
@@ -94,9 +94,7 @@ Description: use BNF grammar to split user input into text and math part, call M
 2022.10.28 modified to support case when user types one half of deliminator
 */
 function convert2(str,p, conversiontype) {
-/*
-  console.log("starting conversiontype", conversiontype);
-*/
+console.log("starting conversiontype", conversiontype, p, "on", str);
   let splitStr = [];
   let newStr = "";
   let deliminators = [["\\[","\\]"],["$$","$$"],["\\(","\\)"],["$","$"]]; //all tokens that will be seen as math mode, in priority (left to right)
@@ -123,6 +121,7 @@ function convert2(str,p, conversiontype) {
           convertedStr = M2LConvert(convertedStr,d[0],d[1], conversiontype);
           convertedStr = d[0] + convertedStr + d[1];
           convertedStr = convertedStr.replaceAll(d[0]+d[1],"");
+console.log("convertedStr", convertedStr);
           return convert2(str.substring(0,counter),p+1, conversiontype) + convertedStr + convert2(str.substring(right+d[1].length),p, conversiontype);
       } else {
           p += 1;
