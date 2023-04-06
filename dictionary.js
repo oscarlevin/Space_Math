@@ -535,6 +535,21 @@ var dictionary = {
       "1,1": "<mi>∞</mi>"
     }
   },
+  "✂️": {
+    "comment": [ ],
+    "alternative": [ ],
+    "type": "symbol",
+    "priority": -1,
+    "rule": {
+      "1,1": ""
+    },
+    "speech": {
+      "1,1": ""
+    },
+    "ruleML": {
+      "1,1": ""
+    }
+  },
   "aleph": {
     "alternative": [],
     "type": "symbol",
@@ -791,7 +806,7 @@ var dictionary = {
       "1,2": "<msqrt><mrow>#2</mrow></msqrt>"
     } 
   },
-  "sqrt": {
+  "lim": {
     "alternative": [],
     "type": "function",
     "priority": 55,
@@ -801,13 +816,13 @@ var dictionary = {
       ]
     },
     "rule": {
-      "1,2": "\\sqrt{#2}"
+      "1,2": "\\lim_{#2}"
     },
     "speech": {
-      "1,2": " square root of quantityZ #2 Zendquantity "
+      "1,2": " limit of #2 endlimit "
     },
     "ruleML": {
-      "1,2": "<msqrt><mrow>#2</mrow></msqrt>"
+      "1,2": "<munder><mo>lim</mo><mrow>#2</mrow></munder>"
     }
   },
   "quote": {

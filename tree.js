@@ -69,6 +69,8 @@ console.log("   adding leaf markup with key, val, oval", this.key,"a,a", this.va
           this.outputvalue = markAtomicItem(this.value, this.conversiontype);
       } else if(this.key == " ") {
           if(this.position == 1) {
+console.warn("assuming implied multiplication");
+console.warn("What is next to this space key? parent:", this.parent, "left sibling", this.parent.children[0], "left sibling value", this.parent.children[0].value, "right sibling", this.parent.children[2]);
             if(this.conversiontype == "SpaceMath2MathML") {
               this.outputvalue = "<mo>&InvisibleTimes;</mo>"
             } else if(this.conversiontype == "SpaceMath2speech") {
@@ -426,6 +428,34 @@ oooooo
     return undefined;
   }
 
+// refactor to combine this and the following, so the tree is only traversed once
+  adjustImpliedMultiplication() {
+//  for some elements, like "lim" and "quote", an adjacent space is not
+//  implied multiplication (some on the right, and some on the left)
+    let noMultRight = ["lim", "quote"];
+    let noMultLeft = ["quote"];
+    for (let node of this.preOrderTraversal()) {
+      if (noMultRight.includes(node.value) && noMultRight.includes(node.key) && node.position == 0) {
+console.log("found a lim", node);
+console.log("now looking at", node.parent, "and",node.parent.children[0], "and", node.parent.children[1]);
+        if (node.parent.parent && node.parent.parent.children[1].key == " " && node.parent.parent.children[1].value == " ") {
+console.error("adding hello", node.parent.parent.children[1]);
+          node.parent.parent.children[1].key = "✂️";
+console.error("now", node.parent.parent.children[1]);
+        }
+      }
+      if (noMultLeft.includes(node.value) && noMultLeft.includes(node.key) && node.position == 0) {
+console.log("found a lim", node);
+console.log("now looking at", node.parent, "and",node.parent.children[0], "and", node.parent.children[1]);
+        if (node.parent.parent && node.parent.parent.parent && node.parent.parent.parent.children[1].key == " " && node.parent.parent.parent.children[1].value == " ") {
+console.error("adding hello", node.parent.parent.parent.children[1]);
+          node.parent.parent.parent.children[1].key = "✂️";
+console.error("now", node.parent.parent.parent.children[1]);
+        }
+      }
+    }
+  }
+
   combineSubSup() {
 // convert  a_b^c  from [a sub b] sup c  to  a subsup b c
     for (let node of this.preOrderTraversal()) {
@@ -514,7 +544,7 @@ oooooo
   }
  }
 
-// should this be with the utility functions
+// should this be with the utility functions?
 function adjustBrackets(brackets, conversiontype) {
     let p = brackets[0];
 console.log("adjusting brackets", p);

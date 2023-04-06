@@ -260,7 +260,7 @@ function preprocessquotes(rawstring) {
     let str = rawstring;
 
 //    str = str.replace(/(\s)"(\S[^"]+)"(\s|$)/g, '$1quote($2)$3');
-    str = str.replace(/(\s)"(\S[^"]+)"(\s|$)/g, wrapquotes);
+    str = str.replace(/(\s|\$|^)"(\S[^"]+)"(\s|\$|$)/g, wrapquotes);
 
     return str
 }
@@ -414,9 +414,13 @@ console.log("did we find vector?", str);
 
 function preprocessderivatives(rawstring) {
 //  need special case for \sum'
+// also limits
     let str = rawstring;
 
     str = str.replace(/([^\^\(\[\{❲])(\'+)/g, '$1▲❲$2❳');
+
+    str = str.replace(/(lim(|inf|sup))_([\(\[\{❲])/g, '$1$3');
+    str = str.replace(/(lim(|inf|sup))_([^ \(\[\{❲][^ ]+)/g, '$1($3)');
 
     return str
 }

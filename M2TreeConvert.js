@@ -42,6 +42,13 @@ console.log("fullStr", "X"+fullStr+"X");
 //  need multiple single quotes for f'' , so only allow " for quoted strings.
 //   (may need to implement smart quotes)
 //            for (let quote of [["\"","\""],["\'","\'"]]){
+
+
+// this next loop should do nothing, because we have preprocessed the quoted
+// strings into quote(...)
+// remove when we are confident it will not be needed.
+// (which involves understanding how extraArgument.length > 0 and stackedTreeNode are relevant)
+
             for (let quote of [["\"","\""]]){
                 if (char == quote[0]){
 console.log("found a quote");
@@ -479,7 +486,9 @@ console.log("----------- just set exParam = ", exParam);
     }
 console.log("continuing",tree.root.children[0], tree.root.children[1]);
     tree.combineSubSup();
-console.log("m2treeconvert returned",tree,"aa",tree.root, "bb", tree.root.children);
+console.log("combineSubSup returned",tree,"aa",tree.root, "bb", tree.root.children);
+    tree.adjustImpliedMultiplication();
+console.log("adjustImpliedMultiplication returned",tree,"aa",tree.root, "bb", tree.root.children);
 console.log(printTree(tree.root, ""));
 //    tree.combineInt();
 //console.log(printTree(tree.root, ""));
