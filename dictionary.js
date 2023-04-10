@@ -1093,6 +1093,20 @@ var dictionary = {
       "1,2": "\\lceiling #2 \\rceiling"
     }
   },
+  "bigO": {
+    "alternative": [ ], 
+    "type": "function",
+    "priority": 15,
+    "rule": {
+      "1,2": "O#2"
+    },
+    "speech": {
+      "1,2": "big-Oh of #2"
+    },
+    "ruleML": {
+      "1,2": "<mi intent=\"bigO\">O</mi><mo>&ApplyFunction;</mo>#2"
+    } 
+  },
   "log": {
     "alternative": [ ],
     "type": "function",
@@ -1106,6 +1120,34 @@ var dictionary = {
     "ruleML": {
       "1,2": "<mi>log</mi><mo>&ApplyFunction;</mo>#2"
     } 
+  },
+  "llog": {
+    "alternative": [ ],
+    "type": "function",
+    "priority": 15,
+    "rule": { 
+      "1,2": "\\log_2 #2"
+    },
+    "speech": {
+      "1,2": "log log of #2"
+    },
+    "ruleML": {
+      "1,2": "<msub><mi>log</mi><mn intent=\":index\">2</mn></msub><mo>&ApplyFunction;</mo>#2"
+    } 
+  },
+  "lllog": {
+    "alternative": [ ],
+    "type": "function",
+    "priority": 15,
+    "rule": {
+      "1,2": "\\log_3 #2"
+    },
+    "speech": {
+      "1,2": "log log log of #2"
+    },
+    "ruleML": {
+      "1,2": "<msub><mi>log</mi><mn intent=\":index\">3</mn></msub><mo>&ApplyFunction;</mo>#2"
+    }
   },
   "baselog": {
     "alternative": [ ],
@@ -1975,6 +2017,34 @@ var dictionary = {
       "2,3": "#1<mo>↦</mo>#3"
     }
   },
+  "~": {
+    "alternative": ["asymp", "asymptotic" ],
+    "type": "relation",
+    "priority": 0,
+    "rule": {
+      "2,3": "#1 \\sim #3"
+    },
+    "speech": {
+      "2,3": " #1 asymptotic to #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo intent=\"asymptotic\">~</mo>#3"
+    }
+  },
+  "≈": {
+    "alternative": ["approx", "approximate", "approximately" ],
+    "type": "relation",
+    "priority": 0,
+    "rule": {
+      "2,3": "#1 \\approx #3"
+    },
+    "speech": {
+      "2,3": " #1 approximately equal to #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo intent=\"approximately\">≈</mo>#3"
+    }
+  },
   "cong": {
     "alternative": [ "congruent" ],
     "type": "relation",
@@ -2084,7 +2154,22 @@ var dictionary = {
     "absorbEmptyLine": true,
     "emptyLineBeforeIndent": true,
     "note": "align",
+    "speechnote": "system",
     "MathMLnote": "system"
+  },
+  "derivation:": {
+    "alternative": [],
+    "type": "multiline",
+    "params": [
+      "system",
+      "&beforeFirstRelation"
+    ],
+//    "seperateOut": true,  // don;t know what this did (but it put closing math delimiters in the wrong place)
+    "absorbEmptyLine": true,
+    "emptyLineBeforeIndent": true,
+    "note": "align",
+    "speechnote": "derivation",
+    "MathMLnote": "derivation"
   },
   "systemline": {  // as in   y^2 <= x^3 + a x + b
     "alternative": [ ],
@@ -2102,6 +2187,24 @@ var dictionary = {
     },
     "ruleML": {
       "1,4": "<mtr><mtd style=\"text-align: right\">#2</mtd><mtd>#3</mtd><mtd style=\"text-align: left\">#4</mtd></mtr>\n"
+    }
+  },
+  "derivationline": {  // as in   <= x^3 + a x + b
+    "alternative": [ ],
+    "type": "function",
+    "priority": 55,
+    "offpair": {
+      "1,3": [ 1, 2, 3, ]
+    },
+    "extraArgument": 1,
+    "rule": {
+      "1,3": " #2 &  #3"
+    },
+    "speech": {
+      "1,3": "#2 #3 "
+    },
+    "ruleML": {
+      "1,3": "<mtr><mtd></mtd><mtd>#2</mtd><mtd style=\"text-align: left\">#3</mtd></mtr>\n"
     }
   },
   "linearsystem:": {   // not actually implemented yet
@@ -2301,7 +2404,7 @@ var charactersymbols = [
     ["euro", "€"]
 ]
 
-var particulargreedyfunctions = ["log", "ln", "lg",
+var particulargreedyfunctions = ["log", "llog", "lllog","ln", "lg",
                        "vec", "hat", "bar",
                        "abs", "det", "order", "card", "len", "length", "norm",
                        "floor", "ceil", "ceiling"];

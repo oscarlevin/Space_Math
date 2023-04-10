@@ -57,7 +57,7 @@ console.log("top of loop  ",splitStr);
 console.log("params = ",params);
 console.log("thisEnvironment = ",thisEnvironment);
 
-      if (splitStr[0].trim() == "" && !params.includes("system")) {console.info("skipping empty string");  splitStr.shift();  continue }  // may need this as an indicator in some cases ??
+      if (splitStr[0].trim() == "" && !params.includes("system") && !params.includes("derivation")) {console.info("skipping empty string");  splitStr.shift();  continue }  // may need this as an indicator in some cases ??
    // sort of a hack, but working toward better multiline expressions
       if (params.length > 0 && params.includes("caseEnvironment")) {
         let thisLine = splitStr[0];
@@ -69,7 +69,7 @@ console.log("thisEnvironment = ",thisEnvironment);
             splitStr[0] = thisLine;
         }
 console.log("thisLinePieces", thisLinePieces);
-      } else if (params.length > 0 && params.includes("system")) {
+      } else if (params.length > 0 && (params.includes("system") || params.includes("derivation")) ) {
         let thisLine = splitStr[0];
         // a if the next line is not blank, it is a ontinuation of the current line
         while (splitStr.length > 1 && splitStr[1].trim() != "") {
@@ -77,16 +77,23 @@ console.log("thisLinePieces", thisLinePieces);
             splitStr.splice(1,1);
         }
   // move the relations to dictionary
-        let thisLinePieces = thisLine.split(/(<=|>=|:=|<|>|=).*?/);
+        let thisLinePieces = thisLine.split(/(<=|>=|:=|<|>|=|~|≈|approx|asymp).*?/);
         // maybe more than one relation on the line
         if (thisLinePieces.length > 3) {
             let newthirdpiece = "";
             while (thisLinePieces.length >= 3) { newthirdpiece = thisLinePieces.pop() + newthirdpiece }
             thisLinePieces[2] = newthirdpiece;
         }
-        if (thisLinePieces.length != 3) { console.error("invalid system line", thisLine, "with pieces", thisLinePieces) }
+        if (thisLinePieces.length != 3) { console.error("invalid system/derivation line", thisLine, "with pieces", thisLinePieces) }
         else {      
-            thisLine = "systemline(" + thisLinePieces[0].trim() + ")(" + thisLinePieces[1].trim() + ")(" + thisLinePieces[2].trim() + ")";
+
+// in the derivation case, we have to treat the first line differently
+// the implementation below assumes too much
+            if (thisLinePieces[0].trim() == "") {
+                thisLine = "derivationline(" + thisLinePieces[1].trim() + ")(" + thisLinePieces[2].trim() + ")";
+            } else {
+                thisLine = "systemline(" + thisLinePieces[0].trim() + ")(" + thisLinePieces[1].trim() + ")(" + thisLinePieces[2].trim() + ")";
+            }
             splitStr[0] = thisLine;
         }   
 console.log("thisLine", thisLine, "thisLinePieces", thisLinePieces);
@@ -107,8 +114,9 @@ console.log("temp");
             } else if (conversiontype == "SpaceMath2speech") {
                 latexLine = " case " + latexLine
             }
-        } else if (params.length && params.includes("system")) {
-            thisEnvironment = "system";
+        } else if (params.length && (params.includes("system") || params.includes("derivation")) ) {
+            if (params.includes("system")) {thisEnvironment = "system"}
+            else if (params.includes("derivation")) { thisEnvironment = "derivation" }
             if (conversiontype == "SpaceMath2MathML") {
     //            latexLine = "<mtr>" + latexLine
             } else if (conversiontype == "SpaceMath2speech") {
@@ -128,7 +136,7 @@ console.log("temp");
                       } else if (conversiontype == "SpaceMath2speech") {
    // why is this here and not in dictionary?
                         if (thisEnvironment == "cases") {latexLine += " end_case\n"}
-                        if (thisEnvironment == "system") {latexLine += " end_line\n"}
+                        if (thisEnvironment == "system" || thisEnvironment == "derivation") {latexLine += " end_line\n"}
                       } else {
                         latexLine += "\\\\\n";
                 }
@@ -166,7 +174,7 @@ console.log("============ exParam", exParam);
                     }
                     latexLine += "<mtable arg=\"table\" intent=\":" + dictionary[exParam].MathMLnote + "\">\n";
                 } else if (conversiontype == "SpaceMath2speech") {
-                    latexLine += " begin-" + dictionary[exParam].note + " ";
+                    latexLine += " begin-" + dictionary[exParam].speechnote + " ";
                 } else {
                     latexLine += "\\begin{"+dictionary[exParam].note+"}";
                 }
@@ -208,7 +216,7 @@ console.log("============ exParam", exParam);
          // it seems anomalous that we need to stick in end_case here
                     if (dictionary[paramStack[0]].note == "cases") { latexStr += "end_case " }
                     if (dictionary[paramStack[0]].note == "align") { latexStr += "end_line " }
-                    latexStr += "end-" + dictionary[paramStack[0]].note;
+                    latexStr += "end-" + dictionary[paramStack[0]].speechnote;
                 } else {
                     latexStr += "\\end{"+dictionary[paramStack[0]].note+"}";
                 }

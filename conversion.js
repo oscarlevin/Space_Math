@@ -447,7 +447,7 @@ console.log("regExStrWeight", regExStrWeight);
          str = str.replace(regEx, '$1wrapper(intlims(' + symbol + ')($2)($3)($4)($5))$6');
 
          // case of no () around limits (but both lower and upper)
-         regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?)";
+         regExStrStub = "(\\$| |\n)" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?)";
          regExStr = regExStrStub + " d([a-z]+)" + "( |\n|\\$)";
  //        regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
          regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|\\$)";
