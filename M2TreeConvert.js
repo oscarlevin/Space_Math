@@ -240,7 +240,7 @@ console.log("and now it is"+ key + "key of", keyType, "keyType");
                 case "operator": //operators
                 case "relation": //relations
                     splitStr = [fullStr.substring(0,startKey), key, fullStr.substring(counter+1)];
-                // omitting, because we atr trying a different way to parse system lines.
+                // omitting, because we are trying a different way to parse system lines.
                     if (false & keyType == "relation" && params.includes("&beforeFirstRelation") && !response["&beforeFirstRelation"]){
                         response["&beforeFirstRelation"] = true;
                         splitStr[2] = "&" + splitStr[2];
@@ -353,6 +353,12 @@ console.log("and now it is"+ key + "key of", keyType, "keyType");
                         currentNode.value = "";
                         currentNode.insertNode(leftNode);
                         currentNode.insertNode(keyNode);
+      // have had a problem with operators (like "+") not having parents
+/// currently wrong
+// see addParents
+//console.log("rrrrrrrrrrrrrr rightNode", rightNode, "and parent", rightNode.parent);
+  //    rightNode.parent = currentNode;
+//console.log("rrrrrrrrrrrrrr again rightNode", rightNode);
                         currentNode.insertNode(rightNode);
                         currentNode = currentNode.children[2];
                     }
@@ -484,6 +490,7 @@ console.log("----------- just set exParam = ", exParam);
             break;
         }
     }
+    tree.addParents();
 console.log("continuing",tree.root.children[0], tree.root.children[1]);
     tree.combineSubSup();
 console.log("combineSubSup returned",tree,"aa",tree.root, "bb", tree.root.children);

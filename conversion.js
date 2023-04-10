@@ -295,7 +295,7 @@ function preprocessarithmetic(rawstring) {
     str = str.replace(/([^ \(\)\[\]\{\}\$]*[^ \)\]}\/])(\/)/g, '❲$1❳/');  // numerator
 //    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/❲$1❳');  // denominator
 // greedy denominator.  When does that fail?
-    str = str.replace(/\/([^ \(\[{\/][^ \n\$]*)/g, '/❲$1❳');  // denominator
+    str = str.replace(/\/([^ \(\[{\/][^ \)\]\}\n\$]*)/g, '/❲$1❳');  // denominator
 console.log("after preprocess fractions", str);
 
 // wrap argument of greedy function in fake parentheses
@@ -341,8 +341,8 @@ console.log("before sub and sup grouping", str);
 console.log("after exponents once ", str);
     str = str.replace(/\^([^ ❲❳\/\(\[{][^ \"❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
 console.log("after exponents twice", str);
-    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ \"❲❳\/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
-    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ \"❲❳\/\^\(\)\[\]\{\}]*)/, '_❲$1❳');  // subscript
+    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ \"❲❳\/\^\(\)\[\]\{\}\$]*)/, '_❲$1❳');  // subscript
+    str = str.replace(/_([^ ❲❳\/\(\[{\$][^ \"❲❳\/\^\(\)\[\]\{\}\$]*)/, '_❲$1❳');  // subscript
 console.log("after subscript twice", str);
 
 // do after the implied grouping for exponents
