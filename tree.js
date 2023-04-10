@@ -327,12 +327,17 @@ console.log("this.pair[0]", this.pair[0]);
                 if(this.conversiontype == "SpaceMath2MathML") {
  console.log("((((adding parentheses to", this.outputvalue, "of", this);
       // a bad hack:  need a more robust way to tell if compound object in parentheses
-      // a slightly less bad havk is counting "<" in the string
+      // a slightly less bad hack could be counting "<" in the string
                     if(this.outputvalue.length > 18) {
                         this.outputvalue = "<mrow>" + this.outputvalue + "</mrow>"
                     }
                     if(!this.key || this.key == " " || !dictionary[this.key].delimitedarguments) {
-                        this.outputvalue = "<mo>" + p[0] + "</mo>" + this.outputvalue + "<mo>" + p[1] + "</mo>";
+            // the brackets might have been temporary and now are empty
+                        let beforebrackets = this.outputvalue;
+                        if (p[0] != "") { beforebrackets = "<mo stretchy=\"false\">" + p[0] + "</mo>" + beforebrackets}
+                        if (p[1] != "") { beforebrackets = beforebrackets + "<mo stretchy=\"false\">" + p[1] + "</mo>"}
+             //           this.outputvalue = "<mo stretchy=\"false\">" + p[0] + "</mo>" + this.outputvalue + "<mo stretchy=\"false\">" + p[1] + "</mo>";
+                        this.outputvalue = beforebrackets;
                     }
                 } else if(this.conversiontype == "SpaceMath2speech") {
                     if(singletonQ(this.outputvalue)) {
@@ -432,8 +437,8 @@ oooooo
   adjustImpliedMultiplication() {
 //  for some elements, like "lim" and "quote", an adjacent space is not
 //  implied multiplication (some on the right, and some on the left)
-    let noMultRight = ["lim", "quote"];
-    let noMultLeft = ["quote"];
+    let noMultRight = ["lim", "quote", "dollar"];
+    let noMultLeft = ["quote", "cent"];
     for (let node of this.preOrderTraversal()) {
       if (noMultRight.includes(node.value) && noMultRight.includes(node.key) && node.position == 0) {
 console.log("found a lim", node);
@@ -445,12 +450,16 @@ console.error("now", node.parent.parent.children[1]);
         }
       }
       if (noMultLeft.includes(node.value) && noMultLeft.includes(node.key) && node.position == 0) {
-console.log("found a lim", node);
-console.log("now looking at", node.parent, "and",node.parent.children[0], "and", node.parent.children[1]);
+console.log("found a quote", node);
+console.log("now looking at parent", node.parent, "and itself",node.parent.children[0], "and parent parent", node.parent.parent);
         if (node.parent.parent && node.parent.parent.parent && node.parent.parent.parent.children[1].key == " " && node.parent.parent.parent.children[1].value == " ") {
-console.error("adding hello", node.parent.parent.parent.children[1]);
+console.error("adding goodbye", node.parent.parent.parent.children[1]);
           node.parent.parent.parent.children[1].key = "✂️";
 console.error("now", node.parent.parent.parent.children[1]);
+        } else if (node.parent && node.parent.parent && node.parent.parent.children[1].key == " " && node.parent.parent.children[1].value == " ") {
+console.error("adding goodbye", node.parent.parent.children[1]);
+          node.parent.parent.children[1].key = "✂️";
+console.error("now", node.parent.parent.children[1]);
         }
       }
     }
@@ -495,6 +504,21 @@ console.error("now", node.parent.parent.parent.children[1]);
     console.log("no children")
         }
       }
+    }
+  }
+
+  addParents() {
+  //  currently a problem that the tree is not always built with parent information
+  //  search for addParents in M2TreeConvert,js
+    for (let node of this.preOrderTraversal()) {
+        for (const child of node.children) {
+// console.log(child.parent == node, "node",node, "children",node.children, "child.parent", child.parent, child.parent == null);
+            if (child.parent != node) {
+//   console.log("parent was", child.parent);
+                child.parent = node
+//   console.log("parent is", child.parent);
+            }
+        }
     }
   }
 
@@ -575,6 +599,10 @@ function printTree(node, indentationlevel) {
       let nodeleveldata = indentationlevel + "[" + visStr(node.key) + "]   |" + visStr(node.value) + "|"
       if(node.pair.length) { nodeleveldata += "    " + node.pair[0] + " " + node.pair.length}
       if(node.children.length == 0) { nodeleveldata += "    leaf" }
+      else {
+          if (node.parent != null) { nodeleveldata += "       " + node.parent.children.length }
+          else { nodeleveldata += "       " + "nuLL" }
+      }
       nodeleveldata += "\n"
       if(node.children.length == 0) {
   //      if(node.position == node.parent.children.length) {
