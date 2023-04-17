@@ -434,7 +434,7 @@ console.log("looking for limits: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;  // hack to be partially backward compatible with TeX
 // the lower and upper limits might be in parentheses.  We handle these awkwardly
-         var regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^()]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
+         var regExStrStub = "(\\$| |\n)" + symbolname + "\\_\\(([^()]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
          var regExStr = regExStrStub + " d([a-z]+)" + "( |\n|\\$)";
   //       var regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
   // switched grouping brackets
@@ -461,7 +461,7 @@ console.log("regExStrWeight", regExStrWeight);
          // case of lower lim only, () around lower limit
          // done poorly now, because int_((c)) is tricky
          // we do a special case for that
-         regExStrStub = "(\\$| )" + symbolname + "\\_\\(\\(([^()]+?)\\)\\) (.*?)";
+         regExStrStub = "(\\$| |\n)" + symbolname + "\\_\\(\\(([^()]+?)\\)\\) (.*?)";
          regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
          regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
          regExWeight = new RegExp(regExStrWeight, "g");
@@ -478,12 +478,13 @@ console.log("regExStrWeight", regExStrWeight);
          str = str.replace(regEx, '$1wrapper(intllim(' + symbol + ')($2)($3)($4))$5');
 
          // case of lower lim only, no () around lower limit (unless intended)
-         regExStrStub = "(\\$| )" + symbolname + "\\_([^ ]+?) (.*?)";
+         regExStrStub = "(\\$| |\n)" + symbolname + "\\_([^ ]+?) (.*?)";
          regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
          regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
          regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')($2)($3)($4)($5))$6');
          regEx = new RegExp(regExStr, "g");
+console.log("final regExStr", regExStr);
          str = str.replace(regEx, '$1wrapper(intllim(' + symbol + ')($2)($3)($4))$5');
 
       }

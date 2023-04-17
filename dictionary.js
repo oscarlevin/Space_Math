@@ -2378,7 +2378,6 @@ var dictionary = {
 }
 
 var integrals = {
-    "oint": "∮",
     "iiint": "∭",
     "iint": "∬",
     "int": "∫",
