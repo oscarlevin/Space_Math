@@ -602,3 +602,107 @@ function preprocessother(rawstring) {
 
     return str
 }
+
+function dollars_to_tags(text) {
+    the_ans = text;
+
+    the_ans = the_ans.replace(/<\s/, "&lt; ");
+
+    the_ans = the_ans.replace(/\$\$\s*([^\$]+)\s*\$\$/g, "<md sourcetag=\"dd\">$1</md>");
+
+    the_ans = the_ans.replace(/\\\[/g, "<md sourcetag=\"sb\">");
+    the_ans = the_ans.replace(/\\\]/g, "</md>");
+
+    the_ans = the_ans.replace(/(^|\s|-)\$([^\$\f\r\n]+)\$(\s|\.|,|;|:|\?|!|$)/g, "$1<m sourcetag=\"d\">$2</m>$3");
+       //twice, for $5$-$6$
+    the_ans = the_ans.replace(/(^|\s|-)\$([^\$\f\r\n]+)\$(\s|\.|,|;|:|\?|!|-|$)/g, "$1<m sourcetag=\"d\">$2</m>$3");
+
+    the_ans = the_ans.replace(/\\\(/g, "<m sourcetag=\"sp\">");
+    the_ans = the_ans.replace(/\\\)/g, "</m>");
+
+    return the_ans
+}
+
+// not "myHash": this shows up repeatedly when you search
+String.prototype.myHash = function() {
+  var hash = 0,
+    i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr = this.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}
+
+function xmlToObject(xml_st) {
+  let xml;
+  xml_st = "<bbbb>" + xml_st + "</bbbb>";
+
+  if (typeof xml_st == "string") {
+ //   parseLog("xml starts", xml_st.slice(0,50));
+    parser = new DOMParser();
+    xml = parser.parseFromString(xml_st, "text/xml");
+//    xml = $.parseXML(xml_st);
+  } else {
+    xml = xml_st
+  }
+
+  console.log("xml", xml);
+  console.log("xml.nodeName", xml.nodeName, "xml.nodeType", xml.nodeType);
+//  let obj = {};
+  let this_id = "";
+  let this_node_content = xml.nodeValue;
+
+  if (xml.nodeType == 9) {  // document              
+      xml = xml.documentElement;
+  }
+
+//  return xml
+
+  let these_nodes = [];
+
+  for (const node of xml.childNodes) {
+      let this_node = [];
+      if (node.nodeName == "#text") {
+        this_node.push("text");
+        this_node.push("");
+        this_node.push(node.nodeValue);  // do I mean textContent ?
+      } else {
+        this_node.push(node.nodeName);
+        this_node.push(node.attributes);
+        this_node.push(node.innerHTML);
+      }
+      this_node.push(this_node[2].myHash());
+
+      these_nodes.push(this_node);
+  }
+
+  return these_nodes
+}
+
+var convertedComponent = {};
+
+function separatePieces(rawstring) {
+    let str = rawstring;
+
+    str = dollars_to_tags(str);
+
+console.log("str with tags", str);
+
+    str_separated = xmlToObject(str);
+
+    const conversiontypes = ["MathML", "speech", "tex"];
+    for (const ctype of conversiontypes) {
+
+  // nothign yet, because we need 'convert' to not depend on the conversiontype.
+
+    }
+
+console.log("this_node_content", str_separated);
+
+    
+
+    return rawstring
+}

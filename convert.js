@@ -10,6 +10,8 @@ Description: the major abstract function which takes the user input and return t
 function convert(str,conversiontype) {
 // why did we need that?   str = trimSpaces(str); //trim down all multiple spaces into one space
 
+  str = separatePieces(str);
+
   str = preprocess(str);
 
 /*
