@@ -2556,3 +2556,23 @@ for (const letterpair of charactersymbols) {
   }
 }
 
+var outputTagsOf = {
+  "text": {
+    "tex": ["",""],
+    "SpaceMath2MathML": ["",""],
+    "SpaceMath2speech": ["",""],
+    "ptx": ["",""]
+  },
+  "m": {
+    "tex": ["\\(", "\\)"],
+    "SpaceMath2MathML": ["<math>", "</math>"],
+    "SpaceMath2speech": ["<em>","</em>"],
+    "ptx": ["<m>", "</m>"]
+  },
+  "md": {
+    "tex": ["\\[","\\]"],
+    "SpaceMath2MathML": ["<math display=\"block\">","</math>"],
+    "SpaceMath2speech": ["<em>","</em>"],
+    "ptx": ["<md>","</md>"]
+  }
+}

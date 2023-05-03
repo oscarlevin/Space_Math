@@ -10,7 +10,20 @@ Description: the major abstract function which takes the user input and return t
 function convert(str,conversiontype) {
 // why did we need that?   str = trimSpaces(str); //trim down all multiple spaces into one space
 
-  str = separatePieces(str);
+  let str_separated = separatePieces(str);
+
+console.log("str_separated", str_separated);
+
+  let convertedComponent = convertPieces(str_separated, conversiontype);
+
+console.log("firsttest", convertedComponent);
+console.log("test",convertMathSnippet("x^447","SpaceMath2MathML"));
+
+  let answer_processed = assemble(str_separated, convertedComponent);
+
+console.log("answer_processed", answer_processed);
+
+die()
 
   str = preprocess(str);
 
@@ -131,6 +144,44 @@ console.log("convertedStr", convertedStr);
       }
       
   }
+}
+
+function convertPieces(pieces, conversiontype) {
+
+  let converted_component = {};
+
+  for (const piece of pieces) {
+    const piece_type = piece[0];
+    const contentkey = piece[3] + "," + conversiontype;
+    if (piece_type == "text") { converted_component[contentkey] = [piece[0], piece[1], piece[2]] }
+// note that [piece[3],conversiontype] as a key is really the string: piece[3] + "," + conversiontype]
+    else if ( !(contentkey in converted_component)) {
+      if (piece_type == "m" || piece_type == "md") {
+          converted_component[contentkey] = [piece[0], piece[1],convertMathSnippet(piece[2], conversiontype)]
+      } else {
+        console.error("unknown piece_type", piece)
+      }
+    }
+  }
+
+//  const conversiontypes = ["MathML", "speech", "tex"];
+//    for (const ctype of conversiontypes) {
+//
+//  // nothign yet, because we need 'convert' to not depend on the conversiontype.
+//
+//    }
+
+  return converted_component
+
+}
+
+
+// like convert2, except no delimiters because we have alread separated the math
+function convertMathSnippet(str, conversiontype) {
+console.log("starting convertMathSnippet", conversiontype, "on", str);
+    let convertedStr = M2LConvert(str,"LBRACK","RBRACK", conversiontype);
+
+    return convertedStr
 }
 
 /*

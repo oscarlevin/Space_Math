@@ -682,8 +682,6 @@ function xmlToObject(xml_st) {
   return these_nodes
 }
 
-var convertedComponent = {};
-
 function separatePieces(rawstring) {
     let str = rawstring;
 
@@ -691,18 +689,28 @@ function separatePieces(rawstring) {
 
 console.log("str with tags", str);
 
-    str_separated = xmlToObject(str);
-
-    const conversiontypes = ["MathML", "speech", "tex"];
-    for (const ctype of conversiontypes) {
-
-  // nothign yet, because we need 'convert' to not depend on the conversiontype.
-
-    }
+    let str_separated = xmlToObject(str);
 
 console.log("this_node_content", str_separated);
 
-    
+    return str_separated
+}
 
-    return rawstring
+function assemble(sourcelist, componentdict, conversiontype="SpaceMath2MathML") {
+
+    let ans = "";
+
+    for (const element of sourcelist) {
+        let tags = outputTagsOf[element[0]];
+console.log("element", element);
+console.log("componentdict", componentdict);
+console.log(conversiontype, "tags",tags, "tags.conversiontype",tags[conversiontype]);
+   //     let content = componentdict[[element[3], conversiontype]];
+        const contentkey = element[3] + "," + conversiontype;
+console.log("contentkey", contentkey);
+        let content = componentdict[contentkey][2];
+        ans = tags[conversiontype][0] + content + tags[conversiontype][1];
+    }
+
+    return ans
 }
