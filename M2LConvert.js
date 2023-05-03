@@ -9,9 +9,9 @@ Description: A helper function which generalize several steps to take the origin
 2022.11.04 compatibility with sentence structure: add in new arguments lp,rp for the left/right pair of delimiters.
 2022.11.14 add a preprocessing to transfer inline structures to multiline form
 */
-function M2LConvert(str,lp,rp, conversiontype){
+function M2LConvert(str,lp,rp, conversiontarget){
     //preprocessing for inline structure
-console.log("M2LConvert(str,lp,rp, conversiontype)", str,lp,rp, conversiontype);
+console.log("M2LConvert(str,lp,rp, conversiontarget)", str,lp,rp, conversiontarget);
     for (let key of translateTable.getAllMultiLine()) { // iterate through dictionary
         let index = str.indexOf(key.slice(0, -1)+"(");
         while (index != -1){
@@ -101,7 +101,7 @@ console.log("thisLine", thisLine, "thisLinePieces", thisLinePieces);
 
    // this is the key parsing step, when one meaningful string is parsed into a tree
 // 4/1/23 added .trim(); may need to rethink, if the indentation level is relevant
-        let temp = M2TreeConvert(splitStr[0].trim(),params, conversiontype);
+        let temp = M2TreeConvert(splitStr[0].trim(),params, conversiontarget);
 console.log("temp");
         let tree = temp[0];
         let exParam = temp[1];
@@ -109,17 +109,17 @@ console.log("temp");
         let latexLine = combineTree2Latex(tree,params);
         if (params.length && params.includes("caseEnvironment")) {
             thisEnvironment = "cases";
-            if (conversiontype == "SpaceMath2MathML") {
+            if (conversiontarget == "MathML") {
     //            latexLine = "<mtr>" + latexLine
-            } else if (conversiontype == "SpaceMath2speech") {
+            } else if (conversiontarget == "Speech") {
                 latexLine = " case " + latexLine
             }
         } else if (params.length && (params.includes("system") || params.includes("derivation")) ) {
             if (params.includes("system")) {thisEnvironment = "system"}
             else if (params.includes("derivation")) { thisEnvironment = "derivation" }
-            if (conversiontype == "SpaceMath2MathML") {
+            if (conversiontarget == "MathML") {
     //            latexLine = "<mtr>" + latexLine
-            } else if (conversiontype == "SpaceMath2speech") {
+            } else if (conversiontarget == "Speech") {
                 latexLine = " line " + latexLine
             }
         }
@@ -131,9 +131,9 @@ console.log("temp");
                     if (dictionary[paramStack[0]].changeLineTurn){
                         latexLine += dictionary[paramStack[0]].changeLineTurn + "\n";
                     } else {
-                      if (conversiontype == "SpaceMath2MathML") {
+                      if (conversiontarget == "MathML") {
      //                   latexLine += "</mtr>\n"
-                      } else if (conversiontype == "SpaceMath2speech") {
+                      } else if (conversiontarget == "Speech") {
    // why is this here and not in dictionary?
                         if (thisEnvironment == "cases") {latexLine += " end_case\n"}
                         if (thisEnvironment == "system" || thisEnvironment == "derivation") {latexLine += " end_line\n"}
@@ -168,12 +168,12 @@ console.log("============ exParam", exParam);
             if (dictionary[exParam].noBeginEnd){
                 latexLine += dictionary[exParam].note+"{";
             } else {
-                if (conversiontype == "SpaceMath2MathML") {
+                if (conversiontarget == "MathML") {
                     if (exParam == "cases:") {
                         latexLine += "<mrow intent=\"$table\"><mo>{</mo>"   // + latexLine;  // where does the intent go"
                     }
                     latexLine += "<mtable arg=\"table\" intent=\":" + dictionary[exParam].MathMLnote + "\">\n";
-                } else if (conversiontype == "SpaceMath2speech") {
+                } else if (conversiontarget == "Speech") {
                     latexLine += " begin-" + dictionary[exParam].speechnote + " ";
                 } else {
                     latexLine += "\\begin{"+dictionary[exParam].note+"}";
@@ -207,12 +207,12 @@ console.log("============ exParam", exParam);
         if (dictionary[paramStack[0]].noBeginEnd){
             latexStr += "}";
         } else {
-                if (conversiontype == "SpaceMath2MathML") {
+                if (conversiontarget == "MathML") {
                     latexStr += "</mtable><!-- " + dictionary[paramStack[0]].MathMLnote + " -->\n";
                     if (params.length && params.includes("caseEnvironment")) {
                         latexStr += "</mrow>";  // because of the mrow supplying the big left curly bracket
                     }
-                } else if (conversiontype == "SpaceMath2speech") {
+                } else if (conversiontarget == "Speech") {
          // it seems anomalous that we need to stick in end_case here
                     if (dictionary[paramStack[0]].note == "cases") { latexStr += "end_case " }
                     if (dictionary[paramStack[0]].note == "align") { latexStr += "end_line " }

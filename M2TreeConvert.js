@@ -12,16 +12,16 @@ Description: A function to parse math text to a tree
 2022.11.02 modify: supports pair up function (improve the hard coded part latter), improve script (meaning sub- or superscript)treatment
 2022.11.04 modify: supports params for better supoort of sentence structures.
 */
-function M2TreeConvert(str,params, conversiontype){
-  console.log("starting M2TreeConvert  conversiontype", conversiontype);
-    let tree = new Tree(0,str, null, conversiontype);
+function M2TreeConvert(str,params, conversiontarget){
+  console.log("starting M2TreeConvert  conversiontarget", conversiontarget);
+    let tree = new Tree(0,str, null, conversiontarget);
     let exParam = "";
     let currentNode = tree.root;
     let inLoop = true;
     let stackedTreeNode = undefined;
     let extraArgument = []; //number of extra requirement of stack push that need to be fulfilled (see root)
     let response = {}; //response to the params
-  console.log("continuing M2TreeConvert  conversiontype", conversiontype, "on", str);
+  console.log("continuing M2TreeConvert  conversiontarget", conversiontarget, "on", str);
 
     while (inLoop){
         let fullStr = currentNode.value;
@@ -58,22 +58,22 @@ console.log("found a quote");
 console.log("children are", children);
                         currentNode.value = "";
                        
-              //          let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\",null,null, conversiontype);
-                        let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\","justatest",null, conversiontype);
-                        // it is a bad sign that this is the only place where conversiontype is used in this function
+              //          let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\",null,null, conversiontarget);
+                        let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\","justatest",null, conversiontarget);
+                        // it is a bad sign that this is the only place where conversiontarget is used in this function
                         // what will we do when we combine all the conversion methods?
-                        if(conversiontype == "SpaceMath2MathML") {
-              //              qNode = new TreeNode(0,"<mspace width=\"0.8em\"/></mspace><mtext>"+children[1]+"</mtext><mspace width=\"0.8em\"/></mspace>",null,null, conversiontype);
-                            qNode = new TreeNode(0,"<mspace width=\"0.8em\"/></mspace><mtext>"+children[1]+"</mtext><mspace width=\"0.8em\"/></mspace>","quote",null, conversiontype);
-                        } else if(conversiontype == "SpaceMath2speech") {
-                            qNode = new TreeNode(0,"␣text "+children[1]+" endtext␣",null,null, conversiontype);
+                        if(conversiontarget == "MathML") {
+              //              qNode = new TreeNode(0,"<mspace width=\"0.8em\"/></mspace><mtext>"+children[1]+"</mtext><mspace width=\"0.8em\"/></mspace>",null,null, conversiontarget);
+                            qNode = new TreeNode(0,"<mspace width=\"0.8em\"/></mspace><mtext>"+children[1]+"</mtext><mspace width=\"0.8em\"/></mspace>","quote",null, conversiontarget);
+                        } else if(conversiontarget == "Speech") {
+                            qNode = new TreeNode(0,"␣text "+children[1]+" endtext␣",null,null, conversiontarget);
                         }
 
 console.log("qNode was", qNode, "with children", qNode.children);
-                        qNode = combinePrev(children[0],qNode, conversiontype); // there are something before the pair, consider multiplication/compositio
+                        qNode = combinePrev(children[0],qNode, conversiontarget); // there are something before the pair, consider multiplication/compositio
 console.log("qNode is", qNode, "with children", qNode.children);
 console.log("stackedTreeNode was", stackedTreeNode);
-                        stackedTreeNode = stackNode(stackedTreeNode, qNode, conversiontype); // put the symbol node on the stack
+                        stackedTreeNode = stackNode(stackedTreeNode, qNode, conversiontarget); // put the symbol node on the stack
 console.log("stackedTreeNode is", stackedTreeNode, "with children", stackedTreeNode.children);
 
                         if (extraArgument.length > 0){ // treat space differently if we run into extra argument case
@@ -105,11 +105,11 @@ console.log("apparently found a left of pair", char);
                 if (rpos != -1){ 
                     let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
                     currentNode.value = "";
-                    let pNode = M2TreeConvert(children[1].trim(),params, conversiontype)[0].root;
+                    let pNode = M2TreeConvert(children[1].trim(),params, conversiontarget)[0].root;
                     pNode.pair.push([char,fullStr[rpos]]);
-                    pNode = combinePrev(children[0],pNode, conversiontype); // there are something before the pair, consider multiplication
+                    pNode = combinePrev(children[0],pNode, conversiontarget); // there are something before the pair, consider multiplication
 console.log("just made pNode", pNode);
-                    stackedTreeNode = stackNode(stackedTreeNode, pNode, conversiontype); // put the symbol node on the stack
+                    stackedTreeNode = stackNode(stackedTreeNode, pNode, conversiontarget); // put the symbol node on the stack
 console.log("just made stackedTreeNode", stackedTreeNode);
 
                     if (extraArgument.length > 0){ // treat space differently if we run into extra argument case
@@ -140,10 +140,10 @@ console.log("looking for an angle pair");
                 if (rpos != -1){ 
                     let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
                     currentNode.value = "";
-                    let pNode = M2TreeConvert(children[1].trim(),params, conversiontype)[0].root;
+                    let pNode = M2TreeConvert(children[1].trim(),params, conversiontarget)[0].root;
                     pNode.pair.push(["\\langle ","\\rangle "]);
-                    pNode = combinePrev(children[0],pNode, conversiontype); // there are something before the pair, consider multiplication
-                    stackedTreeNode = stackNode(stackedTreeNode, pNode, conversiontype); // put the symbol node on the stack
+                    pNode = combinePrev(children[0],pNode, conversiontarget); // there are something before the pair, consider multiplication
+                    stackedTreeNode = stackNode(stackedTreeNode, pNode, conversiontarget); // put the symbol node on the stack
 
                     if (extraArgument.length > 0){ // treat space differently if we run into extra argument case
                         stackedTreeNode.key = extraArgument[0][0].children[0].key;
@@ -245,11 +245,11 @@ console.log("and now it is"+ key + "key of", keyType, "keyType");
                         response["&beforeFirstRelation"] = true;
                         splitStr[2] = "&" + splitStr[2];
                     }
-                    leftNode = new TreeNode(0,splitStr[0],key,null, conversiontype);
-                    keyNode = new TreeNode(0,splitStr[1],key,null, conversiontype);
-                    rightNode = new TreeNode(0,splitStr[2],key,null, conversiontype);
+                    leftNode = new TreeNode(0,splitStr[0],key,null, conversiontarget);
+                    keyNode = new TreeNode(0,splitStr[1],key,null, conversiontarget);
+                    rightNode = new TreeNode(0,splitStr[2],key,null, conversiontarget);
                     if (stackedTreeNode){ // we have a stackedTreeNode 
-                        stackedTreeNode = combineAfter(leftNode.value,stackedTreeNode, conversiontype); // there are something before the pair, consider multiplication
+                        stackedTreeNode = combineAfter(leftNode.value,stackedTreeNode, conversiontarget); // there are something before the pair, consider multiplication
                         leftNode = stackedTreeNode;
                         leftNode.key = key;
                         stackedTreeNode = undefined;
@@ -316,7 +316,7 @@ console.log("and now it is"+ key + "key of", keyType, "keyType");
                             }
                             if (!currentNode.children[0].noPriority && keyPriority + exPriority >= getPriority(currentNode.children[0].key)){
                                 let lastNode = currentNode.children[lastNodePos];
-                                let newNode = new TreeNode(lastNodePos,null,currentNode.children[0].key,null, conversiontype);
+                                let newNode = new TreeNode(lastNodePos,null,currentNode.children[0].key,null, conversiontarget);
                                 newNode.noPriority = currentNode.children[lastNodePos].noPriority;
                                 newNode.exPriority = currentNode.children[lastNodePos].exPriority;
                                 currentNode.children[lastNodePos] = newNode;
@@ -336,7 +336,7 @@ console.log("and now it is"+ key + "key of", keyType, "keyType");
                             }
                         }
                         if (!solved){ //this mean we should reach the root level
-                            let newroot = new TreeNode(0,"",null, null,conversiontype);
+                            let newroot = new TreeNode(0,"",null, null,conversiontarget);
                             tree.root.key = key;
                             newroot.insertNode(tree.root);
                             newroot.insertNode(keyNode);
@@ -369,18 +369,18 @@ console.log("and now it is"+ key + "key of", keyType, "keyType");
                     if (splitStr[2][0] == " "){
                         splitStr[2] = splitStr[2].substring(1)
                     }
-                    leftNode = new TreeNode(0,splitStr[0],key,null, conversiontype);
-                    keyNode = new TreeNode(0,splitStr[1],key,null, conversiontype);
-                    rightNode = new TreeNode(0,splitStr[2],key,null, conversiontype);
+                    leftNode = new TreeNode(0,splitStr[0],key,null, conversiontarget);
+                    keyNode = new TreeNode(0,splitStr[1],key,null, conversiontarget);
+                    rightNode = new TreeNode(0,splitStr[2],key,null, conversiontarget);
                     if (stackedTreeNode){ // we have a stackedTreeNode 
-                        stackedTreeNode = combinePrev(leftNode.value,stackedTreeNode, conversiontype); // there are something before the pair, consider multiplication
+                        stackedTreeNode = combinePrev(leftNode.value,stackedTreeNode, conversiontarget); // there are something before the pair, consider multiplication
                         leftNode = stackedTreeNode;
                         leftNode.key = key;
                         stackedTreeNode = undefined;
                     }
                     
                     let funcNode = new TreeNode;
-                    funcNode.conversiontype = conversiontype;
+                    funcNode.conversiontarget = conversiontarget;
                     funcNode.value = "";
                     funcNode.insert(key,key);
                     rightNode.key = key;
@@ -388,8 +388,8 @@ console.log("and now it is"+ key + "key of", keyType, "keyType");
                         let rpos = findPositionOfRightPair(fullStr,startKey,key,dictionary[key].pairedArgument,dictionary[key].family);
                         if (rpos != -1){ 
                             let splitR = [fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
-                            let rightNode1 = M2TreeConvert(splitR[0].trim(),params, conversiontype)[0].root;
-                            let rightNode2 = new TreeNode(0,splitR[1],key,null, conversiontype);
+                            let rightNode1 = M2TreeConvert(splitR[0].trim(),params, conversiontarget)[0].root;
+                            let rightNode2 = new TreeNode(0,splitR[1],key,null, conversiontarget);
                             funcNode.insertNode(rightNode1);
                             funcNode.insertNode(rightNode2);
                         } else {
@@ -402,7 +402,7 @@ console.log("and now it is"+ key + "key of", keyType, "keyType");
                     let cNode = currentNode;
                     currentNode = funcNode.children[funcNode.children.length - 1];
                     if (leftNode.value.length > 0){
-                        funcNode = combinePrevNode(leftNode,funcNode, conversiontype); // there are something before the pair, consider multiplication
+                        funcNode = combinePrevNode(leftNode,funcNode, conversiontarget); // there are something before the pair, consider multiplication
                     }
                     
                     funcNode.value = "";
@@ -427,11 +427,11 @@ console.log("and now it is"+ key + "key of", keyType, "keyType");
                     splitStr = [fullStr.substring(0,startKey), key, fullStr.substring(counter+1)];
 console.log("making a symbolNode with", splitStr);
                     let symbolNode = new TreeNode;
-                    symbolNode.conversiontype = conversiontype;
+                    symbolNode.conversiontarget = conversiontarget;
                     symbolNode.value = "";
                     symbolNode.insert(key,key);
-                    symbolNode = combinePrev(splitStr[0],symbolNode, conversiontype); // there are something before the pair, consider multiplication
-                    stackedTreeNode = stackNode(stackedTreeNode, symbolNode, conversiontype); // put the symbol node on the stack
+                    symbolNode = combinePrev(splitStr[0],symbolNode, conversiontarget); // there are something before the pair, consider multiplication
+                    stackedTreeNode = stackNode(stackedTreeNode, symbolNode, conversiontarget); // put the symbol node on the stack
 console.log("now have stackedTreeNode", stackedTreeNode);
 
                     if (extraArgument.length > 0){ // treat space differently if we run into extra argument case
@@ -451,8 +451,8 @@ console.log("now have currentNode", currentNode);
                     break;
                 case "multiline":
                     splitStr = [fullStr.substring(0,startKey), key, fullStr.substring(counter+1)];
-                    let mNode = new TreeNode(0,splitStr[0],null,null, conversiontype);
-                    stackedTreeNode = stackNode(stackedTreeNode, mNode, conversiontype); // put the symbol node on the stack
+                    let mNode = new TreeNode(0,splitStr[0],null,null, conversiontarget);
+                    stackedTreeNode = stackNode(stackedTreeNode, mNode, conversiontarget); // put the symbol node on the stack
                     currentNode.value = splitStr[2];
                     exParam = key;
 console.log("----------- just set exParam = ", exParam);
@@ -465,10 +465,10 @@ console.log("----------- just set exParam = ", exParam);
         } else {
             if (stackedTreeNode){ //left with some undealt pair
                 if (fullStr.trim()!=""){
-  console.log("388 M2TreeConvert  conversiontype", conversiontype);
+  console.log("388 M2TreeConvert  conversiontarget", conversiontarget);
 
                     let tempNode = new TreeNode;
-                    tempNode.conversiontype = conversiontype;
+                    tempNode.conversiontarget = conversiontarget;
                     stackedTreeNode.key = "";
                     tempNode.insertNode(stackedTreeNode);
                     tempNode.insert("","");
@@ -511,12 +511,12 @@ Arguments: the current stackedTreeNode and the node to be put on the stack.
 return: the new stackedTreeNode
 2022.10.26 created;
 */
-function stackNode(stackedTreeNode, pNode, conversiontype){
+function stackNode(stackedTreeNode, pNode, conversiontarget){
     if (stackedTreeNode){ //already exists a node in stack, so they should be multiplied/composited
-  console.log("stackNode M2TreeConvert  stackedTreeNode.conversiontype", stackedTreeNode.conversiontype);
+  console.log("stackNode M2TreeConvert  stackedTreeNode.conversiontarget", stackedTreeNode.conversiontarget);
 
         let tempNode = new TreeNode;
-        tempNode.conversiontype = conversiontype;
+        tempNode.conversiontarget = conversiontarget;
         stackedTreeNode.key = "";
         tempNode.insertNode(stackedTreeNode);
         tempNode.insert("","");
@@ -536,18 +536,18 @@ return: the adjusted holding node
 2022.10.26 created;
 */
 
-function combinePrev(preVal,pNode,  conversiontype){
+function combinePrev(preVal,pNode,  conversiontarget){
     if (preVal.trim()!=""){ // there are something before the pair, consider multiplication
-  console.log("combinePrev M2TreeConvert  ", preVal, "xx", pNode, "cc", conversiontype);
+  console.log("combinePrev M2TreeConvert  ", preVal, "xx", pNode, "cc", conversiontarget);
 
         let tempNode = new TreeNode;
-        tempNode.conversiontype = conversiontype;
+        tempNode.conversiontarget = conversiontarget;
         pNode.key = "";
         tempNode.insert(preVal,"");
         tempNode.insert("","");
         tempNode.insertNode(pNode);
         pNode = tempNode;
-  console.log(" combinePrev pNode.conversiontype", pNode);
+  console.log(" combinePrev pNode.conversiontarget", pNode);
     }
     return pNode;
 }
@@ -560,7 +560,7 @@ return: the adjusted holding node
 */
 
 function combinePrevNode(preNode,pNode){
-  console.log("combinePrevNode preNode.conversiontype", preNode.conversiontype);
+  console.log("combinePrevNode preNode.conversiontarget", preNode.conversiontarget);
     preNode.insert("","");
     preNode.insertNode(pNode);
     return preNode;
@@ -574,12 +574,12 @@ return: the adjusted holding node
 2022.10.26 created;
 */
 
-function combineAfter(followingVal,pNode, conversiontype){
+function combineAfter(followingVal,pNode, conversiontarget){
     if (followingVal.trim()!=""){ // there are something before the pair, consider multiplication
-  console.log("combineAfter M2TreeConvert  conversiontype", conversiontype);
+  console.log("combineAfter M2TreeConvert  conversiontarget", conversiontarget);
 
         let tempNode = new TreeNode;
-        tempNode.conversiontype = conversiontype;
+        tempNode.conversiontarget = conversiontarget;
         pNode.key = "";
         tempNode.insertNode(pNode);
         tempNode.insert("","");

@@ -128,12 +128,12 @@ function singletonQ(str) {
         (str.trim() in dictionary && dictionary[str.trim()]["type"] == "symbol")
 }
 
-function convertSymbol(str, conversiontype) {
+function convertSymbol(str, conversiontarget) {
     let ans = str;
 
-    if(conversiontype == "SpaceMath2MathML") {
+    if(conversiontarget == "MathML") {
         ans = dictionary[ans]["ruleML"]
-    } else if (conversiontype == "SpaceMath2speech") {
+    } else if (conversiontarget == "Speech") {
         ans = dictionary[ans]["speech"]
     } else {
         ans = dictionary[ans]["rule"]
@@ -141,21 +141,21 @@ function convertSymbol(str, conversiontype) {
     return ans
 }
 
-function markAtomicItem(str, conversiontype) {
+function markAtomicItem(str, conversiontarget) {
   if(numbervariableQ(str)) {
     let numberpart = str.replace(/[a-zA-Z]+$/, "");
     let variablepart = str.replace(/^[0-9\.,]+/, "");
     console.log("found mixed", str, "with parts", numberpart, ",", variablepart);
-    numberpart = markAtomicItem(numberpart, conversiontype);
-    variablepart = markAtomicItem(variablepart, conversiontype);
+    numberpart = markAtomicItem(numberpart, conversiontarget);
+    variablepart = markAtomicItem(variablepart, conversiontarget);
     let multiplication = "";
-    if(conversiontype == "SpaceMath2MathML") { multiplication = "<mo>&InvisibleTimes;</mo>"}
-    else if(conversiontype == "SpaceMath2speech") { multiplication = " times " }
+    if(conversiontarget == "MathML") { multiplication = "<mo>&InvisibleTimes;</mo>"}
+    else if(conversiontarget == "Speech") { multiplication = " times " }
     return numberpart + multiplication + variablepart
   }
   let ans = str;
 console.log("markAtomicItem of", ans, "endans", symbolQ(str));
-  if(conversiontype == "SpaceMath2MathML") {
+  if(conversiontarget == "MathML") {
     if(numberQ(str)) {
       ans = "<mn>"+ans+"</mn>"
     } else if(symbolQ(str)) {
@@ -177,16 +177,16 @@ console.warn("unknown type", "X"+ans+"X")
   return ans
 }
 
-function markBrackets(str, conversiontype) {
+function markBrackets(str, conversiontarget) {
   let ans = str;
 console.log("markBrackets of", ans, "endans");
-  if(conversiontype == "SpaceMath2MathML") {
+  if(conversiontarget == "MathML") {
     if(numberQ(ans)) {
         ans = "<mn>" + ans + "</mn>"
     } else {
         ans = "<mrow>" + ans + "</mrow>"
     }
-  } else if(conversiontype == "SpaceMath2speech") {
+  } else if(conversiontarget == "Speech") {
     if(numberQ(ans)) {
         // nothign to do
     } else {
@@ -696,7 +696,7 @@ console.log("this_node_content", str_separated);
     return str_separated
 }
 
-function assemble(sourcelist, componentdict, conversiontype="SpaceMath2MathML") {
+function assemble(sourcelist, componentdict, conversiontarget="MathML") {
 
     let ans = "";
 
@@ -704,12 +704,12 @@ function assemble(sourcelist, componentdict, conversiontype="SpaceMath2MathML") 
         let tags = outputTagsOf[element[0]];
 console.log("element", element);
 console.log("componentdict", componentdict);
-console.log(conversiontype, "tags",tags, "tags.conversiontype",tags[conversiontype]);
-   //     let content = componentdict[[element[3], conversiontype]];
-        const contentkey = element[3] + "," + conversiontype;
+console.log(conversiontarget, "tags",tags, "tags.conversiontarget",tags[conversiontarget]);
+   //     let content = componentdict[[element[3], conversiontarget]];
+        const contentkey = element[3] + "," + conversiontarget;
 console.log("contentkey", contentkey);
         let content = componentdict[contentkey][2];
-        ans = tags[conversiontype][0] + content + tags[conversiontype][1];
+        ans = tags[conversiontarget][0] + content + tags[conversiontarget][1];
     }
 
     return ans

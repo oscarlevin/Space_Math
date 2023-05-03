@@ -36,11 +36,11 @@ if (sourceTextArea.addEventListener) {
   sourceTextArea.addEventListener('input', function() {
 /*
 */
-      echosourceTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
-      speechTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"SpaceMath2speech") + ' "';
-      theSpaceMathInML = convert(sourceTextArea.value,"SpaceMath2MathML");
+      echosourceTextArea.value = convert(sourceTextArea.value,"LaTeX");
+      speechTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"Speech") + ' "';
+      theSpaceMathInML = convert(sourceTextArea.value,"MathML");
 /*
-      mathmlTextArea.value = convert(sourceTextArea.value,"SpaceMath2MathML");
+      mathmlTextArea.value = convert(sourceTextArea.value,"MathML");
 */
       mathmlTextArea.value = theSpaceMathInML;
       mathmlDisplayArea.innerHTML = theSpaceMathInML;
@@ -55,10 +55,10 @@ if (sourceTextArea.addEventListener) {
 /* is this part ever used? */
   error
   sourceTextArea.attachEvent('onpropertychange', function() {
-      echosourceTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
-      mathmlTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
-      speechTextArea.value = '"' + convert(sourceTextArea.value,"SpaceMath2LaTeX") + '"';
-      pretextTextArea.value = convert(sourceTextArea.value,"SpaceMath2LaTeX");
+      echosourceTextArea.value = convert(sourceTextArea.value,"LaTeX");
+      mathmlTextArea.value = convert(sourceTextArea.value,"LaTeX");
+      speechTextArea.value = '"' + convert(sourceTextArea.value,"LaTeX") + '"';
+      pretextTextArea.value = convert(sourceTextArea.value,"LaTeX");
       mathJaxArea.innerHTML = convert(echosourceTextArea.value,"LaTeX2MathJax");
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathJaxArea"]);
   });

@@ -2559,20 +2559,20 @@ for (const letterpair of charactersymbols) {
 var outputTagsOf = {
   "text": {
     "tex": ["",""],
-    "SpaceMath2MathML": ["",""],
-    "SpaceMath2speech": ["",""],
-    "ptx": ["",""]
+    "MathML": ["",""],
+    "Speech": ["",""],
+    "PTX": ["",""]
   },
   "m": {
     "tex": ["\\(", "\\)"],
-    "SpaceMath2MathML": ["<math>", "</math>"],
-    "SpaceMath2speech": ["<em>","</em>"],
-    "ptx": ["<m>", "</m>"]
+    "MathML": ["<math>", "</math>"],
+    "Speech": ["<em>","</em>"],
+    "PTX": ["<m>", "</m>"]
   },
   "md": {
     "tex": ["\\[","\\]"],
-    "SpaceMath2MathML": ["<math display=\"block\">","</math>"],
-    "SpaceMath2speech": ["<em>","</em>"],
-    "ptx": ["<md>","</md>"]
+    "MathML": ["<math display=\"block\">","</math>"],
+    "Speech": ["<em>","</em>"],
+    "PTX": ["<md>","</md>"]
   }
 }
