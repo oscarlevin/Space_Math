@@ -704,12 +704,12 @@ function assemble(sourcelist, componentdict, conversiontarget="MathML") {
         let tags = outputTagsOf[element[0]];
 console.log("element", element);
 console.log("componentdict", componentdict);
-console.log(conversiontarget, "tags",tags, "tags.conversiontarget",tags[conversiontarget]);
+console.log(conversiontarget, "tags",tags);
    //     let content = componentdict[[element[3], conversiontarget]];
         const contentkey = element[3] + "," + conversiontarget;
 console.log("contentkey", contentkey);
         let content = componentdict[contentkey][2];
-        ans = tags[conversiontarget][0] + content + tags[conversiontarget][1];
+        ans += tags[conversiontarget][0] + content + tags[conversiontarget][1];
     }
 
     return ans

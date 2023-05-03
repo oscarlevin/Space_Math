@@ -19,14 +19,14 @@ console.log("str_separated", str_separated);
 console.log("firsttest", convertedComponent);
 console.log("test",convertMathSnippet("x^447","MathML"));
 
-  let answer_processed = assemble(str_separated, convertedComponent);
+  let answer_processed = assemble(str_separated, convertedComponent,conversiontarget);
 
 console.log("answer_processed", answer_processed);
 
-die()
+// start not doing the old way
+//  str = preprocess(str);
 
-  str = preprocess(str);
-
+  str = answer_processed;
 /*
   str = str.replace(/(\$| |\(|\^)-([^ ])/g, '$1😑$2');  // negative sign
   str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group

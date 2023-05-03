@@ -2558,19 +2558,19 @@ for (const letterpair of charactersymbols) {
 
 var outputTagsOf = {
   "text": {
-    "tex": ["",""],
+    "LaTeX": ["",""],
     "MathML": ["",""],
     "Speech": ["",""],
     "PTX": ["",""]
   },
   "m": {
-    "tex": ["\\(", "\\)"],
+    "LaTeX": ["\\(", "\\)"],
     "MathML": ["<math>", "</math>"],
     "Speech": ["<em>","</em>"],
     "PTX": ["<m>", "</m>"]
   },
   "md": {
-    "tex": ["\\[","\\]"],
+    "LaTeX": ["\\[","\\]"],
     "MathML": ["<math display=\"block\">","</math>"],
     "Speech": ["<em>","</em>"],
     "PTX": ["<md>","</md>"]
