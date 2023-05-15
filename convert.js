@@ -22,11 +22,18 @@ console.log("test",convertMathSnippet("x^447","MathML"));
   let answer_processed = assemble(str_separated, convertedComponent,conversiontarget);
 
 console.log("answer_processed", answer_processed);
+console.log("convertedComponent", convertedComponent);
+console.log(" ");
+console.log("*************************************************************");
+console.log(" ");
 
-// start not doing the old way
-//  str = preprocess(str);
 
-  str = answer_processed;
+  return answer_processed
+
+/* ---------------- */
+
+  str = preprocess(str);
+
 /*
   str = str.replace(/(\$| |\(|\^)-([^ ])/g, '$1😑$2');  // negative sign
   str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
@@ -154,10 +161,13 @@ function convertPieces(pieces, conversiontarget) {
     const piece_type = piece[0];
     const contentkey = piece[3] + "," + conversiontarget;
     if (piece_type == "text") { converted_component[contentkey] = [piece[0], piece[1], piece[2]] }
-// note that [piece[3],conversiontarget] as a key is really the string: piece[3] + "," + conversiontarget]
+        // in the future will will process text, like M\\"obius
     else if ( !(contentkey in converted_component)) {
       if (piece_type == "m" || piece_type == "md") {
-          converted_component[contentkey] = [piece[0], piece[1],convertMathSnippet(piece[2], conversiontarget)]
+          let thiscontentpiece = piece[2];
+          thiscontentpiece = preprocess(thiscontentpiece);
+  //        converted_component[contentkey] = [piece[0], piece[1],convertMathSnippet(piece[2], conversiontarget)]
+          converted_component[contentkey] = [piece[0], piece[1],convertMathSnippet(thiscontentpiece, conversiontarget)]
       } else {
         console.error("unknown piece_type", piece)
       }
@@ -180,7 +190,7 @@ function convertPieces(pieces, conversiontarget) {
 function convertMathSnippet(str, conversiontarget) {
 console.log("starting convertMathSnippet", conversiontarget, "on", str);
     let convertedStr = M2LConvert(str,"LBRACK","RBRACK", conversiontarget);
-
+    convertedStr = simplifyAnswer(convertedStr);
     return convertedStr
 }
 

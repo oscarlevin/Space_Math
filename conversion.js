@@ -296,13 +296,14 @@ function preprocessarithmetic(rawstring) {
 //    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/❲$1❳');  // denominator
 // greedy denominator.  When does that fail?
     str = str.replace(/\/([^ \(\[{\/][^ \)\]\}\n\$]*)/g, '/❲$1❳');  // denominator
-console.log("after preprocess fractions", str);
+console.log("after preprocess fractions", "A" + str + "B");
 
 // wrap argument of greedy function in fake parentheses
     for (const symbolname of greedyfunctions) {
-        var regExStrStub = "([\\$ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}\\$]+)";
-        var regExStr = regExStrStub + "([$ \\$\\(\\)\\[\\]\\{\\}])";
-// console.log("regExStr", regExStr);
+  //      var regExStrStub = "(^|[\\$ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}\\$]+)";
+        var regExStrStub = "(^|[ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}]+)";
+        var regExStr = regExStrStub + "($|[ \\(\\)\\[\\]\\{\\}])";
+console.log("regExStr", regExStr);
         var regEx = new RegExp(regExStr, "g");
 // note that we wrap in brackets the user shoudl not write: ⁅⁆
         str = str.replace(regEx, '$1' + symbolname + '⁅$2⁆$3');
@@ -540,13 +541,13 @@ console.log("prodessed powers of functions", str);
 function preprocesslargeoperators(rawstring) {
     let str = rawstring;
 
-// extract sum, prod, and other big tings with limits
+// extract sum, prod, and other big tsings with limits
     for (let [symbolname, symbol] of Object.entries(symbolswithlimits)) {
 console.log("looking for limits operator: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;
 // first check for limits in brackets
-         var regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]\\^[\\[\\(\\{]([^ ]+)[\\]\\)\\}]";
+         var regExStr = "(^| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]\\^[\\[\\(\\{]([^ ]+)[\\]\\)\\}]";
          var regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))⚡');
 // then only lower limit in brackets
@@ -554,7 +555,7 @@ console.log("looking for limits operator: symbolname", symbolname);
          var regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))⚡');
 // now assume the limits are not in parentheses.  First check for lower and upper
-         regExStr = "(\\$| )" + symbolname + "\\_([^ ]+)\\^([^ ]+)";
+         regExStr = "(\\b)" + symbolname + "\\_([^ ]+)\\^([^ ]+)";
     // for now assume no spaces in the limits
 console.log("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
