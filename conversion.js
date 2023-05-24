@@ -395,20 +395,21 @@ function preprocessbrackets(rawstring) {
 
 // the <...> with "|" have to come before the ones with only commas,
 // because those can also contain commas
-    str = str.replace(/(\$| )< ([^<>|]+) >/g, '$1span($2)');
+    str = str.replace(/(^| )< ([^<>|]+) >/g, '$1span($2)');
 console.log("did we find span?", str);
-    str = str.replace(/(\$| )<([^<>|]+) \| ([^<>|]+)>/g, '$1($2) grouppresentation ($3)');
-    str = str.replace(/(\$| |\(){([^{}|]+) \| ([^{}|]+)}/g, '$1($2) setbuilder ($3)');
-    str = str.replace(/(\$| ){([^{}]+)}/g, '$1setof($2)');
-    str = str.replace(/(\$| )<([^,<>|]+)\|([^,<>|]+)>/g, '$1($2) braket ($3)');
-    str = str.replace(/(\$| )<([^,<>]+)\, ([^,<>]+)>/g, '$1($2) twovector ($3)');
+    str = str.replace(/(^| )<([^<>|]+) \| ([^<>|]+)>/g, '$1($2) grouppresentation ($3)');
+    str = str.replace(/(^| |\(){([^{}|]+) \| ([^{}|]+)}/g, '$1($2) setbuilder ($3)');
+    str = str.replace(/(^| ){([^{}]+)}/g, '$1setof($2)');
+    str = str.replace(/(^| )<([^,<>|]+)\|([^,<>|]+)>/g, '$1($2) braket ($3)');
+    str = str.replace(/(^| )<([^,<>]+)\, ([^,<>]+)>/g, '$1($2) twovector ($3)');
 console.log("looking for vector", str);
-    str = str.replace(/(\$| )<([^ ,<>\$][^,<>\$]*)\, ([^<>\$]+)>/g, '$1vector($2, $3)');
+ //   str = str.replace(/(^| )<([^ ,<>\$][^,<>\$]*)\, ([^<>\$]+)>/g, '$1vector($2, $3)');
+    str = str.replace(/(^| )<([^ ,<>][^,<>]*)\, ([^<>]+)>/g, '$1vector($2, $3)');
 console.log("did we find vector?", str);
 // another place where \n can start an expression
-    str = str.replace(/(\$| |\n)<([^ ][^,<>]*)\,([^ ][^<>]*)>/g, '$1($2) innerproduct ($3)');
+    str = str.replace(/(^| |\n)<([^ ][^,<>]*)\,([^ ][^<>]*)>/g, '$1($2) innerproduct ($3)');
 // catch all for every other case <...> of unknown meaning
-    str = str.replace(/(\$| )<([^<>]+)>/g, '$1anglebrackets($2)');
+    str = str.replace(/(^| )<([^<>]+)>/g, '$1anglebrackets($2)');
 
     return str
 }
@@ -435,11 +436,11 @@ console.log("looking for limits: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;  // hack to be partially backward compatible with TeX
 // the lower and upper limits might be in parentheses.  We handle these awkwardly
-         var regExStrStub = "(\\$| |\n)" + symbolname + "\\_\\(([^()]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
-         var regExStr = regExStrStub + " d([a-z]+)" + "( |\n|\\$)";
+         var regExStrStub = "(^| |\n)" + symbolname + "\\_\\(([^()]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
+         var regExStr = regExStrStub + " d([a-z]+)" + "( |\n|$)";
   //       var regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
   // switched grouping brackets
-         var regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|\\$)";
+         var regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|$)";
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          var regExWeight = new RegExp(regExStrWeight, "g");
@@ -448,10 +449,10 @@ console.log("regExStrWeight", regExStrWeight);
          str = str.replace(regEx, '$1wrapper(intlims(' + symbol + ')($2)($3)($4)($5))$6');
 
          // case of no () around limits (but both lower and upper)
-         regExStrStub = "(\\$| |\n)" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?)";
-         regExStr = regExStrStub + " d([a-z]+)" + "( |\n|\\$)";
+         regExStrStub = "(^| |\n)" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?)";
+         regExStr = regExStrStub + " d([a-z]+)" + "( |\n|$)";
  //        regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
-         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|$)";
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          regExWeight = new RegExp(regExStrWeight, "g");
@@ -462,26 +463,26 @@ console.log("regExStrWeight", regExStrWeight);
          // case of lower lim only, () around lower limit
          // done poorly now, because int_((c)) is tricky
          // we do a special case for that
-         regExStrStub = "(\\$| |\n)" + symbolname + "\\_\\(\\(([^()]+?)\\)\\) (.*?)";
+         regExStrStub = "(^| |\n)" + symbolname + "\\_\\(\\(([^()]+?)\\)\\) (.*?)";
          regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
-         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |$)";
          regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')(($2))($3)($4)($5))$6');
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1wrapper(intllim(' + symbol + ')(($2))($3)($4))$5');
          // now only () around lower limit
-         regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^()]+?)\\) (.*?)";
+         regExStrStub = "(^| )" + symbolname + "\\_\\(([^()]+?)\\) (.*?)";
          regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
-         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |$)";
          regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')($2)($3)($4)($5))$6');
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1wrapper(intllim(' + symbol + ')($2)($3)($4))$5');
 
          // case of lower lim only, no () around lower limit (unless intended)
-         regExStrStub = "(\\$| |\n)" + symbolname + "\\_([^ ]+?) (.*?)";
+         regExStrStub = "(^| |\n)" + symbolname + "\\_([^ ]+?) (.*?)";
          regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
-         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |$)";
          regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')($2)($3)($4)($5))$6');
          regEx = new RegExp(regExStr, "g");
@@ -604,10 +605,28 @@ function preprocessother(rawstring) {
     return str
 }
 
-function dollars_to_tags(text) {
-    the_ans = text;
+function hide_xml(text) {
+    let the_ans = text;
 
-    the_ans = the_ans.replace(/<\s/, "&lt; ");
+    the_ans = the_ans.replace(/</g, "⦉");
+    the_ans = the_ans.replace(/>/g, "⦊");
+
+    return the_ans
+}
+function unhide_xml(text) {
+    let the_ans = text;
+
+    the_ans = the_ans.replace(/⦉/g, "<");
+    the_ans = the_ans.replace(/⦊/g, ">");
+
+    return the_ans
+}
+
+function dollars_to_tags(text) {
+    let the_ans = text;
+
+// see: hide_xml
+//    the_ans = the_ans.replace(/<\s/, "&lt; ");
 
     the_ans = the_ans.replace(/\$\$\s*([^\$]+)\s*\$\$/g, "<md sourcetag=\"dd\">$1</md>");
 
@@ -714,4 +733,38 @@ console.log("contentkey", contentkey);
     }
 
     return ans
+}
+
+function postprocess(answer, conversiontarget) {
+
+  let str = answer.trim();
+
+  str = str.replace(/␣/g, " ");  // can occur in text in math
+
+  if(conversiontarget == "Speech") {
+      str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
+      str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
+      str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
+      str = str.replace(/\$\$(.+?)\$\$/sg, "\n<em>$1</em>\n");
+      str = str.replace(/\\,/g, " ");
+      str = str.replace(/∏/g, "product");
+      str = str.replace(/∑/g, "sum");
+  } else if(conversiontarget == "MathML") {
+  //    str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "\n<math>$2</math>\n");
+      str = str.replace(/\$\$(.+?)\$\$/sg, "\n<math display=\"block\">$1</math>\n");
+      str = str.replace(/(^| |\n)\$\$(.+?)\$\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math display=\"block\">$2</math>$3\n");
+      str = str.replace(/(^| |\n)\$(.+?)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math>$2</math>$3\n");
+      str = str.replace(/\\,/g, "");
+// We use "wrap" to add attributes to a child, but don't know if there is
+// a single child.  When there is, transfer the attributes to the single child
+// refactor to imporve and reconcile this with "simplifyAnswer" in conversion.js
+      str = str.replace(/<wrap([^>]+)>(<m[a-z]+[^<>]*)(>[^<>]*<\/m[a-z]+>)<\/wrap>/g, "$2$1$3");
+      str = str.replace(/<wrap /g, "<mrow ");
+      str = str.replace(/<\/wrap>/g, "</mrow>");
+/*
+      str = str.replace(/\\,/g, "<mspace width=\"0.16em\"></mspace>");
+*/
+  }
+
+  return str
 }

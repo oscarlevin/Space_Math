@@ -178,6 +178,7 @@ var dictionary = {
       "´óÓÚµÈÓÚ"
     ],
     "alternative": [
+      "⦊=",
       "ge",
       "geq",
       "´óÓÚµÈÓÚ"
@@ -199,6 +200,7 @@ var dictionary = {
       "Ð¡ÓÚµÈÓÚ"
     ],
     "alternative": [
+      "⦉=",
       "le",
       "leq",
       "Ð¡ÓÚµÈÓÚ"
@@ -348,6 +350,7 @@ var dictionary = {
       "Ð¡ÓÚ"
     ],
     "alternative": [
+      "⦉",
       "less than",
       "Ð¡ÓÚ"
     ],
@@ -368,6 +371,7 @@ var dictionary = {
       "´óÓÚ"
     ],
     "alternative": [
+      "⦊",
       "greater than",
       "´óÓÚ"
     ],

@@ -10,7 +10,8 @@ Description: the major abstract function which takes the user input and return t
 function convert(str,conversiontarget) {
 // why did we need that?   str = trimSpaces(str); //trim down all multiple spaces into one space
 
-  let str_separated = separatePieces(str);
+  let str_no_xml = hide_xml(str);
+  let str_separated = separatePieces(str_no_xml);
 
 console.log("str_separated", str_separated);
 
@@ -27,6 +28,7 @@ console.log(" ");
 console.log("*************************************************************");
 console.log(" ");
 
+  answer_processed = postprocess(answer_processed, conversiontarget);
 
   return answer_processed
 
@@ -72,7 +74,6 @@ console.log("   in convert, str: ", str);
       str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
       str = str.replace(/\$\$(.+?)\$\$/sg, "\n<em>$1</em>\n");
       str = str.replace(/\\,/g, " ");
-      str = str.replace(/␣/g, " ");
       str = str.replace(/∏/g, "product");
       str = str.replace(/∑/g, "sum");
   } else if(conversiontarget == "MathML") {
@@ -165,6 +166,7 @@ function convertPieces(pieces, conversiontarget) {
     else if ( !(contentkey in converted_component)) {
       if (piece_type == "m" || piece_type == "md") {
           let thiscontentpiece = piece[2];
+          thiscontentpiece = unhide_xml(thiscontentpiece);
           thiscontentpiece = preprocess(thiscontentpiece);
   //        converted_component[contentkey] = [piece[0], piece[1],convertMathSnippet(piece[2], conversiontarget)]
           converted_component[contentkey] = [piece[0], piece[1],convertMathSnippet(thiscontentpiece, conversiontarget)]
