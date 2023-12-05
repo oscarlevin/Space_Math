@@ -12,10 +12,9 @@ Spacemath solves the lack of a fast and convenient method for inserting mathemat
 Read more at https://aimath.org/~farmer/spacemath/
 
 ## Can I try it?
-Download the project and open the file "SpaceMath.html" in your favorite browser, or take it for a test drive here:
-https://eg.bucknell.edu/~yh013/SpaceMath/SpaceMath.html
+Download the project and open the file "SpaceMath.html" in your favorite browser <!--, or take it for a test drive here:-->
 
 
-*Senior Design Project, Bucknell University Computer Science 2022 <br>
+*Based on a Senior Design Project, Bucknell University Computer Science 2022 <br>
 Authors: Per Astrom, Yang Hong, Nick Satriano, Qixiao Zhu*
 
