@@ -38,6 +38,15 @@ $det I$ vs $abs r$
 
 $a^(7+d)$ and $5^37$ are okay, but: $RR^2$ or $A_25$
 
+$ a x^2 + b x + c$ and $e^2 x sin 2 pi i n x$
+
+$e^sin a*b + e^sin a+b + e^sin a + b + e^sin a b$
+
+$x <= (-b +- sqrt[b^2 - 4 a c])/(2a)$
+
+$exists x in b$  (problem because the space before x is interpreted as "times")
+
+$ZZ cross ZZ isom <a, b | a b a^-1 b^-1>$
 -->
 <!--
 <p>Try SpaceMath in the interactive renderer below, the Latex output will be out on the right box, and the displayable form will appear below the box. Just like LaTeX, you may use a pair of deliminators (\$...\$,\$\$...\$\$) to indicate if you want some parts to be rendered in displayable math. </p>
@@ -45,12 +54,14 @@ $a^(7+d)$ and $5^37$ are okay, but: $RR^2$ or $A_25$
 
     <textarea rows="8" cols="60" id=sourceTextArea placeholder="Type in this box."></textarea>
 
+    <div id=mathmlDisplayArea disabled=true></div>
+
     <div id=speechTextArea disabled=true placeholder="How it will be spoken"></div>
+
     <textarea rows="8" cols="60" id=mathmlTextArea disabled=true placeholder="MathML version"></textarea>
 <!--
     <textarea rows="8" cols="60" id=pretextTextArea disabled=true placeholder="PreTeXt version"></textarea>
 -->
-    <div id=mathmlDisplayArea disabled=true></div>
 <!--
     <textarea rows="8" cols="60" id=XXmathmlTextArea disabled=true placeholder="MathML version"></textarea>
 -->
@@ -674,8 +685,9 @@ $a^(7+d)$ and $5^37$ are okay, but: $RR^2$ or $A_25$
 <script src="conversion.js"></script>
 <script src="convert.js"></script>
 <!-- when running locally
-<script src="dictionary.js"></script>
 -->
+<script src="dictionary.js"></script>
+
 <script src="M2LConvert.js"></script>
 <script src="M2TreeConvert.js"></script>
 <script src="combineTree2Latex.js"></script>
