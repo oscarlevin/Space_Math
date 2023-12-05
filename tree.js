@@ -26,28 +26,28 @@ Symbol notations:
 */
 class TreeNode {
 /*
-  constructor(position, value, key = null, parent = null, conversiontype) {
+  constructor(position, value, key = null, parent = null, conversiontarget) {
 */
-  constructor(position, value, key=null, parent=null, conversiontype="unknown") {
+  constructor(position, value, key=null, parent=null, conversiontarget="unknown") {
     this.position = position; // position of its brothers, 0 if is root
     this.value = value;
     this.outputvalue = value;
     this.key = key;
     this.parent = parent;
-    this.conversiontype = conversiontype;
+    this.conversiontarget = conversiontarget;
     this.children = [];
     this.pair = [];
     this.noPriority = false;
     this.exPriority = false;
-// console.log("in TreeNode, this.conversiontype", this.conversiontype);
-if(true || this.conversiontype === undefined) {
-//    console.log("making a TreeNode", this.position, "a",  value, "b",  key, "c", this.parent,"d",this.conversiontype);
+// console.log("in TreeNode, this.conversiontarget", this.conversiontarget);
+if(true || this.conversiontarget === undefined) {
+//    console.log("making a TreeNode", this.position, "a",  value, "b",  key, "c", this.parent,"d",this.conversiontarget);
 }
   }
 
   insert(value, key = value) {
 //   console.log("TreNode 1 ", this);
-    this.children.push(new TreeNode(this.children.length,value, key, this, this.conversiontype));
+    this.children.push(new TreeNode(this.children.length,value, key, this, this.conversiontarget));
 //   console.log("TreNode 1 again ", this);
     return true;
   }
@@ -66,18 +66,18 @@ if(true || this.conversiontype === undefined) {
   addLeafMarkup() {
 console.log("   adding leaf markup with key, val, oval", this.key,"a,a", this.value, "b,b",this.outputvalue, "to", this);
       if(this.key == null) {
-          this.outputvalue = markAtomicItem(this.value, this.conversiontype);
+          this.outputvalue = markAtomicItem(this.value, this.conversiontarget);
       } else if(this.key == " ") {
           if(this.position == 1) {
 console.warn("assuming implied multiplication");
 console.warn("What is next to this space key? parent:", this.parent, "left sibling", this.parent.children[0], "left sibling value", this.parent.children[0].value, "right sibling", this.parent.children[2]);
-            if(this.conversiontype == "SpaceMath2MathML") {
+            if(this.conversiontarget == "MathML") {
               this.outputvalue = "<mo>&InvisibleTimes;</mo>"
-            } else if(this.conversiontype == "SpaceMath2speech") {
+            } else if(this.conversiontarget == "Speech") {
               this.outputvalue = " times "
             }
           } else {
-               this.outputvalue = markAtomicItem(this.value, this.conversiontype);
+               this.outputvalue = markAtomicItem(this.value, this.conversiontarget);
           }
       } else if(this.key == "quote") {
           if(this.position == 1) {
@@ -89,9 +89,9 @@ console.warn("What is next to this space key? parent:", this.parent, "left sibli
 console.log("What is nect to this enpty key? parent:", this.parent, "left sibling", this.parent.children[0], "right sibling", this.parent.children[2]);
             if(this.parent.children[2].pair.length > 0) {
           // the "" is funciton application if its right-hand neighbor is in delimiters
-              if(this.conversiontype == "SpaceMath2MathML") {
+              if(this.conversiontarget == "MathML") {
                 this.outputvalue = "<mo>&ApplyFunction;</mo>"
-              } else if(this.conversiontype == "SpaceMath2speech") {
+              } else if(this.conversiontarget == "Speech") {
                 this.outputvalue = " of "
               }
             }
@@ -99,19 +99,19 @@ console.log("What is nect to this enpty key? parent:", this.parent, "left siblin
               // sort of a hack to put a space in front og funciton name in speech
               // rethink and consider inserting invisible multiplication  (which will
               // require testing previous item)
-              if(this.conversiontype == "SpaceMath2speech") {
-                this.outputvalue = " " + markAtomicItem(this.value, this.conversiontype);
+              if(this.conversiontarget == "Speech") {
+                this.outputvalue = " " + markAtomicItem(this.value, this.conversiontarget);
               } else {
-                this.outputvalue = markAtomicItem(this.value, this.conversiontype);
+                this.outputvalue = markAtomicItem(this.value, this.conversiontarget);
               }
           } else {
-               this.outputvalue = markAtomicItem(this.value, this.conversiontype);
+               this.outputvalue = markAtomicItem(this.value, this.conversiontarget);
           }
       } else if(dictionary[this.key]["type"] == "operator") {
      //     if(this.value != this.key) { this.outputvalue = "<mi>"+this.value+"</mi>" }
 // next two are messed up somehow
-          if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
-          else { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+          if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontarget) }
+          else { this.outputvalue = markAtomicItem(this.value, this.conversiontarget) }
       } else if(this.key == ",") {
 console.log("found comma with parent", this.parent);
           if(this.position == 1) { this.outputvalue = "COMMA" }
@@ -120,22 +120,22 @@ console.log("found comma with parent", this.parent);
           // do nothing, but why?
       } else if(dictionary[this.key]["type"] == "relation") {
           console.log("found a relation");
-          if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
-          else { this.outputvalue = markAtomicItem(this.value, this.conversiontype) }
+          if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontarget) }
+          else { this.outputvalue = markAtomicItem(this.value, this.conversiontarget) }
       } else if(dictionary[this.key]["type"] == "function") {
           console.log("found a function");
           if(this.value != this.key) {
 console.log("marking the argument of a function", this.value, "within", this);
-              this.outputvalue = markAtomicItem(this.value, this.conversiontype)
+              this.outputvalue = markAtomicItem(this.value, this.conversiontarget)
           } else { 
-              this.outputvalue = markAtomicItem(this.value, this.conversiontype)
+              this.outputvalue = markAtomicItem(this.value, this.conversiontarget)
           }
       }
 console.log("   and now leaf is key, val, oval", this.key,",", this.value,",", this.outputvalue);
   }
 
   combine(params){
-//   console.log("TreNode 3 conversiontype", params, "gg", this);
+//   console.log("TreNode 3 conversiontarget", params, "gg", this);
       for (let i of this.children){
           if (!i){
               continue;
@@ -185,9 +185,9 @@ console.log("adding Oo to", this, "because of", this.children[0]);
                 if(this.key && this.key != " " && dictionary[this.key]["type"] != "function" && !dictionary[this.key]["wrappedarguments"] && dictionary[this.key]["priority"] > 20) {
 //  note:  recent changed to != "function" because functions shoudl wrap their arguments
 console.log("maybe wrapping this.key", this.key, "for", newOutputValue);
-                    if (this.conversiontype == "SpaceMath2MathML") {
+                    if (this.conversiontarget == "MathML") {
                       newOutputValue = "<mrow>" + newOutputValue + "</mrow>";
-                    } else if(this.conversiontype == "SpaceMath2speech") {
+                    } else if(this.conversiontarget == "Speech") {
 console.log("AddIng quantity", this);
                       newOutputValue = "quantityS " + newOutputValue + " Sendquantity";
                     }
@@ -206,14 +206,14 @@ console.log("AddIng quantity", this);
                 newValue = this.children[1].value;
               }
           } else {
-console.log("about to use conversiontype", this.conversiontype);
+console.log("about to use conversiontarget", this.conversiontarget);
               try {
 console.log("               trying to extract using key", key, "position", position,"numberOfSiblings", numberOfSiblings, "from", this, "with rule of",(position+1)+","+(numberOfSiblings));
-                if(this.conversiontype == "SpaceMath2MathML") {
+                if(this.conversiontarget == "MathML") {
                   newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                   newOutputValue = dictionary[key].ruleML[(position+1)+","+(numberOfSiblings)];
-console.log("               attempted       SpaceMath2MathML conversion: ", newValue, "newOutputValue",newOutputValue);
-                } else if(this.conversiontype == "SpaceMath2speech") {
+console.log("               attempted       MathML conversion: ", newValue, "newOutputValue",newOutputValue);
+                } else if(this.conversiontarget == "Speech") {
                   newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                   newOutputValue = dictionary[key].speech[(position+1)+","+(numberOfSiblings)];
                 } else {
@@ -223,7 +223,7 @@ console.log("               attempted       SpaceMath2MathML conversion: ", newV
               } catch(error) {
                 newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                 newOutputValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
-console.log("                      SpaceMath2MathML conversion failed on", newValue);
+console.log("                      MathML conversion failed on", newValue);
               }
               if (newValue.includes("#comma?")){
                   if (this.key && dictionary[this.key].type == "operator" && dictionary[this.key].priority < 0){ // comma group
@@ -259,15 +259,15 @@ console.log("                      SpaceMath2MathML conversion failed on", newVa
                       if (childValueBracket.length > 1 ){
 // inconsistency:  for some outputs, the brackets are supplied by the dictionary
                           childValueBracket = "{"+childValueBracket+"}"
-    //                      childOutputValueBracket = markBrackets(childOutputValueBracket, this.conversiontype);
+    //                      childOutputValueBracket = markBrackets(childOutputValueBracket, this.conversiontarget);
 //                          childOutputValueBracket = "<mrow>" + childOutputValueBracket + "</mrow>"
                       }
                       newValue = newValue.replace("#@"+(i+1), childValueBracket);
                       newOutputValue = newOutputValue.replace("#@"+(i+1), childOutputValueBracket);
   // we are trying to have these wrappers in the dictionary
-       //               if(this.conversiontype == "SpaceMath2MathML") {
+       //               if(this.conversiontarget == "MathML") {
        //                   newOutputValue = "<mrow>" + newOutputValue + "</mrow>";
-       //               } else if (this.conversiontype == "SpaceMath2speech") {
+       //               } else if (this.conversiontarget == "Speech") {
        //                   newOutputValue = "quantityA " + newOutputValue + " Aendquantity";
        //               }
                   }
@@ -313,7 +313,7 @@ console.log("dictionary[this.key].offpair", dictionary[this.key].offpair, "looki
 //  The \{ should only be for LaTeX output.
 //  Also need special cases for implied brackets.
 console.log("this.pair[0]", this.pair[0]);
-            this.pair[0] = adjustBrackets(this.pair, this.conversiontype);
+            this.pair[0] = adjustBrackets(this.pair, this.conversiontarget);
             if (this.pair[0].length > 0) {  // if the brackets have not been adjusted away
 console.log("this.pair[0]", this.pair[0]);
               for (let p of this.pair){
@@ -324,7 +324,7 @@ console.log("this.pair[0]", this.pair[0]);
   //                  p[1] = ["\\}"];
   //              }
                 this.value = p[0] + this.value + p[1];
-                if(this.conversiontype == "SpaceMath2MathML") {
+                if(this.conversiontarget == "MathML") {
  console.log("((((adding parentheses to", this.outputvalue, "of", this);
       // a bad hack:  need a more robust way to tell if compound object in parentheses
       // a slightly less bad hack could be counting "<" in the string
@@ -339,7 +339,7 @@ console.log("this.pair[0]", this.pair[0]);
              //           this.outputvalue = "<mo stretchy=\"false\">" + p[0] + "</mo>" + this.outputvalue + "<mo stretchy=\"false\">" + p[1] + "</mo>";
                         this.outputvalue = beforebrackets;
                     }
-                } else if(this.conversiontype == "SpaceMath2speech") {
+                } else if(this.conversiontarget == "Speech") {
                     if(singletonQ(this.outputvalue)) {
                         // no need to do anything
                     } else {
@@ -375,9 +375,9 @@ console.log("adding quantity", this);
 }
 
 class Tree {
-  constructor(id,value, key, conversiontype) {
-    this.root = new TreeNode(id, value, key, null, conversiontype);
-  console.log("       Tree 0 conversiontype", conversiontype);
+  constructor(id,value, key, conversiontarget) {
+    this.root = new TreeNode(id, value, key, null, conversiontarget);
+  console.log("       Tree 0 conversiontarget", conversiontarget);
   }
 
   *preOrderTraversal(node = this.root) {
@@ -399,15 +399,15 @@ class Tree {
   }
 
   insert(parentNodevalue, value, key = value) {
-  console.log("       Tree 1 conversiontype", this.conversiontype);
+  console.log("       Tree 1 conversiontarget", this.conversiontarget);
 
     for (let node of this.preOrderTraversal()) {
 console.log("trying Tree1 node", node);
       if (node.value === parentNodevalue) {
-        node.children.push(new TreeNode(value, key, node, conversiontype));
+        node.children.push(new TreeNode(value, key, node, conversiontarget));
 /*
 oooooo
-        node.children.push(new TreeNode(0,value, key, node, conversiontype));
+        node.children.push(new TreeNode(0,value, key, node, conversiontarget));
 */
         return true;
       }
@@ -569,10 +569,10 @@ console.error("now", node.parent.parent.children[1]);
  }
 
 // should this be with the utility functions?
-function adjustBrackets(brackets, conversiontype) {
+function adjustBrackets(brackets, conversiontarget) {
     let p = brackets[0];
 console.log("adjusting brackets", p);
-    if(conversiontype == "SpaceMath2LaTeX") {
+    if(conversiontarget == "LaTeX") {
         if (p[0] == "{"){ p[0] = ["\\{"] }
         if (p[1] == "}"){ p[1] = ["\\}"] }
     }

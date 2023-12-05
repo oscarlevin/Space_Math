@@ -1,14 +1,38 @@
 /*
-Input: the user input, conversiontype of conversion: Latex, MathJax
+Input: the user input, conversiontarget of conversion: Latex, MathJax
 Output: the corresponding Latex string of the user input
 Description: the major abstract function which takes the user input and return the supposed output
 
 2022.10.07 created
 2022.10.25 refined to support MathJax
-2022.10.26 add conversiontype to support both cases
+2022.10.26 add conversiontarget to support both cases
 */
-function convert(str,conversiontype) {
+function convert(str,conversiontarget) {
 // why did we need that?   str = trimSpaces(str); //trim down all multiple spaces into one space
+
+  let str_no_xml = hide_xml(str);
+  let str_separated = separatePieces(str_no_xml);
+
+console.log("str_separated", str_separated);
+
+  let convertedComponent = convertPieces(str_separated, conversiontarget);
+
+console.log("firsttest", convertedComponent);
+console.log("test",convertMathSnippet("x^447","MathML"));
+
+  let answer_processed = assemble(str_separated, convertedComponent,conversiontarget);
+
+console.log("answer_processed", answer_processed);
+console.log("convertedComponent", convertedComponent);
+console.log(" ");
+console.log("*************************************************************");
+console.log(" ");
+
+  answer_processed = postprocess(answer_processed, conversiontarget);
+
+  return answer_processed
+
+/* ---------------- */
 
   str = preprocess(str);
 
@@ -32,10 +56,10 @@ function convert(str,conversiontype) {
 
   str = str.replaceAll('\\$', '%24%'); //replacement on all special characters, Using HTML UTF conversion here (see https://www.w3schools.com/tags/ref_urlencode.ASP)
 console.log("input is now", str);
-  if (conversiontype == "LaTeX2MathJax"){
+  if (conversiontarget == "LaTeX2MathJax"){
        str = convertLaTeX2MathJax(str,0);
   } else {
-      str = convert2(str,0, conversiontype); // use BNF grammar to split text and math, then combine them
+      str = convert2(str,0, conversiontarget); // use BNF grammar to split text and math, then combine them
   }
   
   str = str.replaceAll('%24%', '\\$'); //put the special characters back
@@ -44,16 +68,15 @@ console.log("   in convert, str: ", str);
 
   str = str.trim();
 
-  if(conversiontype == "SpaceMath2speech") {
+  if(conversiontarget == "Speech") {
       str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
       str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
       str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
       str = str.replace(/\$\$(.+?)\$\$/sg, "\n<em>$1</em>\n");
       str = str.replace(/\\,/g, " ");
-      str = str.replace(/␣/g, " ");
       str = str.replace(/∏/g, "product");
       str = str.replace(/∑/g, "sum");
-  } else if(conversiontype == "SpaceMath2MathML") {
+  } else if(conversiontarget == "MathML") {
   //    str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "\n<math>$2</math>\n");
       str = str.replace(/\$\$(.+?)\$\$/sg, "\n<math display=\"block\">$1</math>\n");
       str = str.replace(/(^| |\n)\$\$(.+?)\$\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math display=\"block\">$2</math>$3\n");
@@ -93,8 +116,8 @@ Description: use BNF grammar to split user input into text and math part, call M
 2022.10.26 modified to support none-symmetry shape.
 2022.10.28 modified to support case when user types one half of deliminator
 */
-function convert2(str,p, conversiontype) {
-console.log("starting conversiontype", conversiontype, p, "on", str);
+function convert2(str,p, conversiontarget) {
+console.log("starting conversiontarget", conversiontarget, p, "on", str);
   let splitStr = [];
   let newStr = "";
   let deliminators = [["\\[","\\]"],["$$","$$"],["\\(","\\)"],["$","$"]]; //all tokens that will be seen as math mode, in priority (left to right)
@@ -109,7 +132,7 @@ console.log("starting conversiontype", conversiontype, p, "on", str);
   }
   if (str.substring(counter,counter + d[0].length) != d[0]){
       p += 1;
-      return convert2(str,p,conversiontype);
+      return convert2(str,p,conversiontarget);
   } else {
       let right = findPositionOfRightPairConvert(str, counter, d[0],d[1]);
       if (right > 0){
@@ -118,17 +141,59 @@ console.log("starting conversiontype", conversiontype, p, "on", str);
             convertedStr = convertedStr.replaceAll(deliminators[j][0], ''); 
             convertedStr = convertedStr.replaceAll(deliminators[j][1], ''); // removed all lower priority deliminators
           }
-          convertedStr = M2LConvert(convertedStr,d[0],d[1], conversiontype);
+          convertedStr = M2LConvert(convertedStr,d[0],d[1], conversiontarget);
           convertedStr = d[0] + convertedStr + d[1];
           convertedStr = convertedStr.replaceAll(d[0]+d[1],"");
 console.log("convertedStr", convertedStr);
-          return convert2(str.substring(0,counter),p+1, conversiontype) + convertedStr + convert2(str.substring(right+d[1].length),p, conversiontype);
+          return convert2(str.substring(0,counter),p+1, conversiontarget) + convertedStr + convert2(str.substring(right+d[1].length),p, conversiontarget);
       } else {
           p += 1;
-          return convert2(str,p, conversiontype);
+          return convert2(str,p, conversiontarget);
       }
       
   }
+}
+
+function convertPieces(pieces, conversiontarget) {
+
+  let converted_component = {};
+
+  for (const piece of pieces) {
+    const piece_type = piece[0];
+    const contentkey = piece[3] + "," + conversiontarget;
+    if (piece_type == "text") { converted_component[contentkey] = [piece[0], piece[1], piece[2]] }
+        // in the future will will process text, like M\\"obius
+    else if ( !(contentkey in converted_component)) {
+      if (piece_type == "m" || piece_type == "md") {
+          let thiscontentpiece = piece[2];
+          thiscontentpiece = unhide_xml(thiscontentpiece);
+          thiscontentpiece = preprocess(thiscontentpiece);
+  //        converted_component[contentkey] = [piece[0], piece[1],convertMathSnippet(piece[2], conversiontarget)]
+          converted_component[contentkey] = [piece[0], piece[1],convertMathSnippet(thiscontentpiece, conversiontarget)]
+      } else {
+        console.error("unknown piece_type", piece)
+      }
+    }
+  }
+
+//  const conversiontargets = ["MathML", "speech", "tex"];
+//    for (const ctype of conversiontargets) {
+//
+//  // nothign yet, because we need 'convert' to not depend on the conversiontarget.
+//
+//    }
+
+  return converted_component
+
+}
+
+
+// like convert2, except no delimiters because we have alread separated the math
+function convertMathSnippet(str, conversiontarget) {
+console.log("starting convertMathSnippet", conversiontarget, "on", str);
+    let convertedStr = M2LConvert(str,"LBRACK","RBRACK", conversiontarget);
+    convertedStr = simplifyAnswer(convertedStr);
+    return convertedStr
 }
 
 /*

@@ -178,6 +178,7 @@ var dictionary = {
       "´óÓÚµÈÓÚ"
     ],
     "alternative": [
+      "⦊=",
       "ge",
       "geq",
       "´óÓÚµÈÓÚ"
@@ -199,6 +200,7 @@ var dictionary = {
       "Ð¡ÓÚµÈÓÚ"
     ],
     "alternative": [
+      "⦉=",
       "le",
       "leq",
       "Ð¡ÓÚµÈÓÚ"
@@ -348,6 +350,7 @@ var dictionary = {
       "Ð¡ÓÚ"
     ],
     "alternative": [
+      "⦉",
       "less than",
       "Ð¡ÓÚ"
     ],
@@ -368,6 +371,7 @@ var dictionary = {
       "´óÓÚ"
     ],
     "alternative": [
+      "⦊",
       "greater than",
       "´óÓÚ"
     ],
@@ -2556,3 +2560,23 @@ for (const letterpair of charactersymbols) {
   }
 }
 
+var outputTagsOf = {
+  "text": {
+    "LaTeX": ["",""],
+    "MathML": ["",""],
+    "Speech": ["",""],
+    "PTX": ["",""]
+  },
+  "m": {
+    "LaTeX": ["\\(", "\\)"],
+    "MathML": ["<math>", "</math>"],
+    "Speech": ["<em>","</em>"],
+    "PTX": ["<m>", "</m>"]
+  },
+  "md": {
+    "LaTeX": ["\\[","\\]"],
+    "MathML": ["<math display=\"block\">","</math>"],
+    "Speech": ["<em>","</em>"],
+    "PTX": ["<md>","</md>"]
+  }
+}

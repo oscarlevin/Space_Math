@@ -128,12 +128,12 @@ function singletonQ(str) {
         (str.trim() in dictionary && dictionary[str.trim()]["type"] == "symbol")
 }
 
-function convertSymbol(str, conversiontype) {
+function convertSymbol(str, conversiontarget) {
     let ans = str;
 
-    if(conversiontype == "SpaceMath2MathML") {
+    if(conversiontarget == "MathML") {
         ans = dictionary[ans]["ruleML"]
-    } else if (conversiontype == "SpaceMath2speech") {
+    } else if (conversiontarget == "Speech") {
         ans = dictionary[ans]["speech"]
     } else {
         ans = dictionary[ans]["rule"]
@@ -141,21 +141,21 @@ function convertSymbol(str, conversiontype) {
     return ans
 }
 
-function markAtomicItem(str, conversiontype) {
+function markAtomicItem(str, conversiontarget) {
   if(numbervariableQ(str)) {
     let numberpart = str.replace(/[a-zA-Z]+$/, "");
     let variablepart = str.replace(/^[0-9\.,]+/, "");
     console.log("found mixed", str, "with parts", numberpart, ",", variablepart);
-    numberpart = markAtomicItem(numberpart, conversiontype);
-    variablepart = markAtomicItem(variablepart, conversiontype);
+    numberpart = markAtomicItem(numberpart, conversiontarget);
+    variablepart = markAtomicItem(variablepart, conversiontarget);
     let multiplication = "";
-    if(conversiontype == "SpaceMath2MathML") { multiplication = "<mo>&InvisibleTimes;</mo>"}
-    else if(conversiontype == "SpaceMath2speech") { multiplication = " times " }
+    if(conversiontarget == "MathML") { multiplication = "<mo>&InvisibleTimes;</mo>"}
+    else if(conversiontarget == "Speech") { multiplication = " times " }
     return numberpart + multiplication + variablepart
   }
   let ans = str;
 console.log("markAtomicItem of", ans, "endans", symbolQ(str));
-  if(conversiontype == "SpaceMath2MathML") {
+  if(conversiontarget == "MathML") {
     if(numberQ(str)) {
       ans = "<mn>"+ans+"</mn>"
     } else if(symbolQ(str)) {
@@ -177,16 +177,16 @@ console.warn("unknown type", "X"+ans+"X")
   return ans
 }
 
-function markBrackets(str, conversiontype) {
+function markBrackets(str, conversiontarget) {
   let ans = str;
 console.log("markBrackets of", ans, "endans");
-  if(conversiontype == "SpaceMath2MathML") {
+  if(conversiontarget == "MathML") {
     if(numberQ(ans)) {
         ans = "<mn>" + ans + "</mn>"
     } else {
         ans = "<mrow>" + ans + "</mrow>"
     }
-  } else if(conversiontype == "SpaceMath2speech") {
+  } else if(conversiontarget == "Speech") {
     if(numberQ(ans)) {
         // nothign to do
     } else {
@@ -296,13 +296,14 @@ function preprocessarithmetic(rawstring) {
 //    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/❲$1❳');  // denominator
 // greedy denominator.  When does that fail?
     str = str.replace(/\/([^ \(\[{\/][^ \)\]\}\n\$]*)/g, '/❲$1❳');  // denominator
-console.log("after preprocess fractions", str);
+console.log("after preprocess fractions", "A" + str + "B");
 
 // wrap argument of greedy function in fake parentheses
     for (const symbolname of greedyfunctions) {
-        var regExStrStub = "([\\$ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}\\$]+)";
-        var regExStr = regExStrStub + "([$ \\$\\(\\)\\[\\]\\{\\}])";
-// console.log("regExStr", regExStr);
+  //      var regExStrStub = "(^|[\\$ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}\\$]+)";
+        var regExStrStub = "(^|[ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}]+)";
+        var regExStr = regExStrStub + "($|[ \\(\\)\\[\\]\\{\\}])";
+console.log("regExStr", regExStr);
         var regEx = new RegExp(regExStr, "g");
 // note that we wrap in brackets the user shoudl not write: ⁅⁆
         str = str.replace(regEx, '$1' + symbolname + '⁅$2⁆$3');
@@ -394,20 +395,21 @@ function preprocessbrackets(rawstring) {
 
 // the <...> with "|" have to come before the ones with only commas,
 // because those can also contain commas
-    str = str.replace(/(\$| )< ([^<>|]+) >/g, '$1span($2)');
+    str = str.replace(/(^| )< ([^<>|]+) >/g, '$1span($2)');
 console.log("did we find span?", str);
-    str = str.replace(/(\$| )<([^<>|]+) \| ([^<>|]+)>/g, '$1($2) grouppresentation ($3)');
-    str = str.replace(/(\$| |\(){([^{}|]+) \| ([^{}|]+)}/g, '$1($2) setbuilder ($3)');
-    str = str.replace(/(\$| ){([^{}]+)}/g, '$1setof($2)');
-    str = str.replace(/(\$| )<([^,<>|]+)\|([^,<>|]+)>/g, '$1($2) braket ($3)');
-    str = str.replace(/(\$| )<([^,<>]+)\, ([^,<>]+)>/g, '$1($2) twovector ($3)');
+    str = str.replace(/(^| )<([^<>|]+) \| ([^<>|]+)>/g, '$1($2) grouppresentation ($3)');
+    str = str.replace(/(^| |\(){([^{}|]+) \| ([^{}|]+)}/g, '$1($2) setbuilder ($3)');
+    str = str.replace(/(^| ){([^{}]+)}/g, '$1setof($2)');
+    str = str.replace(/(^| )<([^,<>|]+)\|([^,<>|]+)>/g, '$1($2) braket ($3)');
+    str = str.replace(/(^| )<([^,<>]+)\, ([^,<>]+)>/g, '$1($2) twovector ($3)');
 console.log("looking for vector", str);
-    str = str.replace(/(\$| )<([^ ,<>\$][^,<>\$]*)\, ([^<>\$]+)>/g, '$1vector($2, $3)');
+ //   str = str.replace(/(^| )<([^ ,<>\$][^,<>\$]*)\, ([^<>\$]+)>/g, '$1vector($2, $3)');
+    str = str.replace(/(^| )<([^ ,<>][^,<>]*)\, ([^<>]+)>/g, '$1vector($2, $3)');
 console.log("did we find vector?", str);
 // another place where \n can start an expression
-    str = str.replace(/(\$| |\n)<([^ ][^,<>]*)\,([^ ][^<>]*)>/g, '$1($2) innerproduct ($3)');
+    str = str.replace(/(^| |\n)<([^ ][^,<>]*)\,([^ ][^<>]*)>/g, '$1($2) innerproduct ($3)');
 // catch all for every other case <...> of unknown meaning
-    str = str.replace(/(\$| )<([^<>]+)>/g, '$1anglebrackets($2)');
+    str = str.replace(/(^| )<([^<>]+)>/g, '$1anglebrackets($2)');
 
     return str
 }
@@ -434,11 +436,11 @@ console.log("looking for limits: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;  // hack to be partially backward compatible with TeX
 // the lower and upper limits might be in parentheses.  We handle these awkwardly
-         var regExStrStub = "(\\$| |\n)" + symbolname + "\\_\\(([^()]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
-         var regExStr = regExStrStub + " d([a-z]+)" + "( |\n|\\$)";
+         var regExStrStub = "(^| |\n)" + symbolname + "\\_\\(([^()]+)\\)\\^\\(([^()]+)\\) ?(.*?)";
+         var regExStr = regExStrStub + " d([a-z]+)" + "( |\n|$)";
   //       var regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
   // switched grouping brackets
-         var regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|\\$)";
+         var regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|$)";
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          var regExWeight = new RegExp(regExStrWeight, "g");
@@ -447,10 +449,10 @@ console.log("regExStrWeight", regExStrWeight);
          str = str.replace(regEx, '$1wrapper(intlims(' + symbol + ')($2)($3)($4)($5))$6');
 
          // case of no () around limits (but both lower and upper)
-         regExStrStub = "(\\$| |\n)" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?)";
-         regExStr = regExStrStub + " d([a-z]+)" + "( |\n|\\$)";
+         regExStrStub = "(^| |\n)" + symbolname + "\\_([^ ]+?)\\^([^ ]+) (.*?)";
+         regExStr = regExStrStub + " d([a-z]+)" + "( |\n|$)";
  //        regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
-         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|$)";
 console.log("regExStr", regExStr);
 console.log("regExStrWeight", regExStrWeight);
          regExWeight = new RegExp(regExStrWeight, "g");
@@ -461,26 +463,26 @@ console.log("regExStrWeight", regExStrWeight);
          // case of lower lim only, () around lower limit
          // done poorly now, because int_((c)) is tricky
          // we do a special case for that
-         regExStrStub = "(\\$| |\n)" + symbolname + "\\_\\(\\(([^()]+?)\\)\\) (.*?)";
+         regExStrStub = "(^| |\n)" + symbolname + "\\_\\(\\(([^()]+?)\\)\\) (.*?)";
          regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
-         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |$)";
          regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')(($2))($3)($4)($5))$6');
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1wrapper(intllim(' + symbol + ')(($2))($3)($4))$5');
          // now only () around lower limit
-         regExStrStub = "(\\$| )" + symbolname + "\\_\\(([^()]+?)\\) (.*?)";
+         regExStrStub = "(^| )" + symbolname + "\\_\\(([^()]+?)\\) (.*?)";
          regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
-         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |$)";
          regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')($2)($3)($4)($5))$6');
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1wrapper(intllim(' + symbol + ')($2)($3)($4))$5');
 
          // case of lower lim only, no () around lower limit (unless intended)
-         regExStrStub = "(\\$| |\n)" + symbolname + "\\_([^ ]+?) (.*?)";
+         regExStrStub = "(^| |\n)" + symbolname + "\\_([^ ]+?) (.*?)";
          regExStr = regExStrStub +  " d([a-z]+)" + "( |\\$)";
-         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |\\$)";
+         regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^ $]+)❳" + "( |$)";
          regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')($2)($3)($4)($5))$6');
          regEx = new RegExp(regExStr, "g");
@@ -540,13 +542,13 @@ console.log("prodessed powers of functions", str);
 function preprocesslargeoperators(rawstring) {
     let str = rawstring;
 
-// extract sum, prod, and other big tings with limits
+// extract sum, prod, and other big tsings with limits
     for (let [symbolname, symbol] of Object.entries(symbolswithlimits)) {
 console.log("looking for limits operator: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;
 // first check for limits in brackets
-         var regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]\\^[\\[\\(\\{]([^ ]+)[\\]\\)\\}]";
+         var regExStr = "(^| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]\\^[\\[\\(\\{]([^ ]+)[\\]\\)\\}]";
          var regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))⚡');
 // then only lower limit in brackets
@@ -554,7 +556,7 @@ console.log("looking for limits operator: symbolname", symbolname);
          var regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))⚡');
 // now assume the limits are not in parentheses.  First check for lower and upper
-         regExStr = "(\\$| )" + symbolname + "\\_([^ ]+)\\^([^ ]+)";
+         regExStr = "(\\b)" + symbolname + "\\_([^ ]+)\\^([^ ]+)";
     // for now assume no spaces in the limits
 console.log("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
@@ -601,4 +603,168 @@ function preprocessother(rawstring) {
                "notcongruentmod($1)($3)($4)");
 
     return str
+}
+
+function hide_xml(text) {
+    let the_ans = text;
+
+    the_ans = the_ans.replace(/</g, "⦉");
+    the_ans = the_ans.replace(/>/g, "⦊");
+
+    return the_ans
+}
+function unhide_xml(text) {
+    let the_ans = text;
+
+    the_ans = the_ans.replace(/⦉/g, "<");
+    the_ans = the_ans.replace(/⦊/g, ">");
+
+    return the_ans
+}
+
+function dollars_to_tags(text) {
+    let the_ans = text;
+
+// see: hide_xml
+//    the_ans = the_ans.replace(/<\s/, "&lt; ");
+
+    the_ans = the_ans.replace(/\$\$\s*([^\$]+)\s*\$\$/g, "<md sourcetag=\"dd\">$1</md>");
+
+    the_ans = the_ans.replace(/\\\[/g, "<md sourcetag=\"sb\">");
+    the_ans = the_ans.replace(/\\\]/g, "</md>");
+
+    the_ans = the_ans.replace(/(^|\s|-)\$([^\$\f\r\n]+)\$(\s|\.|,|;|:|\?|!|$)/g, "$1<m sourcetag=\"d\">$2</m>$3");
+       //twice, for $5$-$6$
+    the_ans = the_ans.replace(/(^|\s|-)\$([^\$\f\r\n]+)\$(\s|\.|,|;|:|\?|!|-|$)/g, "$1<m sourcetag=\"d\">$2</m>$3");
+
+    the_ans = the_ans.replace(/\\\(/g, "<m sourcetag=\"sp\">");
+    the_ans = the_ans.replace(/\\\)/g, "</m>");
+
+    return the_ans
+}
+
+// not "myHash": this shows up repeatedly when you search
+String.prototype.myHash = function() {
+  var hash = 0,
+    i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr = this.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}
+
+function xmlToObject(xml_st) {
+  let xml;
+  xml_st = "<bbbb>" + xml_st + "</bbbb>";
+
+  if (typeof xml_st == "string") {
+ //   parseLog("xml starts", xml_st.slice(0,50));
+    parser = new DOMParser();
+    xml = parser.parseFromString(xml_st, "text/xml");
+//    xml = $.parseXML(xml_st);
+  } else {
+    xml = xml_st
+  }
+
+  console.log("xml", xml);
+  console.log("xml.nodeName", xml.nodeName, "xml.nodeType", xml.nodeType);
+//  let obj = {};
+  let this_id = "";
+  let this_node_content = xml.nodeValue;
+
+  if (xml.nodeType == 9) {  // document              
+      xml = xml.documentElement;
+  }
+
+//  return xml
+
+  let these_nodes = [];
+
+  for (const node of xml.childNodes) {
+      let this_node = [];
+      if (node.nodeName == "#text") {
+        this_node.push("text");
+        this_node.push("");
+        this_node.push(node.nodeValue);  // do I mean textContent ?
+      } else {
+        this_node.push(node.nodeName);
+        this_node.push(node.attributes);
+        this_node.push(node.innerHTML);
+      }
+      this_node.push(this_node[2].myHash());
+
+      these_nodes.push(this_node);
+  }
+
+  return these_nodes
+}
+
+function separatePieces(rawstring) {
+    let str = rawstring;
+
+    str = dollars_to_tags(str);
+
+console.log("str with tags", str);
+
+    let str_separated = xmlToObject(str);
+
+console.log("this_node_content", str_separated);
+
+    return str_separated
+}
+
+function assemble(sourcelist, componentdict, conversiontarget="MathML") {
+
+    let ans = "";
+
+    for (const element of sourcelist) {
+        let tags = outputTagsOf[element[0]];
+console.log("element", element);
+console.log("componentdict", componentdict);
+console.log(conversiontarget, "tags",tags);
+   //     let content = componentdict[[element[3], conversiontarget]];
+        const contentkey = element[3] + "," + conversiontarget;
+console.log("contentkey", contentkey);
+        let content = componentdict[contentkey][2];
+        ans += tags[conversiontarget][0] + content + tags[conversiontarget][1];
+    }
+
+    return ans
+}
+
+function postprocess(answer, conversiontarget) {
+
+  let str = answer.trim();
+
+  str = str.replace(/␣/g, " ");  // can occur in text in math
+
+  if(conversiontarget == "Speech") {
+      str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
+      str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
+      str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
+      str = str.replace(/\$\$(.+?)\$\$/sg, "\n<em>$1</em>\n");
+      str = str.replace(/\\,/g, " ");
+      str = str.replace(/∏/g, "product");
+      str = str.replace(/∑/g, "sum");
+  } else if(conversiontarget == "MathML") {
+  //    str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "\n<math>$2</math>\n");
+      str = str.replace(/\$\$(.+?)\$\$/sg, "\n<math display=\"block\">$1</math>\n");
+      str = str.replace(/(^| |\n)\$\$(.+?)\$\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math display=\"block\">$2</math>$3\n");
+      str = str.replace(/(^| |\n)\$(.+?)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math>$2</math>$3\n");
+      str = str.replace(/\\,/g, "");
+// We use "wrap" to add attributes to a child, but don't know if there is
+// a single child.  When there is, transfer the attributes to the single child
+// refactor to imporve and reconcile this with "simplifyAnswer" in conversion.js
+      str = str.replace(/<wrap([^>]+)>(<m[a-z]+[^<>]*)(>[^<>]*<\/m[a-z]+>)<\/wrap>/g, "$2$1$3");
+      str = str.replace(/<wrap /g, "<mrow ");
+      str = str.replace(/<\/wrap>/g, "</mrow>");
+/*
+      str = str.replace(/\\,/g, "<mspace width=\"0.16em\"></mspace>");
+*/
+  }
+
+  return str
 }
