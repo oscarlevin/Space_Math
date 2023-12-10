@@ -478,6 +478,25 @@ var dictionary = {
       "2,3": "#1 plus-minus #3"
     }
   },
+  "-+": {
+    "comment": [
+    ],
+    "alternative": [
+      "minusplus",
+      "mp"
+    ],
+    "type": "operator",
+    "priority": 10,
+    "rule": {
+      "2,3": "#1 \\mp #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo>∓</mo>#3"
+    },
+    "speech": {
+      "2,3": "#1 minus-plus #3"
+    }
+  },
   "del": {
     "comment": [
       "Æ«Î¢·Ö"

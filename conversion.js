@@ -275,7 +275,7 @@ function preprocessarithmetic(rawstring) {
     str = str.replace(/->/g, 'to');
     str = str.replace(/<--/g, 'longleftarrow');
     str = str.replace(/<-/g, 'from');
-    str = str.replace(/(\$| |\(|\^|_)[\-\−]([^ ])/g, '$1😑$2');  // ascii dash o2negative sign
+    str = str.replace(/(\$| |\(|\^|_)[\-\−]([^ +])/g, '$1😑$2');  // ascii dash or negative sign, but not -+
 // why |.|.| instead of [...]
 // also a place where we need to be more clever about (word) boundaries
     str = str.replace(/(^|\$|\(|\[|\{) *[\-\−]/, '$1😑');
@@ -305,7 +305,7 @@ console.log("after preprocess fractions", "A" + str + "B");
         var regExStr = regExStrStub + "($|[ \\(\\)\\[\\]\\{\\}])";
 console.log("regExStr", regExStr);
         var regEx = new RegExp(regExStr, "g");
-// note that we wrap in brackets the user shoudl not write: ⁅⁆
+// note that we wrap in brackets the user should not write: ⁅⁆
         str = str.replace(regEx, '$1' + symbolname + '⁅$2⁆$3');
     }
 
