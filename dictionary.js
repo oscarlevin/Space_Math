@@ -1803,7 +1803,7 @@ var dictionary = {
       "2,3": "#1 times #3"
     },
     "ruleML": {
-      "2,3": "<mrow>#1<mo>×</mo>#3</mrow>"
+      "2,3": "<mrow>#1<mo intent=\"times\">×</mo>#3</mrow>"
     }
   },
   "by": {
@@ -1817,7 +1817,7 @@ var dictionary = {
       "2,3": "#1 by #3"
     },
     "ruleML": {
-      "2,3": "<mrow>#1<mo intent=\"by\">×</mo>#3</mrow>"
+      "2,3": "<mrow>#1<mo intent=\"dimension-product\">×</mo>#3</mrow>"
     }
   },
   "cross": {

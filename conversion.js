@@ -308,6 +308,7 @@ console.log("regExStr", regExStr);
 // note that we wrap in brackets the user should not write: ⁅⁆
         str = str.replace(regEx, '$1' + symbolname + '⁅$2⁆$3');
     }
+console.log("after wrapping greedy arguments", "A" + str + "B");
 
 // need to preprocess integrals, summation, etc, before wrapping bases
 // (but we gave up on wrapping bases)
@@ -350,10 +351,10 @@ console.log("after subscript twice", str);
     str = preprocessfunctionpowers(str);
 
 //Is this too late? An issue is e^2x+5
-// number-group mught not be multiplicaiton, as in  J_0(x)
+// number-group might not be multiplicaiton, as in  J_0(x)
     str = str.replace(/([0-9])([a-zA-Z])/g, '$1 $2'); // implied multiplication number times letter
 
-console.log("after implied number letter multiplicatin", str);
+console.log("after implied number letter multiplication", str);
 
     str = str.replace(/([0-9])([\(\[\{])/g, '$1 $2'); // implied multiplication number times group
 
@@ -518,7 +519,7 @@ console.log("looking for powers of known functions");
         regEx = new RegExp(regExStrPlus, "g");
         str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)wrapper❲$3❳❳');
     }
-console.log("prodessed powers of functions", str);
+console.log("processed powers of functions", str);
 // subscripts (redundant, consolidate)
     for (let symbolname of greedyfunctions) {
         let slashsymbol = "\\\\?" + symbolname;
