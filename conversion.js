@@ -1,6 +1,7 @@
+/*
 function convert(str) {
   console.log("called the little convert");
-  return trimSpaces(str);
+  return condenseSpaces(str);
   let splitedLine = str.split('\n');
   let newLineStr = "";
   for (let sl of splitedLine){
@@ -14,7 +15,10 @@ function convert(str) {
 
   return newLineStr;
 }
-function trimSpaces(str){
+*/
+
+
+function condenseSpaces(str){
     return str.replace(/\s\s+/g, ' ');
 }
 function plusminus(str){
@@ -319,12 +323,6 @@ console.log("before operators", str);
     str = preprocesslargeoperators(str);
 console.log("after operators", str);
 
-// XX    str = str.replace(/([^ *\/+\-\(\)\[\]\{\}\$]*[^ \)\]\}_])_/, '($1)_');  // base of subscript
-// XX    str = str.replace(/([^ +*\/\-\(\)\[\]\{\}\$]*[^ \)\]\}\^])\^/, 'wrapper($1)^');  // base of exponent (danger from a_b^c)
-// XXconsole.log("after bases once ", str);
-
- //   str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
-
 // not so fast!
 //  // we have previously put in grouping parentheses, so now we separate addition and subtraction
     str = str.replace(/([0-9a-zA-Z])(\+|-|\+-|-\+)([0-9a-zA-Z])/g, '$1 $2 $3');
@@ -511,7 +509,7 @@ console.log("looking for powers of known functions");
         var regExStr = "(^|[ \\(\\[\\{])" + slashsymbol + "\\\^❲([^❲❳]*)❳";
 //first case is already have parentheses around function argument
         var regExStrPlus = regExStr + " *" + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
- console.log("regExStrPlus", regExStrPlus);
+ // console.log("regExStrPlus", regExStrPlus);
         var regEx = new RegExp(regExStrPlus, "g");
         str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)$3❳');
 //second case is trig-like implied parentheses for function argument

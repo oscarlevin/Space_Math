@@ -194,7 +194,7 @@ console.log("============ exParam", exParam);
                 if (dictionary[paramStack[0]].lineBreak){
                     latexLine += "\n";
                 }
-                if (dictionary[paramStack[0]].seperateOut){  // don;t know wy this is here
+                if (dictionary[paramStack[0]].seperateOut){  // don't know why this is here
                     latexLine += lp;
                 }
                 paramStack.shift();
@@ -227,5 +227,5 @@ console.log("============ exParam", exParam);
         paramStack.shift();
     } //no indent
     console.log("latexStr", latexStr);
-    return trimSpaces(latexStr)
+    return condenseSpaces(latexStr)
 }

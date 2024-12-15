@@ -8,7 +8,7 @@ Description: the major abstract function which takes the user input and return t
 2022.10.26 add conversiontarget to support both cases
 */
 function convert(str,conversiontarget) {
-// why did we need that?   str = trimSpaces(str); //trim down all multiple spaces into one space
+// why did we need that?   str = condenseSpaces(str); //trim down all multiple spaces into one space
 
 console.log("converting to target", conversiontarget);
   let str_no_xml = hide_xml(str);
@@ -38,17 +38,6 @@ console.log(" ");
 /* ---------------- */
 
   str = preprocess(str);
-
-/*
-  str = str.replace(/(\$| |\(|\^)-([^ ])/g, '$1😑$2');  // negative sign
-  str = str.replace(/([0-9])([a-zA-Z\(\[\{])/g, '$1 $2'); // implied multiplication number times letter or group
-  str = str.replace(/\)\(/g, ') ('); // implied multiplication (.)(.)
-  str = str.replace(/ \* /g, ' ⭐ '); // star/asterisk operator
-  str = str.replace(/(\$| )\(([^,()]+)\, +([^,()]+)\)/, '$1($2) oointerval ($3)');  //open interval
-  str = str.replace(/(\$| )gcd\( *([^,()]+)\, *([^,()]+) *\)/, '$1($2) gcd ($3)');  //open interval
-  str = str.replace(/(\$| )\( ([^,()]+)\, *([^,()]+) \)/, '$1($2) gcd ($3)');  //open interval
-  str = str.replace(/(\$| )\(([^ ][^,()]*)\,+([^ ][^,()]*)\)/, '$1($2) cartesianpoint ($3)');  //open interval
-*/
 
 // text in math is not parsed properly (see comment in M2Tree).
 // temporary hack to remove spaces around quotes (note: this messes up quotes outside math)
@@ -242,17 +231,6 @@ function convertLaTeX2MathJax(str,p) {
       }
       
   }
-}
-
-/*
-Input: a string of user input
-Output: the string with multiple spaces trimmed into one
-Description: trim multiple spaces in a string into one.
-
-2022.10.07 created
-*/
-function trimSpaces(str){
-    return str.replace(/  +/g, ' ');
 }
 
 /*

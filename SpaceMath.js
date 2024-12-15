@@ -37,15 +37,15 @@ if (sourceTextArea.addEventListener) {
 /*
 */
       if(echosourceTextArea) {
-          echosourceTextArea.value = convert(sourceTextArea.value,"LaTeX");
+          echosourceTextArea.value = convert(sourceTextArea.value, "LaTeX");
       }
 
       if(speechTextArea) {
-          speechTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"Speech") + ' "';
+          speechTextArea.innerHTML = '" ' + convert(sourceTextArea.value, "Speech") + ' "';
       }
 
       if(mathmlTextArea ||  mathmlDisplayArea) {
-          theSpaceMathInML = convert(sourceTextArea.value,"MathML");
+          theSpaceMathInML = convert(sourceTextArea.value, "MathML");
 
           if(mathmlTextArea) { mathmlTextArea.value = theSpaceMathInML }
           if(mathmlDisplayArea) { mathmlDisplayArea.innerHTML = theSpaceMathInML }
@@ -53,19 +53,22 @@ if (sourceTextArea.addEventListener) {
 /*
 */
 /*
-      mathJaxArea.innerHTML = convert(echosourceTextArea.value,"LaTeX2MathJax");
+      mathJaxArea.innerHTML = convert(echosourceTextArea.value, "LaTeX2MathJax");
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathJaxArea"]);
 */
   }, false);
-} else if (sourceTextArea.attachEvent) {
+}
 /* is this part ever used? */
+/*
+ else if (sourceTextArea.attachEvent) {
   error
   sourceTextArea.attachEvent('onpropertychange', function() {
-      echosourceTextArea.value = convert(sourceTextArea.value,"LaTeX");
-      mathmlTextArea.value = convert(sourceTextArea.value,"LaTeX");
-      speechTextArea.value = '"' + convert(sourceTextArea.value,"LaTeX") + '"';
-      pretextTextArea.value = convert(sourceTextArea.value,"LaTeX");
-      mathJaxArea.innerHTML = convert(echosourceTextArea.value,"LaTeX2MathJax");
+      echosourceTextArea.value = convert(sourceTextArea.value, "LaTeX");
+      mathmlTextArea.value = convert(sourceTextArea.value, "LaTeX");
+      speechTextArea.value = '"' + convert(sourceTextArea.value, "LaTeX") + '"';
+      pretextTextArea.value = convert(sourceTextArea.value, "LaTeX");
+      mathJaxArea.innerHTML = convert(echosourceTextArea.value, "LaTeX2MathJax");
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathJaxArea"]);
   });
 }
+*/
