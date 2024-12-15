@@ -303,7 +303,7 @@ console.log("after preprocess fractions", "A" + str + "B");
   //      var regExStrStub = "(^|[\\$ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}\\$]+)";
         var regExStrStub = "(^|[ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}]+)";
         var regExStr = regExStrStub + "($|[ \\(\\)\\[\\]\\{\\}])";
-console.log("regExStr", regExStr);
+// console.log("regExStr", regExStr);
         var regEx = new RegExp(regExStr, "g");
 // note that we wrap in brackets the user should not write: ⁅⁆
         str = str.replace(regEx, '$1' + symbolname + '⁅$2⁆$3');
@@ -433,7 +433,7 @@ function preprocessintegrals(rawstring) {
 
 //    str = str.replace(/(\$| )intr\_\(([^()]+)\)\^\(([^()]+)\) ?(.*?) d([a-z])( |\$)/g, '$1limop(∫)($2)($3)($4)($5)$6');
     for (let [symbolname, symbol] of Object.entries(integrals)) {
-console.log("looking for limits: symbolname", symbolname);
+// console.log("looking for limits: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;  // hack to be partially backward compatible with TeX
 // the lower and upper limits might be in parentheses.  We handle these awkwardly
@@ -507,10 +507,11 @@ console.log("looking for powers of known functions");
         let slashsymbol = "\\\\?" + symbolname;
 // when we refactor to pull out the math pieces, allow more general
 // characters that "(" as in (log^2 x 
-        var regExStr = "([\\$ \\(\\[\\{])" + slashsymbol + "\\\^❲([^❲❳]*)❳";
+ //  why \$ and not ^ ?       var regExStr = "([\\$ \\(\\[\\{])" + slashsymbol + "\\\^❲([^❲❳]*)❳";
+        var regExStr = "(^|[ \\(\\[\\{])" + slashsymbol + "\\\^❲([^❲❳]*)❳";
 //first case is already have parentheses around function argument
         var regExStrPlus = regExStr + " *" + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
-// console.log("regExStrPlus", regExStrPlus);
+ console.log("regExStrPlus", regExStrPlus);
         var regEx = new RegExp(regExStrPlus, "g");
         str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)$3❳');
 //second case is trig-like implied parentheses for function argument
@@ -525,7 +526,8 @@ console.log("processed powers of functions", str);
         let slashsymbol = "\\\\?" + symbolname;
 // when we refactor to pull out the math pieces, allow more general
 // characters that "(" as in (log^2 x 
-        var regExStr = "([\\$ \\(\\[\\{])" + slashsymbol + "\\_❲([^❲❳]*)❳";
+ // same err as in sup case above       var regExStr = "([\\$ \\(\\[\\{])" + slashsymbol + "\\_❲([^❲❳]*)❳";
+        var regExStr = "(^|[\\$ \\(\\[\\{])" + slashsymbol + "\\_❲([^❲❳]*)❳";
 //first case is already have parentheses around function argument
         var regExStrPlus = regExStr + " *" + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
 // console.log("regExStrPlus", regExStrPlus);
@@ -545,7 +547,7 @@ function preprocesslargeoperators(rawstring) {
 
 // extract sum, prod, and other big tsings with limits
     for (let [symbolname, symbol] of Object.entries(symbolswithlimits)) {
-console.log("looking for limits operator: symbolname", symbolname);
+// console.log("looking for limits operator: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;
 // first check for limits in brackets
@@ -553,7 +555,7 @@ console.log("looking for limits operator: symbolname", symbolname);
          var regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))⚡');
 // then only lower limit in brackets
-         var regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]\\^([^ ]+)";
+         var regExStr = "(^|\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]\\^([^ ]+)";
          var regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))⚡');
 // now assume the limits are not in parentheses.  First check for lower and upper
@@ -563,14 +565,14 @@ console.log("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))⚡');
 // now only lower, in brackets
-         regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]";
+         regExStr = "(^|\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]";
  // experiment       regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}] *([^ \\$]+)( |\\$)";
 console.log("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2))⚡');
  // experiemnt        str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2)($3))$4');
 // now only lower limit no brackets (when do we wrap all subscripts?)
-         regExStr = "(\\$| )" + symbolname + "\\_([^ ]+)";
+         regExStr = "(^|\\$| )" + symbolname + "\\_([^ ]+)";
  //experiment        regExStr = "(\\$| )" + symbolname + "\\_([^ ]+) *([^ \\$]+)( |\\$)";
     // for now assume no spaces in the summand
 console.log("regExStr for llimop", regExStr);
@@ -578,7 +580,7 @@ console.log("regExStr for llimop", regExStr);
          str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2))⚡');
   //experiment       str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2)($3))$4');
 // no limits
-         regExStr = "(\\$| )" + symbolname + "( |\\$)";
+         regExStr = "(^|\\$| )" + symbolname + "( |\\$)";
     // for now assume no spaces in the summand
  // idea: try only preprocessing the limits, and let the parsing code
  // handle the summand

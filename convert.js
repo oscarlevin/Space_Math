@@ -10,6 +10,7 @@ Description: the major abstract function which takes the user input and return t
 function convert(str,conversiontarget) {
 // why did we need that?   str = trimSpaces(str); //trim down all multiple spaces into one space
 
+console.log("converting to target", conversiontarget);
   let str_no_xml = hide_xml(str);
   let str_separated = separatePieces(str_no_xml);
 
@@ -18,7 +19,9 @@ console.log("str_separated", str_separated);
   let convertedComponent = convertPieces(str_separated, conversiontarget);
 
 console.log("firsttest", convertedComponent);
+/*
 console.log("test",convertMathSnippet("x^447","MathML"));
+*/
 
   let answer_processed = assemble(str_separated, convertedComponent,conversiontarget);
 

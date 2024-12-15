@@ -36,14 +36,20 @@ if (sourceTextArea.addEventListener) {
   sourceTextArea.addEventListener('input', function() {
 /*
 */
-      echosourceTextArea.value = convert(sourceTextArea.value,"LaTeX");
-      speechTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"Speech") + ' "';
-      theSpaceMathInML = convert(sourceTextArea.value,"MathML");
-/*
-      mathmlTextArea.value = convert(sourceTextArea.value,"MathML");
-*/
-      mathmlTextArea.value = theSpaceMathInML;
-      mathmlDisplayArea.innerHTML = theSpaceMathInML;
+      if(echosourceTextArea) {
+          echosourceTextArea.value = convert(sourceTextArea.value,"LaTeX");
+      }
+
+      if(speechTextArea) {
+          speechTextArea.innerHTML = '" ' + convert(sourceTextArea.value,"Speech") + ' "';
+      }
+
+      if(mathmlTextArea ||  mathmlDisplayArea) {
+          theSpaceMathInML = convert(sourceTextArea.value,"MathML");
+
+          if(mathmlTextArea) { mathmlTextArea.value = theSpaceMathInML }
+          if(mathmlDisplayArea) { mathmlDisplayArea.innerHTML = theSpaceMathInML }
+      }
 /*
 */
 /*
