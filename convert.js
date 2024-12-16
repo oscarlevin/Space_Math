@@ -8,7 +8,6 @@ Description: the major abstract function which takes the user input and return t
 2022.10.26 add conversiontarget to support both cases
 */
 function convert(str,conversiontarget) {
-// why did we need that?   str = condenseSpaces(str); //trim down all multiple spaces into one space
 
 console.log("converting to target", conversiontarget);
   let str_no_xml = hide_xml(str);
@@ -35,63 +34,7 @@ console.log(" ");
 
   return answer_processed
 
-/* ---------------- */
-
-  str = preprocess(str);
-
-// text in math is not parsed properly (see comment in M2Tree).
-// temporary hack to remove spaces around quotes (note: this messes up quotes outside math)
-// LATER:  took away this hack, because it messed up parsing.
-// need to go back and figure out to not have implied multiplication of quoted strings
-//  str = str.replace(/ +"/g, '"');
-//  str = str.replace(/" +/g, '"');
-
-  str = str.replaceAll('\\$', '%24%'); //replacement on all special characters, Using HTML UTF conversion here (see https://www.w3schools.com/tags/ref_urlencode.ASP)
-console.log("input is now", str);
-  if (conversiontarget == "LaTeX2MathJax"){
-       str = convertLaTeX2MathJax(str,0);
-  } else {
-      str = convert2(str,0, conversiontarget); // use BNF grammar to split text and math, then combine them
-  }
-  
-  str = str.replaceAll('%24%', '\\$'); //put the special characters back
-
-console.log("   in convert, str: ", str);
-
-  str = str.trim();
-
-  if(conversiontarget == "Speech") {
-      str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
-      str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
-      str = str.replace(/(^| |\n)\$([^$]+)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "$1&nbsp;&nbsp;<em>$2</em>&nbsp;&nbsp;$3");
-      str = str.replace(/\$\$(.+?)\$\$/sg, "\n<em>$1</em>\n");
-      str = str.replace(/\\,/g, " ");
-      str = str.replace(/∏/g, "product");
-      str = str.replace(/∑/g, "sum");
-  } else if(conversiontarget == "MathML") {
-  //    str = str.replace(/(^| )\$([^$]+)\$( |$)/g, "\n<math>$2</math>\n");
-      str = str.replace(/\$\$(.+?)\$\$/sg, "\n<math display=\"block\">$1</math>\n");
-      str = str.replace(/(^| |\n)\$\$(.+?)\$\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math display=\"block\">$2</math>$3\n");
-      str = str.replace(/(^| |\n)\$(.+?)\$( |\.|\,|:|;|\?|\!|\n|$)/g, "\n<math>$2</math>$3\n");
-      str = str.replace(/\\,/g, "");
-// We use "wrap" to add attributes to a child, but don't know if there is
-// a single child.  When there is, transfer the attributes to the single child
-// refactor to imporve and reconcile this with "simplifyAnswer" in conversion.js
-      str = str.replace(/<wrap([^>]+)>(<m[a-z]+[^<>]*)(>[^<>]*<\/m[a-z]+>)<\/wrap>/g, "$2$1$3");
-      str = str.replace(/<wrap /g, "<mrow ");
-      str = str.replace(/<\/wrap>/g, "</mrow>");
-/*
-      str = str.replace(/\\,/g, "<mspace width=\"0.16em\"></mspace>");
-*/
-  }
-console.log("str was", str);
-  str = simplifyAnswer(str)
-//  str = str.replace(/<mrow>/g, "\n<mrow>");
-//  str = str.replace(/<\/mrow>/g, "</mrow>\n");
-  str = str.replace(/\n+/g, "\n");
-  str = str.replace(/␣/g, " ");
-  return str
-}
+}  // convert(str target)
 
 /*
 Input: 
