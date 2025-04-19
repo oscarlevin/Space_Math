@@ -40,7 +40,11 @@ console.debug("M2LConvert(str,lp,rp, conversiontarget)", str,lp,rp, conversionta
     str = str.replaceAll("\\:","");
     str = str.replaceAll("\\;","");
     str = str.replaceAll("\\!","");
+//    str = str.replaceAll("\\","");
+    str = str.replace(/([a-zA-Z])\\/g,"$1 ");
     str = str.replaceAll("\\","");
+
+console.log("str now", str)
 
     let splitStr = str.split("\n");
     let latexStr = "";

@@ -613,7 +613,7 @@ var dictionary = {
     "type": "symbol",
     "priority": -1,
     "rule": {
-      "1,1": "\\ "
+      "1,1": "\\backslash "
     },
     "speech": {
       "1,1": " backslash "
@@ -2160,7 +2160,7 @@ var dictionary = {
     } 
   },
   ":=": {
-    "alternative": [ ],
+    "alternative": ["coloneq", "coloneqq" ],
     "type": "relation",
     "priority": 0,
     "rule": {
