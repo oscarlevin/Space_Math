@@ -305,7 +305,7 @@ var dictionary = {
     "priority": 30,
     "script": true,
     "rule": {
-      "2,3": "#1_#@3"
+      "2,3": "#1_{#@3}"
     },
     "offpair": {
       "2,3": [
@@ -2171,6 +2171,20 @@ var dictionary = {
     },
     "ruleML": {
       "2,3": "#1<mo intent=\"defined-as\">≔</mo>#3"
+    }
+  },
+  ":": {
+    "alternative": ["colon"],
+    "type": "relation",
+    "priority": 0,
+    "rule": {
+      "2,3": "#1 \\colon #3"
+    },
+    "speech": {
+      "2,3": " #1 colon #3  "
+    },
+    "ruleML": {
+      "2,3": "#1<mo>:</mo>#3"
     }
   },
   "cases:": {
