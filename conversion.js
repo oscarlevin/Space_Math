@@ -1,6 +1,6 @@
 /*
 function convert(str) {
-  console.log("called the little convert");
+  console.debug("called the little convert");
   return condenseSpaces(str);
   let splitedLine = str.split('\n');
   let newLineStr = "";
@@ -149,7 +149,7 @@ function markAtomicItem(str, conversiontarget) {
   if(numbervariableQ(str)) {
     let numberpart = str.replace(/[a-zA-Z]+$/, "");
     let variablepart = str.replace(/^[0-9\.,]+/, "");
-    console.log("found mixed", str, "with parts", numberpart, ",", variablepart);
+    console.debug("found mixed", str, "with parts", numberpart, ",", variablepart);
     numberpart = markAtomicItem(numberpart, conversiontarget);
     variablepart = markAtomicItem(variablepart, conversiontarget);
     let multiplication = "";
@@ -158,7 +158,7 @@ function markAtomicItem(str, conversiontarget) {
     return numberpart + multiplication + variablepart
   }
   let ans = str;
-console.log("markAtomicItem of", ans, "endans", symbolQ(str));
+console.debug("markAtomicItem of", ans, "endans", symbolQ(str));
   if(conversiontarget == "MathML") {
     if(numberQ(str)) {
       ans = "<mn>"+ans+"</mn>"
@@ -183,7 +183,7 @@ console.warn("unknown type", "X"+ans+"X")
 
 function markBrackets(str, conversiontarget) {
   let ans = str;
-console.log("markBrackets of", ans, "endans");
+console.debug("markBrackets of", ans, "endans");
   if(conversiontarget == "MathML") {
     if(numberQ(ans)) {
         ans = "<mn>" + ans + "</mn>"
@@ -194,7 +194,7 @@ console.log("markBrackets of", ans, "endans");
     if(numberQ(ans)) {
         // nothign to do
     } else {
-console.log("aDDing qUAntity",str);
+console.debug("aDDing qUAntity",str);
         ans = "quantityC " + ans + " Cendquantity"
     }
   } else {
@@ -208,7 +208,7 @@ console.log("aDDing qUAntity",str);
 function simplifyAnswer(str) {
     ans = str;
 
-console.log("   starting to simplify Answer", ans);
+console.debug("   starting to simplify Answer", ans);
     for (let i=0; i <= 2; ++i) {
         ans = ans.replace(/to the quantity([A-Z]?) +negative 1 +([A-Z]?)endquantity/g, "inverse");
         ans = ans.replace(/to the quantity([A-Z]?) +2 +([A-Z]?)endquantity/g, "squared");
@@ -218,7 +218,7 @@ console.log("   starting to simplify Answer", ans);
         ans = ans.replace(/(^| )quantity([A-Z]?) +(negative +[^ ]+) +([A-Z]?)endquantity/g, " $3 ");
         ans = ans.replace(/<mrow ([^<>]+)><(mi|mo|mn)>([^<>]+)(<\/(mi|mo|mn)>)<\/mrow>/g, "<$2 $1>$3$4");
         ans = ans.replace(/<mrow>(<([a-z]+)>)([^<>]+)(<\/$2>)<\/mrow>/g, "$1$3$4");
-console.log("now ans", ans);
+console.debug("now ans", ans);
         ans = ans.replace(/<mrow>(<mi>)([^<>]+)(<\/mi>)<\/mrow>/g, "$1$2$3");
         ans = ans.replace(/<mrow>(<mo>)([^<>]+)(<\/mo>)<\/mrow>/g, "$1$2$3");
         ans = ans.replace(/<mrow>(<mn>)([^<>]+)(<\/mn>)<\/mrow>/g, "$1$2$3");
@@ -227,7 +227,7 @@ console.log("now ans", ans);
 // save the outer mrow in case of attributes
         ans = ans.replace(/(<mrow[^<>]*>)<mrow>([^w]*)<\/mrow>(<\/mrow>)/g, "$1$2$3");
 // 3/12/23 above fails on <mrow><mrow><mo>-</mo><mi>s</mi></mrow></mrow>
-        console.log("removed layer", i, "to get", ans);
+        console.debug("removed layer", i, "to get", ans);
     }
 
     ans = ans.replace(/quantity([A-Z]?)/g, "quantity");
@@ -246,16 +246,16 @@ function preprocess(rawstring) {
 
     str = preprocessquotes(str);
     str = preprocessarithmetic(str);
-console.log("after preprocessarithmetic", str);
+console.debug("after preprocessarithmetic", str);
     str = preprocessparentheses(str);
     str = preprocessbrackets(str);
 //next two are called in preprocessarithmetic
 //    str = preprocessintegrals(str);
 //    str = preprocesslargeoperators(str);
 
-console.log("before other", str);
+console.debug("before other", str);
     str = preprocessother(str);
-console.log("after other", str);
+console.debug("after other", str);
 
     return str
 }
@@ -300,28 +300,28 @@ function preprocessarithmetic(rawstring) {
 //    str = str.replace(/\/([^ \(\[{\/][^ \(\)\[\]\{\}\$]*)/g, '/❲$1❳');  // denominator
 // greedy denominator.  When does that fail?
     str = str.replace(/\/([^ \(\[{\/][^ \)\]\}\n\$]*)/g, '/❲$1❳');  // denominator
-console.log("after preprocess fractions", "A" + str + "B");
+console.debug("after preprocess fractions", "A" + str + "B");
 
 // wrap argument of greedy function in fake parentheses
     for (const symbolname of greedyfunctions) {
   //      var regExStrStub = "(^|[\\$ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}\\$]+)";
         var regExStrStub = "(^|[ \\(\\[\\{])" + symbolname + " " + "([^ \\(\\)\\[\\]\\{\\}]+)";
         var regExStr = regExStrStub + "($|[ \\(\\)\\[\\]\\{\\}])";
-// console.log("regExStr", regExStr);
+// console.debug("regExStr", regExStr);
         var regEx = new RegExp(regExStr, "g");
 // note that we wrap in brackets the user should not write: ⁅⁆
         str = str.replace(regEx, '$1' + symbolname + '⁅$2⁆$3');
     }
-console.log("after wrapping greedy arguments", "A" + str + "B");
+console.debug("after wrapping greedy arguments", "A" + str + "B");
 
 // need to preprocess integrals, summation, etc, before wrapping bases
 // (but we gave up on wrapping bases)
 
     str = preprocessderivatives(str);
-console.log("before operators", str);
+console.debug("before operators", str);
     str = preprocessintegrals(str);
     str = preprocesslargeoperators(str);
-console.log("after operators", str);
+console.debug("after operators", str);
 
 // not so fast!
 //  // we have previously put in grouping parentheses, so now we separate addition and subtraction
@@ -333,17 +333,17 @@ console.log("after operators", str);
 // maybe after number multiplication and +/- have been spaced out, it is okay to
 // parenthesixe sub and superscript ( for things like 
 
-console.log("before sub and sup grouping", str);
+console.debug("before sub and sup grouping", str);
 
 // go back and see how e^x^2/2 is working
 
     str = str.replace(/\^([^ ❲❳\/\(\[{][^ \"❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
-console.log("after exponents once ", str);
+console.debug("after exponents once ", str);
     str = str.replace(/\^([^ ❲❳\/\(\[{][^ \"❲❳\/\(\)\[\]\{\}\$]*)/, '^❲$1❳');  // exponent
-console.log("after exponents twice", str);
+console.debug("after exponents twice", str);
     str = str.replace(/_([^ ❲❳\/\(\[{\$][^ \"❲❳\/\^\(\)\[\]\{\}\$]*)/, '_❲$1❳');  // subscript
     str = str.replace(/_([^ ❲❳\/\(\[{\$][^ \"❲❳\/\^\(\)\[\]\{\}\$]*)/, '_❲$1❳');  // subscript
-console.log("after subscript twice", str);
+console.debug("after subscript twice", str);
 
 // do after the implied grouping for exponents
     str = preprocessfunctionpowers(str);
@@ -352,7 +352,7 @@ console.log("after subscript twice", str);
 // number-group might not be multiplicaiton, as in  J_0(x)
     str = str.replace(/([0-9])([a-zA-Z])/g, '$1 $2'); // implied multiplication number times letter
 
-console.log("after implied number letter multiplication", str);
+console.debug("after implied number letter multiplication", str);
 
     str = str.replace(/([0-9])([\(\[\{])/g, '$1 $2'); // implied multiplication number times group
 
@@ -395,16 +395,16 @@ function preprocessbrackets(rawstring) {
 // the <...> with "|" have to come before the ones with only commas,
 // because those can also contain commas
     str = str.replace(/(^| )< ([^<>|]+) >/g, '$1span($2)');
-console.log("did we find span?", str);
+console.debug("did we find span?", str);
     str = str.replace(/(^| )<([^<>|]+) \| ([^<>|]+)>/g, '$1($2) grouppresentation ($3)');
     str = str.replace(/(^| |\(){([^{}|]+) \| ([^{}|]+)}/g, '$1($2) setbuilder ($3)');
     str = str.replace(/(^| ){([^{}]+)}/g, '$1setof($2)');
     str = str.replace(/(^| )<([^,<>|]+)\|([^,<>|]+)>/g, '$1($2) braket ($3)');
     str = str.replace(/(^| )<([^,<>]+)\, ([^,<>]+)>/g, '$1($2) twovector ($3)');
-console.log("looking for vector", str);
+console.debug("looking for vector", str);
  //   str = str.replace(/(^| )<([^ ,<>\$][^,<>\$]*)\, ([^<>\$]+)>/g, '$1vector($2, $3)');
     str = str.replace(/(^| )<([^ ,<>][^,<>]*)\, ([^<>]+)>/g, '$1vector($2, $3)');
-console.log("did we find vector?", str);
+console.debug("did we find vector?", str);
 // another place where \n can start an expression
     str = str.replace(/(^| |\n)<([^ ][^,<>]*)\,([^ ][^<>]*)>/g, '$1($2) innerproduct ($3)');
 // catch all for every other case <...> of unknown meaning
@@ -431,7 +431,7 @@ function preprocessintegrals(rawstring) {
 
 //    str = str.replace(/(\$| )intr\_\(([^()]+)\)\^\(([^()]+)\) ?(.*?) d([a-z])( |\$)/g, '$1limop(∫)($2)($3)($4)($5)$6');
     for (let [symbolname, symbol] of Object.entries(integrals)) {
-// console.log("looking for limits: symbolname", symbolname);
+// console.debug("looking for limits: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;  // hack to be partially backward compatible with TeX
 // the lower and upper limits might be in parentheses.  We handle these awkwardly
@@ -440,8 +440,8 @@ function preprocessintegrals(rawstring) {
   //       var regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
   // switched grouping brackets
          var regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|$)";
-console.log("regExStr", regExStr);
-console.log("regExStrWeight", regExStrWeight);
+console.debug("regExStr", regExStr);
+console.debug("regExStrWeight", regExStrWeight);
          var regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intlimsweight(' + symbol + ')($2)($3)($4)($5)($6))$7');
          var regEx = new RegExp(regExStr, "g");
@@ -452,8 +452,8 @@ console.log("regExStrWeight", regExStrWeight);
          regExStr = regExStrStub + " d([a-z]+)" + "( |\n|$)";
  //        regExStrWeight = regExStrStub + " \\[d([a-z]+)\\]" + "/\\{([^ $]+)\\}" + "( |\\$)";
          regExStrWeight = regExStrStub + " ❲d([a-z]+)❳" + "/❲([^❲❳]+)❳" + "( |\n|$)";
-console.log("regExStr", regExStr);
-console.log("regExStrWeight", regExStrWeight);
+console.debug("regExStr", regExStr);
+console.debug("regExStrWeight", regExStrWeight);
          regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intlimsweight(' + symbol + ')($2)($3)($4)($5)($6))$7');
          regEx = new RegExp(regExStr, "g");
@@ -485,12 +485,12 @@ console.log("regExStrWeight", regExStrWeight);
          regExWeight = new RegExp(regExStrWeight, "g");
          str = str.replace(regExWeight, '$1wrapper(intllimweight(' + symbol + ')($2)($3)($4)($5))$6');
          regEx = new RegExp(regExStr, "g");
-console.log("final regExStr", regExStr);
+console.debug("final regExStr", regExStr);
          str = str.replace(regEx, '$1wrapper(intllim(' + symbol + ')($2)($3)($4))$5');
 
       }
     }
-console.log("did we find integral?", str);
+console.debug("did we find integral?", str);
 
     return str
 }
@@ -499,7 +499,7 @@ function preprocessfunctionpowers(rawstring) {
     let str = rawstring;
 // this is for "known" funcitons like log and sin.
 // generic functions, like f^2(x), are handled differently
-console.log("looking for powers of known functions");
+console.debug("looking for powers of known functions");
 
     for (let symbolname of greedyfunctions) {
         let slashsymbol = "\\\\?" + symbolname;
@@ -509,7 +509,7 @@ console.log("looking for powers of known functions");
         var regExStr = "(^|[ \\(\\[\\{])" + slashsymbol + "\\\^❲([^❲❳]*)❳";
 //first case is already have parentheses around function argument
         var regExStrPlus = regExStr + " *" + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
- // console.log("regExStrPlus", regExStrPlus);
+ // console.debug("regExStrPlus", regExStrPlus);
         var regEx = new RegExp(regExStrPlus, "g");
         str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)$3❳');
 //second case is trig-like implied parentheses for function argument
@@ -518,7 +518,7 @@ console.log("looking for powers of known functions");
         regEx = new RegExp(regExStrPlus, "g");
         str = str.replace(regEx, '$1wrapper❲functionpower(' + "base" + symbolname + ')($2)wrapper❲$3❳❳');
     }
-console.log("processed powers of functions", str);
+console.debug("processed powers of functions", str);
 // subscripts (redundant, consolidate)
     for (let symbolname of greedyfunctions) {
         let slashsymbol = "\\\\?" + symbolname;
@@ -528,7 +528,7 @@ console.log("processed powers of functions", str);
         var regExStr = "(^|[\\$ \\(\\[\\{])" + slashsymbol + "\\_❲([^❲❳]*)❳";
 //first case is already have parentheses around function argument
         var regExStrPlus = regExStr + " *" + "([\\(\\[\\{][^\\(\\)\\[\\]\\{\\}]+[\\)\\]\\}])";
-// console.log("regExStrPlus", regExStrPlus);
+// console.debug("regExStrPlus", regExStrPlus);
         var regEx = new RegExp(regExStrPlus, "g");
         str = str.replace(regEx, '$1wrapper❲functionsubscript(' + "base" + symbolname + ')($2)$3❳');
 //second case is trig-like implied parentheses for function argument
@@ -545,7 +545,7 @@ function preprocesslargeoperators(rawstring) {
 
 // extract sum, prod, and other big tsings with limits
     for (let [symbolname, symbol] of Object.entries(symbolswithlimits)) {
-// console.log("looking for limits operator: symbolname", symbolname);
+// console.debug("looking for limits operator: symbolname", symbolname);
       if(str.includes(symbolname)) {
          symbolname = "\\\\?" + symbolname;
 // first check for limits in brackets
@@ -559,13 +559,13 @@ function preprocesslargeoperators(rawstring) {
 // now assume the limits are not in parentheses.  First check for lower and upper
          regExStr = "(\\b)" + symbolname + "\\_([^ ]+)\\^([^ ]+)";
     // for now assume no spaces in the limits
-console.log("regExStr", regExStr);
+console.debug("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(limsop(' + symbol + ')($2)($3))⚡');
 // now only lower, in brackets
          regExStr = "(^|\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}]";
  // experiment       regExStr = "(\\$| )" + symbolname + "\\_[\\[\\(\\{]([^ ]+)[\\]\\)\\}] *([^ \\$]+)( |\\$)";
-console.log("regExStr", regExStr);
+console.debug("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2))⚡');
  // experiemnt        str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2)($3))$4');
@@ -573,7 +573,7 @@ console.log("regExStr", regExStr);
          regExStr = "(^|\\$| )" + symbolname + "\\_([^ ]+)";
  //experiment        regExStr = "(\\$| )" + symbolname + "\\_([^ ]+) *([^ \\$]+)( |\\$)";
     // for now assume no spaces in the summand
-console.log("regExStr for llimop", regExStr);
+console.debug("regExStr for llimop", regExStr);
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2))⚡');
   //experiment       str = str.replace(regEx, '$1opwrap(llimop(' + symbol + ')($2)($3))$4');
@@ -582,7 +582,7 @@ console.log("regExStr for llimop", regExStr);
     // for now assume no spaces in the summand
  // idea: try only preprocessing the limits, and let the parsing code
  // handle the summand
-console.log("regExStr", regExStr);
+console.debug("regExStr", regExStr);
          regEx = new RegExp(regExStr, "g");
          str = str.replace(regEx, '$1opwrap(bigop(' + symbol + '))$2⚡');
       }
@@ -670,8 +670,8 @@ function xmlToObject(xml_st) {
     xml = xml_st
   }
 
-  console.log("xml", xml);
-  console.log("xml.nodeName", xml.nodeName, "xml.nodeType", xml.nodeType);
+  console.debug("xml", xml);
+  console.debug("xml.nodeName", xml.nodeName, "xml.nodeType", xml.nodeType);
 //  let obj = {};
   let this_id = "";
   let this_node_content = xml.nodeValue;
@@ -708,11 +708,11 @@ function separatePieces(rawstring) {
 
     str = dollars_to_tags(str);
 
-console.log("str with tags", str);
+console.debug("str with tags", str);
 
     let str_separated = xmlToObject(str);
 
-console.log("this_node_content", str_separated);
+console.debug("this_node_content", str_separated);
 
     return str_separated
 }
@@ -723,12 +723,12 @@ function assemble(sourcelist, componentdict, conversiontarget="MathML") {
 
     for (const element of sourcelist) {
         let tags = outputTagsOf[element[0]];
-console.log("element", element);
-console.log("componentdict", componentdict);
-console.log(conversiontarget, "tags",tags);
+console.debug("element", element);
+console.debug("componentdict", componentdict);
+console.debug(conversiontarget, "tags",tags);
    //     let content = componentdict[[element[3], conversiontarget]];
         const contentkey = element[3] + "," + conversiontarget;
-console.log("contentkey", contentkey);
+console.debug("contentkey", contentkey);
         let content = componentdict[contentkey][2];
         ans += tags[conversiontarget][0] + content + tags[conversiontarget][1];
     }

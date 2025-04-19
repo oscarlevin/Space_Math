@@ -39,38 +39,38 @@ class TreeNode {
     this.pair = [];
     this.noPriority = false;
     this.exPriority = false;
-// console.log("in TreeNode, this.conversiontarget", this.conversiontarget);
+// console.debug("in TreeNode, this.conversiontarget", this.conversiontarget);
 if(true || this.conversiontarget === undefined) {
-//    console.log("making a TreeNode", this.position, "a",  value, "b",  key, "c", this.parent,"d",this.conversiontarget);
+//    console.debug("making a TreeNode", this.position, "a",  value, "b",  key, "c", this.parent,"d",this.conversiontarget);
 }
   }
 
   insert(value, key = value) {
-//   console.log("TreNode 1 ", this);
+//   console.debug("TreNode 1 ", this);
     this.children.push(new TreeNode(this.children.length,value, key, this, this.conversiontarget));
-//   console.log("TreNode 1 again ", this);
+//   console.debug("TreNode 1 again ", this);
     return true;
   }
 
   insertNode(node) {
-// console.log("TreNode 2 ", node,"   ", this);
+// console.debug("TreNode 2 ", node,"   ", this);
 
     node.parent = this;
     node.position = this.children.length;
     this.children.push(node);
-// console.log("TreNode 2 again", node,"   ", this);
+// console.debug("TreNode 2 again", node,"   ", this);
 
     return true;
   }
 
   addLeafMarkup() {
-console.log("   adding leaf markup with key, val, oval", this.key,"a,a", this.value, "b,b",this.outputvalue, "to", this);
+console.debug("   adding leaf markup with key, val, oval", this.key,"a,a", this.value, "b,b",this.outputvalue, "to", this);
       if(this.key == null) {
           this.outputvalue = markAtomicItem(this.value, this.conversiontarget);
       } else if(this.key == " ") {
           if(this.position == 1) {
-console.warn("assuming implied multiplication");
-console.warn("What is next to this space key? parent:", this.parent, "left sibling", this.parent.children[0], "left sibling value", this.parent.children[0].value, "right sibling", this.parent.children[2]);
+console.info("assuming implied multiplication");
+console.info("What is next to this space key? parent:", this.parent, "left sibling", this.parent.children[0], "left sibling value", this.parent.children[0].value, "right sibling", this.parent.children[2]);
             if(this.conversiontarget == "MathML") {
               this.outputvalue = "<mo>&InvisibleTimes;</mo>"
             } else if(this.conversiontarget == "Speech") {
@@ -84,9 +84,9 @@ console.warn("What is next to this space key? parent:", this.parent, "left sibli
               this.outputvalue = this.value
           }
       } else if(this.key == "") {
-          console.log("item with empty key.  Is this function apply?", this)
+          console.debug("item with empty key.  Is this function apply?", this)
           if(this.position == 1) {
-console.log("What is nect to this enpty key? parent:", this.parent, "left sibling", this.parent.children[0], "right sibling", this.parent.children[2]);
+console.debug("What is nect to this enpty key? parent:", this.parent, "left sibling", this.parent.children[0], "right sibling", this.parent.children[2]);
             if(this.parent.children[2].pair.length > 0) {
           // the "" is funciton application if its right-hand neighbor is in delimiters
               if(this.conversiontarget == "MathML") {
@@ -113,29 +113,29 @@ console.log("What is nect to this enpty key? parent:", this.parent, "left siblin
           if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontarget) }
           else { this.outputvalue = markAtomicItem(this.value, this.conversiontarget) }
       } else if(this.key == ",") {
-console.log("found comma with parent", this.parent);
+console.debug("found comma with parent", this.parent);
           if(this.position == 1) { this.outputvalue = "COMMA" }
       } else if(dictionary[this.key]["type"] == "symbol") {
-          console.log("found a symbol");
+          console.debug("found a symbol");
           // do nothing, but why?
       } else if(dictionary[this.key]["type"] == "relation") {
-          console.log("found a relation");
+          console.debug("found a relation");
           if(this.value != this.key) { this.outputvalue = markAtomicItem(this.value, this.conversiontarget) }
           else { this.outputvalue = markAtomicItem(this.value, this.conversiontarget) }
       } else if(dictionary[this.key]["type"] == "function") {
-          console.log("found a function");
+          console.debug("found a function");
           if(this.value != this.key) {
-console.log("marking the argument of a function", this.value, "within", this);
+console.debug("marking the argument of a function", this.value, "within", this);
               this.outputvalue = markAtomicItem(this.value, this.conversiontarget)
           } else { 
               this.outputvalue = markAtomicItem(this.value, this.conversiontarget)
           }
       }
-console.log("   and now leaf is key, val, oval", this.key,",", this.value,",", this.outputvalue);
+console.debug("   and now leaf is key, val, oval", this.key,",", this.value,",", this.outputvalue);
   }
 
   combine(params){
-//   console.log("TreNode 3 conversiontarget", params, "gg", this);
+//   console.debug("TreNode 3 conversiontarget", params, "gg", this);
       for (let i of this.children){
           if (!i){
               continue;
@@ -149,12 +149,12 @@ console.log("   and now leaf is key, val, oval", this.key,",", this.value,",", t
 
       if (this.isLeaf){
 try {
-console.log("isLeaf with key", this.key, "pair", this.pair, "parent children", this.parent.children, "of length", this.parent.children.length, "what we want", this.parent.children[2]["pair"],"ee", this);
+console.debug("isLeaf with key", this.key, "pair", this.pair, "parent children", this.parent.children, "of length", this.parent.children.length, "what we want", this.parent.children[2]["pair"],"ee", this);
 } catch(error) {
-console.log("isLeaf with key", this.key, "pair", this.pair, "this", this);
+console.debug("isLeaf with key", this.key, "pair", this.pair, "this", this);
 }
 
-  console.log("the root", this.treeRoot);
+  console.debug("the root", this.treeRoot);
 // die
           if (this.value.length > 1){
               this.value = this.value.trim();
@@ -162,7 +162,7 @@ console.log("isLeaf with key", this.key, "pair", this.pair, "this", this);
           this.addLeafMarkup()
       } else {
 
- console.log("not a Leaf", this.pair, this);
+ console.debug("not a Leaf", this.pair, this);
           let key = this.children[0].key;
           let newValue;
           let newOutputValue;
@@ -180,15 +180,15 @@ console.log("isLeaf with key", this.key, "pair", this.pair, "this", this);
                 }
                 newValue = this.children[0].value + key + this.children[2].value;
            //     newOutputValue = this.children[0].outputvalue + key + this.children[2].outputvalue;
-console.log("adding Oo to", this, "because of", this.children[0]);
+console.debug("adding Oo to", this, "because of", this.children[0]);
                 newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
                 if(this.key && this.key != " " && dictionary[this.key]["type"] != "function" && !dictionary[this.key]["wrappedarguments"] && dictionary[this.key]["priority"] > 20) {
 //  note:  recent changed to != "function" because functions shoudl wrap their arguments
-console.log("maybe wrapping this.key", this.key, "for", newOutputValue);
+console.debug("maybe wrapping this.key", this.key, "for", newOutputValue);
                     if (this.conversiontarget == "MathML") {
                       newOutputValue = "<mrow>" + newOutputValue + "</mrow>";
                     } else if(this.conversiontarget == "Speech") {
-console.log("AddIng quantity", this);
+console.debug("AddIng quantity", this);
                       newOutputValue = "quantityS " + newOutputValue + " Sendquantity";
                     }
                 }
@@ -197,7 +197,7 @@ console.log("AddIng quantity", this);
                 newValue = this.children[1].value;
               }
           } else if(key == "") {
-  console.log("  found an empty key", this)
+  console.debug("  found an empty key", this)
               if (this.children.length > 1 && this.children[1].value == key){
                 newOutputValue = this.children[0].outputvalue + this.children[1].outputvalue + this.children[2].outputvalue;
                 newValue = this.children[0].value + this.children[1].value + this.children[2].value;
@@ -206,13 +206,13 @@ console.log("AddIng quantity", this);
                 newValue = this.children[1].value;
               }
           } else {
-console.log("about to use conversiontarget", this.conversiontarget);
+console.debug("about to use conversiontarget", this.conversiontarget);
               try {
-console.log("               trying to extract using key", key, "position", position,"numberOfSiblings", numberOfSiblings, "from", this, "with rule of",(position+1)+","+(numberOfSiblings));
+console.debug("               trying to extract using key", key, "position", position,"numberOfSiblings", numberOfSiblings, "from", this, "with rule of",(position+1)+","+(numberOfSiblings));
                 if(this.conversiontarget == "MathML") {
                   newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                   newOutputValue = dictionary[key].ruleML[(position+1)+","+(numberOfSiblings)];
-console.log("               attempted       MathML conversion: ", newValue, "newOutputValue",newOutputValue);
+console.debug("               attempted       MathML conversion: ", newValue, "newOutputValue",newOutputValue);
                 } else if(this.conversiontarget == "Speech") {
                   newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                   newOutputValue = dictionary[key].speech[(position+1)+","+(numberOfSiblings)];
@@ -223,7 +223,7 @@ console.log("               attempted       MathML conversion: ", newValue, "new
               } catch(error) {
                 newValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
                 newOutputValue = dictionary[key].rule[(position+1)+","+(numberOfSiblings)];
-console.log("                      MathML conversion failed on", newValue);
+console.debug("                      MathML conversion failed on", newValue);
               }
               if (newValue.includes("#comma?")){
                   if (this.key && dictionary[this.key].type == "operator" && dictionary[this.key].priority < 0){ // comma group
@@ -298,12 +298,12 @@ console.log("                      MathML conversion failed on", newValue);
       if (this.parent && dictionary[this.key] && dictionary[this.key].offpair){
           let numberOfSiblings = this.parent.children.length;
           let position = 0;
-console.log(numberOfSiblings,"this.key", this.key,"this", this, "this.parent", this.parent);
+console.debug(numberOfSiblings,"this.key", this.key,"this", this, "this.parent", this.parent);
           while (this.parent.children[position].value != this.key){
-console.log(position,"this.parent.children[position]", this.parent.children[position]);
+console.debug(position,"this.parent.children[position]", this.parent.children[position]);
               position++;
           }
-console.log("dictionary[this.key].offpair", dictionary[this.key].offpair, "looking for",(position+1)+","+(numberOfSiblings), "containing", this.position+1, "in", dictionary[this.key].offpair[(position+1)+","+(numberOfSiblings)]);
+console.debug("dictionary[this.key].offpair", dictionary[this.key].offpair, "looking for",(position+1)+","+(numberOfSiblings), "containing", this.position+1, "in", dictionary[this.key].offpair[(position+1)+","+(numberOfSiblings)]);
           if (dictionary[this.key].offpair[(position+1)+","+(numberOfSiblings)] && dictionary[this.key].offpair[(position+1)+","+(numberOfSiblings)].includes(this.position+1)){
             this.pair.pop();
           }
@@ -312,10 +312,10 @@ console.log("dictionary[this.key].offpair", dictionary[this.key].offpair, "looki
       if (this.pair && this.pair.length > 0){
 //  The \{ should only be for LaTeX output.
 //  Also need special cases for implied brackets.
-console.log("this.pair[0]", this.pair[0]);
+console.debug("this.pair[0]", this.pair[0]);
             this.pair[0] = adjustBrackets(this.pair, this.conversiontarget);
             if (this.pair[0].length > 0) {  // if the brackets have not been adjusted away
-console.log("this.pair[0]", this.pair[0]);
+console.debug("this.pair[0]", this.pair[0]);
               for (let p of this.pair){
   //              if (p[0] == "{"){
   //                  p[0] = ["\\{"];
@@ -325,7 +325,7 @@ console.log("this.pair[0]", this.pair[0]);
   //              }
                 this.value = p[0] + this.value + p[1];
                 if(this.conversiontarget == "MathML") {
- console.log("((((adding parentheses to", this.outputvalue, "of", this);
+ console.debug("((((adding parentheses to", this.outputvalue, "of", this);
       // a bad hack:  need a more robust way to tell if compound object in parentheses
       // a slightly less bad hack could be counting "<" in the string
                     if(this.outputvalue.length > 18) {
@@ -343,7 +343,7 @@ console.log("this.pair[0]", this.pair[0]);
                     if(singletonQ(this.outputvalue)) {
                         // no need to do anything
                     } else {
-console.log("adding quantity", this);
+console.debug("adding quantity", this);
                         this.outputvalue = "quantityP " + this.outputvalue + " Pendquantity";
                     }
                 } else {
@@ -377,7 +377,7 @@ console.log("adding quantity", this);
 class Tree {
   constructor(id,value, key, conversiontarget) {
     this.root = new TreeNode(id, value, key, null, conversiontarget);
-  console.log("       Tree 0 conversiontarget", conversiontarget);
+  console.debug("       Tree 0 conversiontarget", conversiontarget);
   }
 
   *preOrderTraversal(node = this.root) {
@@ -399,10 +399,10 @@ class Tree {
   }
 
   insert(parentNodevalue, value, key = value) {
-  console.log("       Tree 1 conversiontarget", this.conversiontarget);
+  console.debug("       Tree 1 conversiontarget", this.conversiontarget);
 
     for (let node of this.preOrderTraversal()) {
-console.log("trying Tree1 node", node);
+console.debug("trying Tree1 node", node);
       if (node.value === parentNodevalue) {
         node.children.push(new TreeNode(value, key, node, conversiontarget));
 /*
@@ -441,8 +441,8 @@ oooooo
     let noMultLeft = ["quote", "cent"];
     for (let node of this.preOrderTraversal()) {
       if (noMultRight.includes(node.value) && noMultRight.includes(node.key) && node.position == 0) {
-console.log("found a lim", node);
-console.log("now looking at", node.parent, "and",node.parent.children[0], "and", node.parent.children[1]);
+console.debug("found a lim", node);
+console.debug("now looking at", node.parent, "and",node.parent.children[0], "and", node.parent.children[1]);
         if (node.parent.parent && node.parent.parent.children[1].key == " " && node.parent.parent.children[1].value == " ") {
 console.error("adding hello", node.parent.parent.children[1]);
           node.parent.parent.children[1].key = "✂️";
@@ -450,8 +450,8 @@ console.error("now", node.parent.parent.children[1]);
         }
       }
       if (noMultLeft.includes(node.value) && noMultLeft.includes(node.key) && node.position == 0) {
-console.log("found a quote", node);
-console.log("now looking at parent", node.parent, "and itself",node.parent.children[0], "and parent parent", node.parent.parent);
+console.debug("found a quote", node);
+console.debug("now looking at parent", node.parent, "and itself",node.parent.children[0], "and parent parent", node.parent.parent);
         if (node.parent.parent && node.parent.parent.parent && node.parent.parent.parent.children[1].key == " " && node.parent.parent.parent.children[1].value == " ") {
 console.error("adding goodbye", node.parent.parent.parent.children[1]);
           node.parent.parent.parent.children[1].key = "✂️";
@@ -468,13 +468,13 @@ console.error("now", node.parent.parent.children[1]);
   combineSubSup() {
 // convert  a_b^c  from [a sub b] sup c  to  a subsup b c
     for (let node of this.preOrderTraversal()) {
-// console.log("trying subsup on", node);
+// console.debug("trying subsup on", node);
       if (node.value === "" && node.key === "^" && node.position == 0) {
-//   console.log("found ^ in position", node.position, "and childrev with values and keys");
+//   console.debug("found ^ in position", node.position, "and childrev with values and keys");
         if(node.children.length > 1 && node.children[0].key == "_") {
-//   console.log("0", node.children[0].value, node.children[0].key);
-//   console.log("1", node.children[1].value, node.children[1].key);
-//   console.log("2", node.children[2].value, node.children[2].key);
+//   console.debug("0", node.children[0].value, node.children[0].key);
+//   console.debug("1", node.children[1].value, node.children[1].key);
+//   console.debug("2", node.children[2].value, node.children[2].key);
           // found a subsup
 // the sibling with position=2 will be moved over to position 3
           node.parent.children[2].key = "subsup";
@@ -496,12 +496,12 @@ console.error("now", node.parent.parent.children[1]);
           node.parent.children[1].position = 1;  // it was that, but good to be careful?
           node.parent.children[1].parent = node.parent;
     //      node.children = [];
-//   console.log("0", node.parent.children[0].value, node.parent.children[0]);
-//   console.log("1", node.parent.children[1].value, node.parent.children[1]);
-//   console.log("2", node.parent.children[2].value, node.parent.children[2]);
-//   console.log("3", node.parent.children[3].value, node.parent.children[3]);
+//   console.debug("0", node.parent.children[0].value, node.parent.children[0]);
+//   console.debug("1", node.parent.children[1].value, node.parent.children[1]);
+//   console.debug("2", node.parent.children[2].value, node.parent.children[2]);
+//   console.debug("3", node.parent.children[3].value, node.parent.children[3]);
         } else {
-    console.log("no children")
+    console.debug("no children")
         }
       }
     }
@@ -512,11 +512,11 @@ console.error("now", node.parent.parent.children[1]);
   //  search for addParents in M2TreeConvert,js
     for (let node of this.preOrderTraversal()) {
         for (const child of node.children) {
-// console.log(child.parent == node, "node",node, "children",node.children, "child.parent", child.parent, child.parent == null);
+// console.debug(child.parent == node, "node",node, "children",node.children, "child.parent", child.parent, child.parent == null);
             if (child.parent != node) {
-//   console.log("parent was", child.parent);
+//   console.debug("parent was", child.parent);
                 child.parent = node
-//   console.log("parent is", child.parent);
+//   console.debug("parent is", child.parent);
             }
         }
     }
@@ -528,19 +528,19 @@ console.error("now", node.parent.parent.children[1]);
   combineInt() {
     for (let node of this.preOrderTraversal()) {
       if(node.value == "integr" && node.key == "integr" && node.position == 0) {
-        console.log("found int in position", node.position, "and siblings with values and keys");
-   console.log("1", node.parent.children[1].key, node.parent.children[1].value);
-//   console.log("2", node.parent.children[2].key, node.parent.children[2].value);
+        console.debug("found int in position", node.position, "and siblings with values and keys");
+   console.debug("1", node.parent.children[1].key, node.parent.children[1].value);
+//   console.debug("2", node.parent.children[2].key, node.parent.children[2].value);
         if(node.parent.children[1].value == "" && node.parent.children[1].key == "integr" && node.parent.children[1].pair.length == 1) {
-   console.log("maybe found an int with limits")
+   console.debug("maybe found an int with limits")
           if(node.parent.children[1].children[0].key == "," &&
              node.parent.children[1].children[0].value == "") {
-   console.log("looking more promising");
+   console.debug("looking more promising");
 
              if(node.parent.children[1].children[1].key != "," || node.parent.children[1].children[2].key != ",") {
-                 console.log("error with integral subsup structure")
+                 console.debug("error with integral subsup structure")
              }
-   console.log("int structure looks good");
+   console.debug("int structure looks good");
            }
          }
        }
@@ -551,16 +551,16 @@ console.error("now", node.parent.parent.children[1]);
   unWrapCertainParentheses() {
     for (let node of this.preOrderTraversal()) {
       if(node.value == "" && node.pair.length == 1 && node.children.length > 0) {
-        console.log("found wrapping parentheses", node.position, "and children with values and keys");
-   console.log("0", node.children[0].key, node.children[0].value);
-//   console.log("2", node.parent.children[2].key, node.parent.children[2].value);
+        console.debug("found wrapping parentheses", node.position, "and children with values and keys");
+   console.debug("0", node.children[0].key, node.children[0].value);
+//   console.debug("2", node.parent.children[2].key, node.parent.children[2].value);
 // need to refactor this
         if( (node.children[0].value == "limop" && node.children[0].key == "limop") ||
              (node.children[0].value == "intllim" && node.children[0].key == "intllim") ||
              (node.children[0].value == "intllimweight" && node.children[0].key == "intllimweight") ||
              (node.children[0].value == "intlimsweight" && node.children[0].key == "intlimsweight") ||
             (node.children[0].value == "intlims" && node.children[0].key == "intlims") ) {
-   console.log("maybe found paraens to eliminate");
+   console.debug("maybe found paraens to eliminate");
           node.pair.pop();
         }
      }
@@ -571,7 +571,7 @@ console.error("now", node.parent.parent.children[1]);
 // should this be with the utility functions?
 function adjustBrackets(brackets, conversiontarget) {
     let p = brackets[0];
-console.log("adjusting brackets", p);
+console.debug("adjusting brackets", p);
     if(conversiontarget == "LaTeX") {
         if (p[0] == "{"){ p[0] = ["\\{"] }
         if (p[1] == "}"){ p[1] = ["\\}"] }
@@ -593,7 +593,7 @@ function visStr(str) {
 
 function printTree(node, indentationlevel) {
   //    thisleveldata = indentationlevel + this.key + " " + this.value + " " + this.pair.length + "\n";
-      console.log("printTree of", node);
+      console.debug("printTree of", node);
       if(!node) { return "" }
   //    let nodeleveldata = indentationlevel + "[" + (node.key || "null").replace(" ","␣") + "]   " + (node.value || "null").replace(" ","␣")
       let nodeleveldata = indentationlevel + "[" + visStr(node.key) + "]   |" + visStr(node.value) + "|"

@@ -2491,7 +2491,7 @@ var greedyfunctions = particulargreedyfunctions.slice();
         greedyfunctions.push(letterpair[0])
     }
 
-console.log("greedyfunctions", greedyfunctions);
+console.debug("greedyfunctions", greedyfunctions);
 
 var greekletters = [["α","alpha"],
 ["β","beta"],

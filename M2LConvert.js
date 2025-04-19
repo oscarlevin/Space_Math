@@ -11,7 +11,7 @@ Description: A helper function which generalize several steps to take the origin
 */
 function M2LConvert(str,lp,rp, conversiontarget){
     //preprocessing for inline structure
-console.log("M2LConvert(str,lp,rp, conversiontarget)", str,lp,rp, conversiontarget);
+console.debug("M2LConvert(str,lp,rp, conversiontarget)", str,lp,rp, conversiontarget);
     for (let key of translateTable.getAllMultiLine()) { // iterate through dictionary
         let index = str.indexOf(key.slice(0, -1)+"(");
         while (index != -1){
@@ -52,10 +52,10 @@ console.log("M2LConvert(str,lp,rp, conversiontarget)", str,lp,rp, conversiontarg
         if (paramStack[0] && dictionary[paramStack[0]].params){
             params = dictionary[paramStack[0]].params;
         }
-console.log("  ++  ++  ++  ++  ++  ++  ++  ++  ++  ++ ");
-console.log("top of loop  ",splitStr);
-console.log("params = ",params);
-console.log("thisEnvironment = ",thisEnvironment);
+console.debug("  ++  ++  ++  ++  ++  ++  ++  ++  ++  ++ ");
+console.debug("top of loop  ",splitStr);
+console.debug("params = ",params);
+//console.debug("thisEnvironment = ",thisEnvironment);
 
       if (splitStr[0].trim() == "" && !params.includes("system") && !params.includes("derivation")) {console.info("skipping empty string");  splitStr.shift();  continue }  // may need this as an indicator in some cases ??
    // sort of a hack, but working toward better multiline expressions
@@ -68,7 +68,7 @@ console.log("thisEnvironment = ",thisEnvironment);
             thisLine = "casesline(" + thisLinePieces[0] + ")(" + thisLinePieces[1] + ")(" + thisLinePieces[2] + ")";
             splitStr[0] = thisLine;
         }
-console.log("thisLinePieces", thisLinePieces);
+console.debug("thisLinePieces", thisLinePieces);
       } else if (params.length > 0 && (params.includes("system") || params.includes("derivation")) ) {
         let thisLine = splitStr[0];
         // a if the next line is not blank, it is a ontinuation of the current line
@@ -96,13 +96,13 @@ console.log("thisLinePieces", thisLinePieces);
             }
             splitStr[0] = thisLine;
         }   
-console.log("thisLine", thisLine, "thisLinePieces", thisLinePieces);
+console.debug("thisLine", thisLine, "thisLinePieces", thisLinePieces);
       }
 
    // this is the key parsing step, when one meaningful string is parsed into a tree
 // 4/1/23 added .trim(); may need to rethink, if the indentation level is relevant
         let temp = M2TreeConvert(splitStr[0].trim(),params, conversiontarget);
-console.log("temp");
+console.debug("temp");
         let tree = temp[0];
         let exParam = temp[1];
         let response = temp[2];
@@ -160,7 +160,7 @@ console.log("temp");
         }
         lastLine = splitStr[0];
         splitStr.shift();
-console.log("============ exParam", exParam);
+console.debug("============ exParam", exParam);
         if (dictionary[exParam]){
             if (dictionary[exParam].seperateOut){  // don;t know why?
                 latexLine += rp;
@@ -226,6 +226,6 @@ console.log("============ exParam", exParam);
         }
         paramStack.shift();
     } //no indent
-    console.log("latexStr", latexStr);
+    console.debug("latexStr", latexStr);
     return condenseSpaces(latexStr)
 }

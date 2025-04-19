@@ -9,26 +9,26 @@ Description: the major abstract function which takes the user input and return t
 */
 function convert(str,conversiontarget) {
 
-console.log("converting to target", conversiontarget);
+console.debug("converting to target", conversiontarget);
   let str_no_xml = hide_xml(str);
   let str_separated = separatePieces(str_no_xml);
 
-console.log("str_separated", str_separated);
+console.debug("str_separated", str_separated);
 
   let convertedComponent = convertPieces(str_separated, conversiontarget);
 
-console.log("firsttest", convertedComponent);
+console.debug("firsttest", convertedComponent);
 /*
-console.log("test",convertMathSnippet("x^447","MathML"));
+console.debug("test",convertMathSnippet("x^447","MathML"));
 */
 
   let answer_processed = assemble(str_separated, convertedComponent,conversiontarget);
 
-console.log("answer_processed", answer_processed);
-console.log("convertedComponent", convertedComponent);
-console.log(" ");
-console.log("*************************************************************");
-console.log(" ");
+console.debug("answer_processed", answer_processed);
+console.debug("convertedComponent", convertedComponent);
+console.debug(" ");
+console.debug("*************************************************************");
+console.debug(" ");
 
   answer_processed = postprocess(answer_processed, conversiontarget);
 
@@ -52,7 +52,7 @@ Description: use BNF grammar to split user input into text and math part, call M
 2022.10.28 modified to support case when user types one half of deliminator
 */
 function convert2(str,p, conversiontarget) {
-console.log("starting conversiontarget", conversiontarget, p, "on", str);
+console.debug("starting conversiontarget", conversiontarget, p, "on", str);
   let splitStr = [];
   let newStr = "";
   let deliminators = [["\\[","\\]"],["$$","$$"],["\\(","\\)"],["$","$"]]; //all tokens that will be seen as math mode, in priority (left to right)
@@ -79,7 +79,7 @@ console.log("starting conversiontarget", conversiontarget, p, "on", str);
           convertedStr = M2LConvert(convertedStr,d[0],d[1], conversiontarget);
           convertedStr = d[0] + convertedStr + d[1];
           convertedStr = convertedStr.replaceAll(d[0]+d[1],"");
-console.log("convertedStr", convertedStr);
+console.debug("convertedStr", convertedStr);
           return convert2(str.substring(0,counter),p+1, conversiontarget) + convertedStr + convert2(str.substring(right+d[1].length),p, conversiontarget);
       } else {
           p += 1;
@@ -125,7 +125,7 @@ function convertPieces(pieces, conversiontarget) {
 
 // like convert2, except no delimiters because we have alread separated the math
 function convertMathSnippet(str, conversiontarget) {
-console.log("starting convertMathSnippet", conversiontarget, "on", str);
+console.debug("starting convertMathSnippet", conversiontarget, "on", str);
     let convertedStr = M2LConvert(str,"LBRACK","RBRACK", conversiontarget);
     convertedStr = simplifyAnswer(convertedStr);
     return convertedStr
