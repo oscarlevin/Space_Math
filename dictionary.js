@@ -41,6 +41,27 @@ var dictionary = {
       "2,3": "#1 minus #3"
     }
    },
+"∘": {
+    "comment": [
+    ],
+    "alternative": [
+      "of",
+      "circ"
+    ],
+    "type": "operator",
+    "priority": 10,
+    "mustHaveLeftArgument": true,
+    "rule": {
+      "2,3": "#1 \\circ #3"
+    },
+    "ruleML": {
+      "2,3": "#1<mo intent=\"of\">∘</mo>#3"
+    },
+    "speech": {
+      "2,3": "#1 of #3"
+    }
+   },
+
   "⭐": {
     "comment": [],
     "alternative": [],
@@ -585,6 +606,20 @@ var dictionary = {
     },
     "ruleML": {
       "1,1": "<mi>א</mi>"
+    }
+  },
+  "backslash": {
+    "alternative": [],
+    "type": "symbol",
+    "priority": -1,
+    "rule": {
+      "1,1": "\\ "
+    },
+    "speech": {
+      "1,1": " backslash "
+    },
+    "ruleML": {
+      "1,1": "<mi>\</mi>"
     }
   },
   "'": {
