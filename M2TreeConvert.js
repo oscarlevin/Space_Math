@@ -59,7 +59,7 @@ console.log("children are", children);
                         currentNode.value = "";
                        
               //          let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\",null,null, conversiontarget);
-                        let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\","justatest",null, conversiontarget);
+                        let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\ ","justatest",null, conversiontarget);
                         // it is a bad sign that this is the only place where conversiontarget is used in this function
                         // what will we do when we combine all the conversion methods?
                         if(conversiontarget == "MathML") {

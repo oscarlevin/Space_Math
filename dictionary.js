@@ -378,7 +378,7 @@ var dictionary = {
     "type": "relation",
     "priority": 0,
     "rule": {
-      "2,3": "#1 < #3"
+      "2,3": "#1 \\lt #3"
     },
     "ruleML": {
       "2,3": "#1<mo>&lt;</mo>#3"
@@ -399,7 +399,7 @@ var dictionary = {
     "type": "relation",
     "priority": 0,
     "rule": {
-      "2,3": "#1 > #3"
+      "2,3": "#1 \\gt #3"
     },
     "ruleML": {
       "2,3": "#1<mo>&gt;</mo>#3"
@@ -619,7 +619,7 @@ var dictionary = {
       "1,1": " backslash "
     },
     "ruleML": {
-      "1,1": "<mi>\</mi>"
+      "1,1": "<mi>\\</mi>"
     }
   },
   "'": {
