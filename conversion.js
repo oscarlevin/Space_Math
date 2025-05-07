@@ -235,6 +235,9 @@ console.debug("now ans", ans);
     ans = ans.replace(/(quantity *)quantity([^q]*)endquantity( *endquantity)/g, "$1$2$3");
     ans = ans.replace(/(quantity *)quantity([^q]*)endquantity( *endquantity)/g, "$1$2$3");
 
+    if (ans.endsWith("\\")) { ans += " " }  // a hack because of \ \ \\text{...}\ \ 
+                                            // track down why the ending space goes away
+
     return ans
 }
 
