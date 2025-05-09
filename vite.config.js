@@ -8,7 +8,7 @@ export default defineConfig({
     lib: {
       entry: 'src/main.js', // Adjust this to your entry file
       name: 'SpaceMath',
-      fileName: (format) => `space-math.${format}.js`,
+      fileName: (format) => `space_math.${format}.js`,
     },
   },
 });
