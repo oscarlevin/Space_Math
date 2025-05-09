@@ -24,7 +24,11 @@ Symbol notations:
 #2@1 first character of 2nd argument
 #2@-1 everything except the first character of 2nd argument
 */
-class TreeNode {
+
+import { dictionary } from './dictionary.js'; // import the dictionary from the JSON file
+import { markAtomicItem, singletonQ } from './conversion.js';
+
+export class TreeNode {
 /*
   constructor(position, value, key = null, parent = null, conversiontarget) {
 */
@@ -374,7 +378,7 @@ console.debug("adding quantity", this);
   }
 }
 
-class Tree {
+export class Tree {
   constructor(id,value, key, conversiontarget) {
     this.root = new TreeNode(id, value, key, null, conversiontarget);
   console.debug("       Tree 0 conversiontarget", conversiontarget);
@@ -591,7 +595,7 @@ function visStr(str) {
     return str.replaceAll(" ","␣")
 }
 
-function printTree(node, indentationlevel) {
+export function printTree(node, indentationlevel) {
   //    thisleveldata = indentationlevel + this.key + " " + this.value + " " + this.pair.length + "\n";
       console.debug("printTree of", node);
       if(!node) { return "" }

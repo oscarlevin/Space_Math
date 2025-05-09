@@ -9,7 +9,15 @@ Description: A helper function which generalize several steps to take the origin
 2022.11.04 compatibility with sentence structure: add in new arguments lp,rp for the left/right pair of delimiters.
 2022.11.14 add a preprocessing to transfer inline structures to multiline form
 */
-function M2LConvert(str,lp,rp, conversiontarget){
+import { findPositionOfRightPairConvert } from './convert.js'
+import { M2TreeConvert } from './M2TreeConvert.js'
+import { dictionary } from './dictionary.js';
+import { combineTree2Latex } from './combineTree2Latex.js'
+import { condenseSpaces } from './conversion.js'
+import { translateTable } from './SpaceMath.js'
+
+
+export function M2LConvert(str,lp,rp, conversiontarget){
     //preprocessing for inline structure
 console.debug("M2LConvert(str,lp,rp, conversiontarget)", str,lp,rp, conversiontarget);
     for (let key of translateTable.getAllMultiLine()) { // iterate through dictionary
@@ -25,7 +33,7 @@ console.debug("M2LConvert(str,lp,rp, conversiontarget)", str,lp,rp, conversionta
                 } else {
                     newMiddleStr += splitStr[1].replaceAll(";","\n ");
                 }
-                
+
                 str = splitStr[0] + newMiddleStr + splitStr[2];
                 index = str.indexOf(key.slice(0, -1)+"(");
             } else {
@@ -89,7 +97,7 @@ console.debug("thisLinePieces", thisLinePieces);
             thisLinePieces[2] = newthirdpiece;
         }
         if (thisLinePieces.length != 3) { console.error("invalid system/derivation line", thisLine, "with pieces", thisLinePieces) }
-        else {      
+        else {
 
 // in the derivation case, we have to treat the first line differently
 // the implementation below assumes too much
@@ -99,7 +107,7 @@ console.debug("thisLinePieces", thisLinePieces);
                 thisLine = "systemline(" + thisLinePieces[0].trim() + ")(" + thisLinePieces[1].trim() + ")(" + thisLinePieces[2].trim() + ")";
             }
             splitStr[0] = thisLine;
-        }   
+        }
 console.debug("thisLine", thisLine, "thisLinePieces", thisLinePieces);
       }
 
@@ -111,6 +119,7 @@ console.debug("temp");
         let exParam = temp[1];
         let response = temp[2];
         let latexLine = combineTree2Latex(tree,params);
+        let thisEnvironment = "";
         if (params.length && params.includes("caseEnvironment")) {
             thisEnvironment = "cases";
             if (conversiontarget == "MathML") {
@@ -119,7 +128,7 @@ console.debug("temp");
                 latexLine = " case " + latexLine
             }
         } else if (params.length && (params.includes("system") || params.includes("derivation")) ) {
-            if (params.includes("system")) {thisEnvironment = "system"}
+            if (params.includes("system")) { thisEnvironment = "system"}
             else if (params.includes("derivation")) { thisEnvironment = "derivation" }
             if (conversiontarget == "MathML") {
     //            latexLine = "<mtr>" + latexLine
@@ -146,7 +155,7 @@ console.debug("temp");
                 }
                     }
                 }
-                
+
                 // treating cases where response show some requirements are not fulfilled
 // turned off while debugging system
                 if (false && dictionary[paramStack[0]].params && dictionary[paramStack[0]].params.includes("&beforeFirstRelation") && !response["&beforeFirstRelation"] && lastLine.trim().length == 0){
@@ -183,7 +192,7 @@ console.debug("============ exParam", exParam);
                     latexLine += "\\begin{"+dictionary[exParam].note+"}";
                 }
             }
-            
+
             paramStack.push(exParam);
         }
 
@@ -194,7 +203,7 @@ console.debug("============ exParam", exParam);
                 } else {
                     latexLine += "AA\\end{"+dictionary[paramStack[0]].note+"}";
                 }
-                
+
                 if (dictionary[paramStack[0]].lineBreak){
                     latexLine += "\n";
                 }

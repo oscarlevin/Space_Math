@@ -7,7 +7,9 @@ cache = [[alt, standard][alt, standard]]
 11.14.2022 Add feature to support inline preprocessing in M2L
  */
 
-class TranslateTable {
+import { dictionary } from './dictionary.js'; // import the dictionary from the JSON file
+
+export class TranslateTable {
     constructor() {
         this.cache = []; // a cache that contains alternative names and standard forms
         this.cacheSize = 500; // length of the cache

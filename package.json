@@ -1,8 +1,10 @@
 {
   "name": "space_math",
   "version": "0.0.1",
-  "description": "Space Math solves the lack of a fast and convenient method for inserting mathematical notation in documents. LaTeX, the current most widely used system is cumbersome and difficult to type and remember, while GUIs are too slow and inefficient for longer input. Space Math is also compatible with screen readers, unlike LaTeX, and has international support (you can type in Chinese!). Space Math is backwards compatible with both LaTeX and Asciimath. Implemented for David Farmer at the American Institue of Mathematics.",
-  "main": "combineTree2Latex.js",
+  "description": "Space Math solves the lack of a fast and convenient method for inserting mathematical notation in documents. LaTeX, the current most widely used system is cumbersome and difficult to type and remember, while GUIs are too slow and inefficient for longer input. Space Math is also compatible with screen readers, unlike LaTeX, and has international support (you can type in Chinese!). Space Math is backwards compatible with both LaTeX and Asciimath. Implemented by David Farmer at the American Institue of Mathematics.",
+  "main": "main.js",
+  "license": "MIT",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -10,7 +12,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
   "devDependencies": {
     "vite": "^6.3.5"
   }
