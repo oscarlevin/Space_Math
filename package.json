@@ -2,7 +2,7 @@
   "name": "space_math",
   "version": "0.0.1",
   "description": "",
-  "main": "src/main.js",
+  "main": "dist/space_math.es.js",
   "module": "dist/space_math.es.js",
   "license": "MIT",
   "type": "module",

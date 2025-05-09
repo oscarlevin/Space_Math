@@ -19,6 +19,7 @@ let mathmlTextArea = document.getElementById("mathmlTextArea");
 let pretextTextArea = document.getElementById("pretextTextArea");
 let speechTextArea = document.getElementById("speechTextArea");
 let mathJaxArea = document.getElementById("MathJaxArea");
+let mathmlDisplayArea = document.getElementById("mathmlDisplayArea");
 
 export let translateTable = new TranslateTable();
 
