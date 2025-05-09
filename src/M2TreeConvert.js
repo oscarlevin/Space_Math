@@ -12,7 +12,14 @@ Description: A function to parse math text to a tree
 2022.11.02 modify: supports pair up function (improve the hard coded part latter), improve script (meaning sub- or superscript)treatment
 2022.11.04 modify: supports params for better supoort of sentence structures.
 */
-function M2TreeConvert(str,params, conversiontarget){
+import { dictionary } from "./dictionary";
+import { translateTable } from "./SpaceMath";
+import { Tree, TreeNode, printTree } from "./tree.js";
+
+var funcStr;
+
+
+export function M2TreeConvert(str,params, conversiontarget){
   console.debug("starting M2TreeConvert  conversiontarget", conversiontarget);
     let tree = new Tree(0,str, null, conversiontarget);
     let exParam = "";
@@ -53,11 +60,11 @@ console.debug("fullStr", "X"+fullStr+"X");
                 if (char == quote[0]){
 console.debug("found a quote");
                     let rpos = findPositionOfRightPair(fullStr,counter,quote[0],quote[1],[[quote[0]]]);
-                    if (rpos != -1){ 
+                    if (rpos != -1){
                         let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
 console.debug("children are", children);
                         currentNode.value = "";
-                       
+
               //          let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\",null,null, conversiontarget);
                         let qNode = new TreeNode(0,"\\ \\ \\text{"+children[1]+"}\\ \\ ","justatest",null, conversiontarget);
                         // it is a bad sign that this is the only place where conversiontarget is used in this function
@@ -87,9 +94,9 @@ console.debug("stackedTreeNode is", stackedTreeNode, "with children", stackedTre
                             }
                             stackedTreeNode = undefined;
                         }
-                        
+
                         fullStr = fullStr.substring(rpos+1);
-                        funcStr = ""; 
+                        funcStr = "";
                         counter = 0;
                         startCounter = 0;
                         key = undefined;
@@ -102,7 +109,7 @@ console.debug("stackedTreeNode is", stackedTreeNode, "with children", stackedTre
             if (isLeftPair(char)){
 console.debug("apparently found a left of pair", char);
                 let rpos = findPositionOfRightParenthese(fullStr,counter);
-                if (rpos != -1){ 
+                if (rpos != -1){
                     let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
                     currentNode.value = "";
                     let pNode = M2TreeConvert(children[1].trim(),params, conversiontarget)[0].root;
@@ -123,9 +130,9 @@ console.debug("just made stackedTreeNode", stackedTreeNode);
                         }
                         stackedTreeNode = undefined;
                     }
-                        
+
                     fullStr = fullStr.substring(rpos+1);
-                    funcStr = ""; 
+                    funcStr = "";
                     counter = 0;
                     startCounter = 0;
                     key = undefined;
@@ -137,7 +144,7 @@ console.debug("just made stackedTreeNode", stackedTreeNode);
             if (char == "<" && fullStr[counter+1] != " "){
 console.debug("looking for an angle pair");
                 let rpos = findPositionOfRightAngle(fullStr,counter);
-                if (rpos != -1){ 
+                if (rpos != -1){
                     let children = [fullStr.substring(0,counter), fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
                     currentNode.value = "";
                     let pNode = M2TreeConvert(children[1].trim(),params, conversiontarget)[0].root;
@@ -156,9 +163,9 @@ console.debug("looking for an angle pair");
                         }
                         stackedTreeNode = undefined;
                     }
-                        
+
                     fullStr = fullStr.substring(rpos+1);
-                    funcStr = ""; 
+                    funcStr = "";
                     counter = 0;
                     startCounter = 0;
                     key = undefined;
@@ -230,7 +237,7 @@ console.debug("yes, there is there a"+ key + "key");
                 key = translateTable.getItem(key)// translate the key if it is not directly in the dictionary;
             }
 console.debug("and now it is"+ key + "key of", keyType, "keyType");
-            
+
             let splitStr;
             let leftNode;
             let keyNode;
@@ -248,7 +255,7 @@ console.debug("and now it is"+ key + "key of", keyType, "keyType");
                     leftNode = new TreeNode(0,splitStr[0],key,null, conversiontarget);
                     keyNode = new TreeNode(0,splitStr[1],key,null, conversiontarget);
                     rightNode = new TreeNode(0,splitStr[2],key,null, conversiontarget);
-                    if (stackedTreeNode){ // we have a stackedTreeNode 
+                    if (stackedTreeNode){ // we have a stackedTreeNode
                         stackedTreeNode = combineAfter(leftNode.value,stackedTreeNode, conversiontarget); // there are something before the pair, consider multiplication
                         leftNode = stackedTreeNode;
                         leftNode.key = key;
@@ -325,7 +332,7 @@ console.debug("and now it is"+ key + "key of", keyType, "keyType");
                                 lastNode.key = key;
                                 lastNode.noPriority = keyNode.noPriority; // set them with same no priority
                                 lastNode.exPriority = keyNode.exPriority; // set them with same ex priority
-                                
+
                                 //newNode.insertNode(leftNode);
                                 newNode.insertNode(keyNode);
                                 newNode.insertNode(rightNode);
@@ -343,7 +350,7 @@ console.debug("and now it is"+ key + "key of", keyType, "keyType");
                             newroot.insertNode(rightNode);
                             tree.root = newroot;
                             currentNode = tree.root.children[2];
-                        }   
+                        }
                     } else {
                         if (!validPriority){
                             leftNode.noPriority = true;
@@ -372,13 +379,13 @@ console.debug("and now it is"+ key + "key of", keyType, "keyType");
                     leftNode = new TreeNode(0,splitStr[0],key,null, conversiontarget);
                     keyNode = new TreeNode(0,splitStr[1],key,null, conversiontarget);
                     rightNode = new TreeNode(0,splitStr[2],key,null, conversiontarget);
-                    if (stackedTreeNode){ // we have a stackedTreeNode 
+                    if (stackedTreeNode){ // we have a stackedTreeNode
                         stackedTreeNode = combinePrev(leftNode.value,stackedTreeNode, conversiontarget); // there are something before the pair, consider multiplication
                         leftNode = stackedTreeNode;
                         leftNode.key = key;
                         stackedTreeNode = undefined;
                     }
-                    
+
                     let funcNode = new TreeNode;
                     funcNode.conversiontarget = conversiontarget;
                     funcNode.value = "";
@@ -386,7 +393,7 @@ console.debug("and now it is"+ key + "key of", keyType, "keyType");
                     rightNode.key = key;
                     if (dictionary[key].pairedArgument){
                         let rpos = findPositionOfRightPair(fullStr,startKey,key,dictionary[key].pairedArgument,dictionary[key].family);
-                        if (rpos != -1){ 
+                        if (rpos != -1){
                             let splitR = [fullStr.substring(counter+1,rpos), fullStr.substring(rpos+1)];
                             let rightNode1 = M2TreeConvert(splitR[0].trim(),params, conversiontarget)[0].root;
                             let rightNode2 = new TreeNode(0,splitR[1],key,null, conversiontarget);
@@ -398,13 +405,13 @@ console.debug("and now it is"+ key + "key of", keyType, "keyType");
                     } else {
                         funcNode.insertNode(rightNode);
                     }
-                    
+
                     let cNode = currentNode;
                     currentNode = funcNode.children[funcNode.children.length - 1];
                     if (leftNode.value.length > 0){
                         funcNode = combinePrevNode(leftNode,funcNode, conversiontarget); // there are something before the pair, consider multiplication
                     }
-                    
+
                     funcNode.value = "";
                     if (cNode.parent){
                         funcNode.key = cNode.parent.children[cNode.position].key;
@@ -593,7 +600,7 @@ function combineAfter(followingVal,pNode, conversiontarget){
 Description: function to detect if we have a keyword and returns its type
 Arguments: the whole string, the current word, and the position of the end of the word
 return: the type of the keyword, or undefined if it is not a keyword
-2022.10.12 created, 
+2022.10.12 created,
 2022.10.17 abstractized
 2022.10.19 modified to check if in a longer keyword
 2022.10.26 combined into one function
@@ -615,7 +622,7 @@ function getType(str,key,pos,stackedTreeNode){
 
 /*
 Description: function to get keyword
-2022.10.19 created, 
+2022.10.19 created,
 */
 function getKeyword(key){
     if (dictionary[key]){
@@ -628,12 +635,12 @@ function getKeyword(key){
             return dictionary[key];
         }
     }
-    
+
 }
 
 /*
 Description: function to detect left parenthese
-2022.10.14 created, 
+2022.10.14 created,
 2023.3.23 added ⁅⁆ as a new pair
 */
 function isLeftPair(key){
@@ -642,7 +649,7 @@ function isLeftPair(key){
 
 /*
 Description: function to tell the corresponding right parenthese based on the left one
-2022.10.14 created, 
+2022.10.14 created,
 */
 
 function getRightPair(key){
@@ -662,7 +669,7 @@ function getRightPair(key){
 
 /*
 Description: function to detect operators
-2022.10.19 created, 
+2022.10.19 created,
 */
 function isOperatorPure(key){
     let keyWord = getKeyword(key);
@@ -671,7 +678,7 @@ function isOperatorPure(key){
 
 /*
 Description: function to detect sup/subscripts
-2022.11.02 created, 
+2022.11.02 created,
 */
 function isScriptPure(key){
     let keyWord = getKeyword(key);
@@ -680,7 +687,7 @@ function isScriptPure(key){
 
 /*
 Description: function to detect operators containment
-2022.10.20 created, 
+2022.10.20 created,
 2022.11.04 modified.
 */
 function containOperatorOrRelationPure(key){
@@ -696,7 +703,7 @@ function containOperatorOrRelationPure(key){
 
 /*
 Description: function to detect relations
-2022.10.19 created, 
+2022.10.19 created,
 */
 function isRelationPure(key){
     let keyWord = getKeyword(key);
@@ -714,7 +721,7 @@ function isOperatorRelationPure(key){
 
 /*
 Description: function to detect operators or spaces
-2022.10.12 created, 
+2022.10.12 created,
 2022.10.19 modified to match with changes.
 */
 function isOperatorRelationOrSpace(key){
@@ -723,7 +730,7 @@ function isOperatorRelationOrSpace(key){
 
 /*
 Description: function to tell the priority of operators/symbols
-2022.10.12 created, 
+2022.10.12 created,
 2022.10.17 abstractized
 */
 
@@ -744,7 +751,7 @@ function getPriority(key){
 
 /*
 Description: given a string, a position of the left parenthese, find the position of the paired up right parenthese (regardless of type).
-2022.10.19 created, 
+2022.10.19 created,
 2022.11.1 be the function to detect paired parentheses
 */
 
@@ -781,7 +788,7 @@ function findPositionOfRightParenthese(str, pos) {
 
 /*
 Description: given a string, a position of a <, find the position of the paired up >.
-2022.11.9 created, 
+2022.11.9 created,
 */
 
 function findPositionOfRightAngle(str, pos) {
@@ -829,7 +836,7 @@ function findPositionOfRightPair(str, pos, lp, rp, family) {
 
 /*
 Description: given a string, a position of the space, get all the contents till the next space (or end of string)).
-2022.10.19 created, 
+2022.10.19 created,
 */
 
 function findNextWord(str, pos) {
@@ -848,7 +855,7 @@ function findNextWord(str, pos) {
 
 /*
 Description: given a string, the current keyword, the position of the end of the keyword, check if we can find a longer keyword).
-2022.10.19 created, 
+2022.10.19 created,
 */
 
 function containedInKeyword(str, key, pos) {
@@ -869,7 +876,7 @@ function containedInKeyword(str, key, pos) {
 /*
 Description: given a node and key, check if there are same key in the approachable nodes of the currentNode (not touching parentheses).
 Return true is a key in approachable path with same name is detected.
-2022.11.2 created, 
+2022.11.2 created,
 */
 
 function checkScriptSimilarity(node, key) {

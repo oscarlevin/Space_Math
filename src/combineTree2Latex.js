@@ -5,7 +5,7 @@ Description: A function to call combine method in tree root to get the latex str
 
 2022.10.12 created, only works for simple equation with operators at this stage.
 */
-function combineTree2Latex(tree,params){
+export function combineTree2Latex(tree,params){
 console.debug("combineTree2Latex", tree, "params", params, "with output", tree.root.outputvalue);
 	tree.root.combine(params);
 console.debug("AGAIN combineTree2Latex", tree, "params", params,"with output", tree.root.outputvalue);

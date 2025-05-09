@@ -1,16 +1,3 @@
-<!--<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
-</html>-->
 
 <!DOCTYPE HTML>
 <html lang="en">
@@ -65,10 +52,21 @@ $ZZ cross ZZ isom <a, b | a b a^-1 b^-1>$
 <!--
 <p>Try SpaceMath in the interactive renderer below, the Latex output will be out on the right box, and the displayable form will appear below the box. Just like LaTeX, you may use a pair of deliminators (\$...\$,\$\$...\$\$) to indicate if you want some parts to be rendered in displayable math. </p>
 -->
+<p>
+Some <a href="test_expressions.txt">test expressions</a> to try.
+</p>
+
+<p>
+It may help to imagine that this input format is for students answering homework questions online.
+</p>
+
+<p>
+Please provide <a href="https://docs.google.com/forms/d/e/1FAIpQLSfOYSiM25C9r4ciLI46Fy1qLlG6hSVCBnywLmt7R6SHvz_68Q/viewform">feedback</a> if something does not work as expected.
+</p>
 
     <textarea rows="8" cols="60" id=sourceTextArea placeholder="Type in this box."></textarea>
 
-    <div id=mathmlDisplayArea disabled=true></div>
+    <div id=mathmlDisplayArea disabled=true role="region" aria-label="displayed math"></div>
 
     <div id=speechTextArea disabled=true placeholder="How it will be spoken"></div>
 
@@ -694,20 +692,19 @@ $ZZ cross ZZ isom <a, b | a b a^-1 b^-1>$
 </script>
 
 
-<!--<script src="TranslateTable.js"></script>-->
-<!--<script src="SpaceMath.js"></script>-->
-<!--<script src="conversion.js"></script>-->
-<!--<script src="convert.js"></script>-->
-<!-- when running locally
--->
-<!--<script src="dictionary.js"></script>-->
+<!--<script src="TranslateTable.js"></script>
+<script src="SpaceMath.js"></script>
+<script src="conversion.js"></script>
+<script src="convert.js"></script>
 
-<!--<script src="M2LConvert.js"></script>-->
-<!--<script src="M2TreeConvert.js"></script>-->
-<!--<script src="combineTree2Latex.js"></script>-->
-<!--<script src="tree.js"></script>-->
+<script src="dictionary.js"></script>
 
+<script src="M2LConvert.js"></script>
+<script src="M2TreeConvert.js"></script>
+<script src="combineTree2Latex.js"></script>
+<script src="tree.js"></script>-->
 
 <script type="module" src="src/SpaceMath.js"></script>
+
 </body>
 </html>

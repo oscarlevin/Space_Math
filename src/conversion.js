@@ -16,11 +16,12 @@ function convert(str) {
   return newLineStr;
 }
 */
+import {dictionary, outputTagsOf, greedyfunctions, integrals, symbolswithlimits, charactersymbols, particulargreedyfunctions, operatorsymbols, triglikefunctions, greekletters, } from './dictionary.js'
 
-
-function condenseSpaces(str){
+export function condenseSpaces(str){
     return str.replace(/\s\s+/g, ' ');
 }
+
 function plusminus(str){
   for (let sym of ['+','-']){
     if (str.includes(sym)){
@@ -125,7 +126,8 @@ function numbervariableQ(str) {
 function atomicQ(str) {
     return variableQ(str) || numberQ(str)
 }
-function singletonQ(str) {
+
+export function singletonQ(str) {
   // need to include things like Greek letters
   // the issue is whether  quantity ... endquantity  is needed
     return numberQ(str) || str.length == 1 ||
@@ -145,7 +147,7 @@ function convertSymbol(str, conversiontarget) {
     return ans
 }
 
-function markAtomicItem(str, conversiontarget) {
+export function markAtomicItem(str, conversiontarget) {
   if(numbervariableQ(str)) {
     let numberpart = str.replace(/[a-zA-Z]+$/, "");
     let variablepart = str.replace(/^[0-9\.,]+/, "");
@@ -205,8 +207,8 @@ console.debug("aDDing qUAntity",str);
 
 // remove redundancies and un-necessary markup.  For example:
 // <mrow><mi>x</mi></mrow> --> <mi>x</mi>
-function simplifyAnswer(str) {
-    ans = str;
+export function simplifyAnswer(str) {
+    let ans = str;
 
 console.debug("   starting to simplify Answer", ans);
     for (let i=0; i <= 2; ++i) {
@@ -235,7 +237,7 @@ console.debug("now ans", ans);
     ans = ans.replace(/(quantity *)quantity([^q]*)endquantity( *endquantity)/g, "$1$2$3");
     ans = ans.replace(/(quantity *)quantity([^q]*)endquantity( *endquantity)/g, "$1$2$3");
 
-    if (ans.endsWith("\\")) { ans += " " }  // a hack because of \ \ \\text{...}\ \ 
+    if (ans.endsWith("\\")) { ans += " " }  // a hack because of \ \ \\text{...}\ \
                                             // track down why the ending space goes away
 
     return ans
@@ -244,7 +246,7 @@ console.debug("now ans", ans);
 // convert common constructions to functional or infix notation,
 // so that the existing tree structures can be used.
 
-function preprocess(rawstring) {
+export function preprocess(rawstring) {
     let str = rawstring;
 
     str = preprocessquotes(str);
@@ -334,7 +336,7 @@ console.debug("after operators", str);
 // need a way to specify what * means
 
 // maybe after number multiplication and +/- have been spaced out, it is okay to
-// parenthesixe sub and superscript ( for things like 
+// parenthesixe sub and superscript ( for things like
 
 console.debug("before sub and sup grouping", str);
 
@@ -507,7 +509,7 @@ console.debug("looking for powers of known functions");
     for (let symbolname of greedyfunctions) {
         let slashsymbol = "\\\\?" + symbolname;
 // when we refactor to pull out the math pieces, allow more general
-// characters that "(" as in (log^2 x 
+// characters that "(" as in (log^2 x
  //  why \$ and not ^ ?       var regExStr = "([\\$ \\(\\[\\{])" + slashsymbol + "\\\^❲([^❲❳]*)❳";
         var regExStr = "(^|[ \\(\\[\\{])" + slashsymbol + "\\\^❲([^❲❳]*)❳";
 //first case is already have parentheses around function argument
@@ -526,7 +528,7 @@ console.debug("processed powers of functions", str);
     for (let symbolname of greedyfunctions) {
         let slashsymbol = "\\\\?" + symbolname;
 // when we refactor to pull out the math pieces, allow more general
-// characters that "(" as in (log^2 x 
+// characters that "(" as in (log^2 x
  // same err as in sup case above       var regExStr = "([\\$ \\(\\[\\{])" + slashsymbol + "\\_❲([^❲❳]*)❳";
         var regExStr = "(^|[\\$ \\(\\[\\{])" + slashsymbol + "\\_❲([^❲❳]*)❳";
 //first case is already have parentheses around function argument
@@ -609,7 +611,7 @@ function preprocessother(rawstring) {
     return str
 }
 
-function hide_xml(text) {
+export function hide_xml(text) {
     let the_ans = text;
 
     the_ans = the_ans.replace(/</g, "⦉");
@@ -617,7 +619,7 @@ function hide_xml(text) {
 
     return the_ans
 }
-function unhide_xml(text) {
+export function unhide_xml(text) {
     let the_ans = text;
 
     the_ans = the_ans.replace(/⦉/g, "<");
@@ -666,7 +668,7 @@ function xmlToObject(xml_st) {
 
   if (typeof xml_st == "string") {
  //   parseLog("xml starts", xml_st.slice(0,50));
-    parser = new DOMParser();
+    let parser = new DOMParser();
     xml = parser.parseFromString(xml_st, "text/xml");
 //    xml = $.parseXML(xml_st);
   } else {
@@ -679,7 +681,7 @@ function xmlToObject(xml_st) {
   let this_id = "";
   let this_node_content = xml.nodeValue;
 
-  if (xml.nodeType == 9) {  // document              
+  if (xml.nodeType == 9) {  // document
       xml = xml.documentElement;
   }
 
@@ -706,7 +708,7 @@ function xmlToObject(xml_st) {
   return these_nodes
 }
 
-function separatePieces(rawstring) {
+export function separatePieces(rawstring) {
     let str = rawstring;
 
     str = dollars_to_tags(str);
@@ -720,7 +722,7 @@ console.debug("this_node_content", str_separated);
     return str_separated
 }
 
-function assemble(sourcelist, componentdict, conversiontarget="MathML") {
+export function assemble(sourcelist, componentdict, conversiontarget="MathML") {
 
     let ans = "";
 
@@ -739,7 +741,7 @@ console.debug("contentkey", contentkey);
     return ans
 }
 
-function postprocess(answer, conversiontarget) {
+export function postprocess(answer, conversiontarget) {
 
   let str = answer.trim();
 
