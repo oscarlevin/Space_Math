@@ -9,12 +9,11 @@ Description: A helper function which generalize several steps to take the origin
 2022.11.04 compatibility with sentence structure: add in new arguments lp,rp for the left/right pair of delimiters.
 2022.11.14 add a preprocessing to transfer inline structures to multiline form
 */
-import { findPositionOfRightPairConvert } from './convert.js'
+import { findPositionOfRightPairConvert, translateTable } from './convert.js'
 import { M2TreeConvert } from './M2TreeConvert.js'
 import { dictionary } from './dictionary.js';
 import { combineTree2Latex } from './combineTree2Latex.js'
 import { condenseSpaces } from './conversion.js'
-import { translateTable } from './SpaceMath.js'
 
 
 export function M2LConvert(str,lp,rp, conversiontarget){

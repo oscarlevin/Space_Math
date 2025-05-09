@@ -9,6 +9,10 @@ Description: the major abstract function which takes the user input and return t
 */
 import {hide_xml, unhide_xml, separatePieces, assemble, postprocess, preprocess, simplifyAnswer} from './conversion.js'
 import {M2LConvert} from './M2LConvert.js'
+import {TranslateTable} from './TranslateTable.js'
+
+
+export let translateTable = new TranslateTable();
 
 export function convert(str,conversiontarget) {
 

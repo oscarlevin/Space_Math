@@ -2505,6 +2505,7 @@ export var greedyfunctions = particulargreedyfunctions.slice();
         greedyfunctions.push(letterpair[0])
     }
 
+console.debug("Do I see this?");
 console.debug("greedyfunctions", greedyfunctions);
 
 export var greekletters = [["α","alpha"],
@@ -2648,3 +2649,5 @@ export var outputTagsOf = {
     "PTX": ["<md>","</md>"]
   }
 }
+
+console.debug("End of dictionary.js");

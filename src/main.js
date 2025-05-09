@@ -1,4 +1,3 @@
-import './spacemath.css'
 
 import { convert, convertMathSnippet } from './convert.js'
 

@@ -13,7 +13,7 @@ Description: A function to parse math text to a tree
 2022.11.04 modify: supports params for better supoort of sentence structures.
 */
 import { dictionary } from "./dictionary";
-import { translateTable } from "./SpaceMath";
+import { translateTable } from "./convert.js";
 import { Tree, TreeNode, printTree } from "./tree.js";
 
 var funcStr;

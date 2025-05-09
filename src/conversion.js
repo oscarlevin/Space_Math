@@ -16,7 +16,7 @@ function convert(str) {
   return newLineStr;
 }
 */
-import {dictionary, outputTagsOf, greedyfunctions, integrals, symbolswithlimits, charactersymbols, particulargreedyfunctions, operatorsymbols, triglikefunctions, greekletters, } from './dictionary.js'
+import {dictionary, outputTagsOf, greedyfunctions, integrals, symbolswithlimits, charactersymbols, particulargreedyfunctions, operatorsymbols } from './dictionary.js'
 
 export function condenseSpaces(str){
     return str.replace(/\s\s+/g, ' ');

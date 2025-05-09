@@ -21,7 +21,6 @@ let speechTextArea = document.getElementById("speechTextArea");
 let mathJaxArea = document.getElementById("MathJaxArea");
 let mathmlDisplayArea = document.getElementById("mathmlDisplayArea");
 
-export let translateTable = new TranslateTable();
 
 /*
 var dictionary;
