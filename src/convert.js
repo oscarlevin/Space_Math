@@ -127,7 +127,7 @@ function convertPieces(pieces, conversiontarget) {
 
 
 // like convert2, except no delimiters because we have alread separated the math
-function convertMathSnippet(str, conversiontarget) {
+export function convertMathSnippet(str, conversiontarget) {
 console.debug("starting convertMathSnippet", conversiontarget, "on", str);
     let convertedStr = M2LConvert(str,"LBRACK","RBRACK", conversiontarget);
     convertedStr = simplifyAnswer(convertedStr);

@@ -4,6 +4,9 @@ import './spacemath.css'
 //import { setupCounter } from './counter.js'
 // Import the main spacemath function:
 
-import { convert } from './convert.js'
+import { convert, convertMathSnippet } from './convert.js'
 
-export { convert as SpaceMathConvert }
+export {
+    convert as SpaceMathConvert,
+    convertMathSnippet,
+}
