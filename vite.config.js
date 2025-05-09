@@ -10,11 +10,5 @@ export default defineConfig({
       name: 'SpaceMath',
       fileName: (format) => `space-math.${format}.js`,
     },
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        // Add other entry points if needed
-      },
-    },
   },
 });
