@@ -1,0 +1,80 @@
+
+A double angle formula: $sin 2x = 2 sin x cos x$.
+
+----------------
+
+A $5 by 8$ chessboard contains $5 times 8 = 40$ little squares.
+
+----------------
+
+$f(x+h) + g (y+k)$
+
+----------------
+
+We have $abs u+v <= abs u + abs v$ for all $u,v in CC$,
+while $norm(vec u + vec v)^2 = norm(vec u)^2 + norm(vec v)^2$ only if $vec u perp vec v$.
+
+----------------
+
+$Gamma(s) = \int_0^infty e^-x x^s dx/x$ and
+$$
+int log x dx = x log x - x + C
+$$
+
+----------------
+
+If $A$ is a permutation matrix then $abs(det A) = 1$
+
+---------------
+
+If $g \in G$ then $order g | order G$
+
+---------------
+
+
+If $a$ and $b$ are finite sets, then $card(a product b) = card a times card b$
+
+---------------
+
+If $a x^2 + b x + c = 0$ then $x = (-b pm sqrt(b^2 - 4 a c))/2a$,
+and
+$$"if" a x^2 + b x + c = 0 "then" x = (-b pm sqrt(b^2 - 4 a c))/2a
+$$
+
+----------------
+
+$$zeta(s) = \sum_n=1^infty 1/n^s = prod_p (1-p^-s)^-1$$
+
+
+----------------
+
+$$
+abs x = cases:
+    x if x > 0
+    0 if x = 0
+    -x otherwise
+$$
+Another line.
+
+----------------
+
+$$
+derivation:
+int_A^T 1/(x log x llog x) dx = lllog T + bigO(1)
+
+asymp lllog T
+$$
+as $T to infty$.
+
+----------------
+
+$$
+system:
+   a + b = c < 8
+      +55
+
+   a^2 <= 77 b^3 + 12
+
+   x^n + y^n = z^n
+$$
+

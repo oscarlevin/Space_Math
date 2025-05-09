@@ -1,0 +1,218 @@
+
+A double angle formula: $sin 2x = 2 sin x cos x$.
+
+A $5 by 8$ chessboard contains $5 times 8 = 40$ little squares.
+
+We have $abs u+v <= abs u + abs v$ for all $u,v in CC$,
+while $norm(vec u + vec v)^2 = norm(vec u)^2 + norm(vec v)^2$ only if $vec u perp vec v$.
+
+If $a x^2 + b x + c = 0$ then $x = (-b pm sqrt(b^2 - 4 a c))/2a$,
+and
+$$"if" a x^2 + b x + c = 0 "then" x = (-b pm sqrt(b^2 - 4 a c))/2a
+$$
+
+$$zeta(s) = \sum_n=1^infty 1/n^s = prod_p (1-p^-s)^-1$$
+
+
+$$
+abs x = cases:
+    x if x > 0
+    0 if x = 0
+    -x otherwise
+$$
+Another line.
+
+$$
+derivation:
+int_A^T 1/(x log x llog x) dx = lllog T + bigO(1)
+
+asymp lllog T
+$$
+as $T to infty$.
+
+$$
+system:
+   a + b = c < 8
+      +55
+
+   a^2 <= 77 b^3 + 12
+
+   x^n + y^n = z^n
+$$
+
++++++++++++++++=
+
+Volker's MathML generator
+https://speech-rule-engine.github.io/semantic-tree-visualiser/visualise.html
+
+$tan x = (sin x)/(cos x)$
+
+A double angle formula: $sin 2x = 2 sin x cos x$.
+
+A $5 by 8$ chessboard contains $5 times 8 = 40$ little squares.
+
+We have $abs u+v <= abs u + abs v$ for all $u,v in CC$,
+while $norm(vec u + vec v)^2 = norm(vec u)^2 + norm(vec v)^2$ only if $vec u perp vec v$.
+
+The Chebyshev polynomials of the first kind, $T_n$, are defined by
+$T_n(cos theta) = cos(n theta)$.  They are orthogonal with respect
+to the inner product
+$$
+<f,g> = \int_-1^1 f(x) g(x) dx/sqrt[1-x^2]
+$$
+[[above weight in the integral not parsing correctly: consider wrapping the sqrt)
+
+If $y'' = c^2 y$ then $y(x) = A e^(c x) +b e^{-c x}$ for some $A,b in CC$
+
+$(f g)' = f' g + f g'$
+
+$f(g(x))' = f'(g(x)) g'(x)$
+
+If $A$ is a permutation matrix then $det A = +-1$ 
+
+If $g \in G$ then $order g | order G$
+
+If $a$ and $b$ are finite sets, then $card(a product b) = card a times card b$
+
+If $a x^2 + b x + c = 0$ then $x = (-b pm sqrt(b^2 - 4 a c))/2a$,
+and
+$$"if" a x^2 + b x + c = 0 "then" x = (-b pm sqrt(b^2 - 4 a c))/2a
+$$
+
+$$
+derivation:
+int_A^T 1/(x log x llog x) dx = lllog T + bigO(1)
+
+asymp lllog T
+$$
+as $T to infty$.
+
+${ f:RR to ZZ | f(0) <= 5}$
+
+$int_0^infty x/(e^(sqrt x)) dx$
+
+$sigma(n) = sum_d|n d$, and more generally, $sigma_k(n) = sum_d|n d^k$
+
+$J_0^2(x) + a_i^45$
+
+$f(1/2) + f(1//2) = e^pi$
+
+$lim_[x to infty] (sin x)/x = 0$
+
+${3,4} subset ZZ$, and $(3,4) in RR^2$, and $(3, 4) subset RR$.
+
+$80 cent + 20 cent = dollar1$
+
+$emptyset = {x in ZZ | 0 < x < 1}$
+
+$sum_n=1^N n = N(N+1)/2$
+
+$sin^2 x + cos^2 x = 1$
+
+The Fibonacci sequence is defined by the recursion
+$F_(n+1) = F_n + F_(n-1)$, with initial conditions $F_0 = F_1 = 1$.
+In closed form:
+$$
+F_n = floor(1/sqrt5 \phi^n) "where" phi = (1 + sqrt(5))/2  "is the golden ratio".
+$$
+
+We use the following notation for integration along a vertical
+line in the complex plane:
+$$
+  int_((c)) f(s) ds := int_(c-i infty)^(c + i infty) f(s) ds .
+$$
+For example, we have the Mellin inversion pair:
+$$
+Gamma(s) = \int_0^infty e^-x x^s dx/x
+"and"
+e^z = 1/(2 pi i) int_((1)) Gamma(s) z^-s ds .
+$$
+
+$−(2n+2) < −a_n < -2n$
+
+
+$$(k+1)(k/2 + 1)$$
+
+If $a | b$ then $c a | c b$.
+
+$e^{i theta} = cos(theta) + i sin(theta)$
+
+$ZZ subset RR intersect QQ$
+
+$y^2 = x^3 + a x + b "with" a, b in QQ$
+
+$18 cong 7 mod 11$
+
+$x^2 cong 0 "or" 1 mod 4$
+
+$$ p | prod_n=1^K a_n "implies" p | a_n "for some" n $$
+
+$(p-1)! cong -1 mod p$
+
+If $a !cong 0 mod b$ then $a^(p-1) congruent -1 mod p$
+
+$$zeta(s) = \sum_n=1^infty 1/n^s = prod_p (1-p^-s)^-1$$
+
+$1 != 2$
+
+--------------
+
+$$
+abs x = cases:
+    x if x > 0
+    0 if x = 0
+    -x otherwise
+$$
+Another line.
+
+$$
+system:
+   a + b = c
+
+   a^2 < 77 b^3 + 12
+$$
+
+$$
+system:
+   a + b = c < 8
+      +55
+
+   a^2 <= 77 b^3 + 12
+
+   x^n + y^n = z^n
+$$
+Some words.
+
+
+Markup for  K/Q ?
+
+
+
+Gegenbauer polynomial: $G_n^(alpha)(x)$
+
+Chebyshev polynomial: $P_n(x)$
+
+*** need the above to be recocnised as functions
+??? maybe funcitonwrap ?
+??? also rething opwrap:  should it have the argument in it?
+         (answer: no, because it is hard to parse what is the argument)
+
+$$zeta(s) = \sum_n=1^infty 1/n^s = prod_p (1-p^-s)^-1$$
+
+$sum_(n=1)^oo x^n = frac1{1-x}$$
+
+$12x^2-5x^2+19x-100/99-p^y$
+
+ need a test to compare \frac{-x^2}{1}  and -\frac{x^2}{2} 
+
+$Gamma(s) = \int_0^infty e^-x x^s dx/x$
+
+
+$e^x^2/2 + e^-x^2 / 2 + e^[x^2]/2 + e^[x^2] / 2  + e^(-x^2 / 2)  e^(- x^2 / 2) $
+
+$sin x^2$ or $sin (1+x)^2$
+
+$x^{(} + y^{)} = z^[$ 
+
+Suppose $x > 0$, and $y < 0$.
+
