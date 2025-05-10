@@ -6,6 +6,11 @@ The js file for the test interface.
 2022.10.17 add global call
 2022.10.25 add MathJax support
 */
+import './spacemath.css'
+import { convert } from './convert.js'
+import { TranslateTable } from './TranslateTable.js'
+
+
 
 "use strict";
 let sourceTextArea = document.getElementById("sourceTextArea");
@@ -14,11 +19,11 @@ let mathmlTextArea = document.getElementById("mathmlTextArea");
 let pretextTextArea = document.getElementById("pretextTextArea");
 let speechTextArea = document.getElementById("speechTextArea");
 let mathJaxArea = document.getElementById("MathJaxArea");
+let mathmlDisplayArea = document.getElementById("mathmlDisplayArea");
 
-let translateTable = new TranslateTable();
 
 /*
-var dictionary;    
+var dictionary;
 fetch("dictionary.json").then(
         function(u){ return u.json();}
       ).then(

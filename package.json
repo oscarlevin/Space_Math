@@ -1,0 +1,19 @@
+{
+  "name": "space_math",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/space_math.es.js",
+  "license": "MIT",
+  "type": "module",
+
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "David Farmer",
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}

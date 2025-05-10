@@ -1,4 +1,4 @@
-var dictionary = {
+export var dictionary = {
   "+": {
     "comment": [
       "¼Ó"
@@ -17,7 +17,7 @@ var dictionary = {
     },
     "speech": {
       "2,3": "#1 plus #3"
-    } 
+    }
   },
   "-": {
     "comment": [
@@ -75,7 +75,7 @@ var dictionary = {
     },
     "speech": {
       "2,3": "#1 star #3"
-    } 
+    }
   },
   "😑": {    // used for "negative", as distinct from subtraction
     "comment": [ ],
@@ -91,9 +91,9 @@ var dictionary = {
     },
     "speech": {
       "1,2": " quantityN negative #2 Nendquantity "
-    } 
+    }
   },
-  "⚡": {   // funciton application 
+  "⚡": {   // funciton application
     "comment": [ ],
     "alternative": [ ],
     "type": "operator",
@@ -152,7 +152,7 @@ var dictionary = {
     },
     "speech": {
       "2,3": "fraction #1 denominator #3 enddenominator"
-    } 
+    }
   },
   "//": {
     "alternative": [ ],
@@ -862,7 +862,7 @@ var dictionary = {
     },
     "ruleML": {
       "1,2": "<msqrt><mrow>#2</mrow></msqrt>"
-    } 
+    }
   },
   "lim": {
     "alternative": [],
@@ -905,7 +905,7 @@ var dictionary = {
   "gcd": {
     "alternative": [],
     "type": "function",
-    "priority": 55,    
+    "priority": 55,
     "offpair": {
       "1,2": [
         2
@@ -919,7 +919,7 @@ var dictionary = {
     },
     "ruleML": {
       "1,2": "<mi>gcd</mi><mo>&ApplyFunction;</mo>(#2)"
-    } 
+    }
   },
   "cardinality": {
     "comment": [
@@ -1016,7 +1016,7 @@ var dictionary = {
     }
   },
   "order": {  // for a group or group element
-    "comment": [       
+    "comment": [
       "¾ø¶ÔÖµ"
     ],
     "alternative": [ ],
@@ -1091,7 +1091,7 @@ var dictionary = {
       "1,2": "\\langle #2\\rangle"
     },
     "speech": {
-      "1,2": " anglebrackets #2 endanglebrackets " 
+      "1,2": " anglebrackets #2 endanglebrackets "
     },
     "ruleML": {
       "1,2": "<mrow intent=\"angle-brackets($c)\"><mo>⟨</mo><mrow arg=\"c\">#2</mrow><mo>⟩</mo></mrow>"
@@ -1152,7 +1152,7 @@ var dictionary = {
     }
   },
   "bigO": {
-    "alternative": [ ], 
+    "alternative": [ ],
     "type": "function",
     "priority": 15,
     "rule": {
@@ -1163,7 +1163,7 @@ var dictionary = {
     },
     "ruleML": {
       "1,2": "<mi intent=\"bigO\">O</mi><mo>&ApplyFunction;</mo>#2"
-    } 
+    }
   },
   "log": {
     "alternative": [ ],
@@ -1177,13 +1177,13 @@ var dictionary = {
     },
     "ruleML": {
       "1,2": "<mi>log</mi><mo>&ApplyFunction;</mo>#2"
-    } 
+    }
   },
   "llog": {
     "alternative": [ ],
     "type": "function",
     "priority": 15,
-    "rule": { 
+    "rule": {
       "1,2": "\\log_2 #2"
     },
     "speech": {
@@ -1191,7 +1191,7 @@ var dictionary = {
     },
     "ruleML": {
       "1,2": "<msub><mi>log</mi><mn intent=\":index\">2</mn></msub><mo>&ApplyFunction;</mo>#2"
-    } 
+    }
   },
   "lllog": {
     "alternative": [ ],
@@ -1355,16 +1355,16 @@ var dictionary = {
       "1,4": [ 1, 2, 3, 4 ]
     },
     "extraArgument": 2,
-    "rule": { 
+    "rule": {
       "1,4": "#2\\equiv #3 \\pmod  #4"
     },
     "speech": {
       "1,4": "#2 congruent to #3 modulo #4 "
     },
-    "ruleML": { 
+    "ruleML": {
       "1,4": "<mrow>#2<mo>≡</mo>#3<mspace width=\"0.5em\"></mspace><mo>(</mo><mi>mod</mi><mspace width=\"0.25em\"></mspace>#4<mo>)</mo></mrow>"
-    } 
-  },  
+    }
+  },
   "notcongruentmod": {  // as in   a \equiv b (mod c)
     "alternative": [ ],
     "type": "function",
@@ -1373,7 +1373,7 @@ var dictionary = {
       "1,4": [ 1, 2, 3, 4 ]
     },
     "extraArgument": 2,
-    "rule": { 
+    "rule": {
       "1,4": "#2\\not\\equiv #3 \\pmod  #4"
     },
     "speech": {
@@ -1381,7 +1381,7 @@ var dictionary = {
     },
     "ruleML": {
       "1,4": "<mrow>#2<mo>≢</mo>#3<mspace width=\"0.5em\"></mspace><mo>(</mo><mi>mod</mi><mspace width=\"0.25em\"></mspace>#4<mo>)</mo></mrow>"
-    } 
+    }
   },
   "wrapper": {  // a trick to group quantities without adding parentheses
     "alternative": [ ],
@@ -1506,7 +1506,7 @@ var dictionary = {
       "1,4": [ 2, 3 ],
     },
     "extraArgument": 2,
-    "rule": { 
+    "rule": {
       "1,4": "#2_{#3}#4",
 // experiment      "1,4": "#2_{#3} #4"
     },
@@ -1516,7 +1516,7 @@ var dictionary = {
     "ruleML": {
       "1,4": "<msub><mi>#2</mi><mrow>#3</mrow></msub><mo>&ApplyFunction;</mo>#4",
  //     "1,4": "<msub><mi>#2</mi><mrow>#3</mrow></msub><mo>&ApplyFunction;</mo><mrow>#4</mrow>",
-    } 
+    }
   },
   "bigop": {  // large operators with no limits, such as \sum and \prod, but not integrals
     "alternative": [ ],
@@ -1570,7 +1570,7 @@ var dictionary = {
     "ruleML": {
       "1,7": "<mrow><munderover>#2<mrow>#3</mrow><mrow>#4</mrow></munderover>#5<mspace width=\"0.167em\"></mspace><mfrac><mrow><mo>&dd;</mo>#6</mrow><mrow>#7</mrow></mfrac></mrow>"
      }
-    },  
+    },
     "intllimweight": {  // various integrals
     "alternative": [ ],
     "type": "function",
@@ -1582,7 +1582,7 @@ var dictionary = {
     "rule": {
       "1,6": "#2_{#3} #4 \\,\\frac{d#5}{#6}"
     },
-    "speech": { 
+    "speech": {
       "1,6": " #2 over #3 of #4 d#5 over #6 "
     },
     "ruleML": {
@@ -1716,7 +1716,7 @@ var dictionary = {
     },
     "speech": {
       "2,3": "#1 subset #3"
-    },  
+    },
     "ruleML": {
       "2,3": "#1<mo>⊂</mo>#3"
     }
@@ -1733,7 +1733,7 @@ var dictionary = {
     },
     "ruleML": {
       "2,3": "#1<mo>≠</mo>#3"
-    } 
+    }
   },
   "and": {
     "alternative": [],
@@ -1883,7 +1883,7 @@ var dictionary = {
     "ruleML": {
       "2,3": "<mrow intent=\"open-interval($f, $g)\"><mo>(</mo><wrap arg=\"f\">#1</wrap><mo>,</mo><wrap arg=\"g\">#3</wrap><mo>)</mo></mrow>"
     }
-  },  
+  },
   "innergcd": {
     "alternative": [ ],
     "type": "operator",
@@ -1894,11 +1894,11 @@ var dictionary = {
     },
     "speech": {
       "2,3": " gcd of #1 comma #3 endgcd "
-    },  
+    },
     "ruleML": {
       "2,3": "<mrow intent=\"gcd($f, $g)\"><mo>(</mo><wrap arg=\"f\">#1</wrap><mo>,</mo><wrap arg=\"g\">#3</wrap><mo>)</mo></mrow>"
     }
-  },  
+  },
   "cartesianpoint": {
     "alternative": [ ],
     "type": "operator",
@@ -1928,7 +1928,7 @@ var dictionary = {
     "ruleML": {
       "2,3": "<mrow intent=\"inner-product($f, $g)\"><mo>⟨</mo><wrap arg=\"f\">#1</wrap><mo>,</mo><wrap arg=\"g\">#3</wrap><mo>⟩</mo></mrow>"
     }
-  }, 
+  },
   "twovector": {
     "alternative": [ ],
     "type": "operator",
@@ -1951,7 +1951,7 @@ var dictionary = {
     "priority": 20,
     "rule": {
       "2,3": "\\langle #1\\ |\\  #3\\rangle "
-    },  
+    },
     "speech": {
       "2,3": " group generated by #1 with relations #3 endrelations "
     },
@@ -1966,14 +1966,14 @@ var dictionary = {
     "priority": 20,
     "rule": {
       "2,3": "\\{ #1\\ |\\  #3\\} "
-    },  
+    },
     "speech": {
       "2,3": " set of #1 such that #3 endset "
     },
     "ruleML": {
       "2,3": "<mrow intent=\"set-such-that($sba, $sbb)\"><mo>{</mo><mrow arg=\"sba\">#1</mrow><mo>|</mo><mrow arg=\"sbb\">#3</mrow><mo>}</mo></mrow>"
     }
-  }, 
+  },
   "braket": {
     "alternative": [ ],
     "type": "operator",
@@ -2031,7 +2031,7 @@ var dictionary = {
     },
     "ruleML": {
       "2,3": "#1<mo>⟶</mo>#3"
-    } 
+    }
   },
   "from": {
     "alternative": [ "<-" , "leftarrow"],
@@ -2045,7 +2045,7 @@ var dictionary = {
     },
     "ruleML": {
       "2,3": "#1<mo>←</mo>#3"
-    } 
+    }
   },
   "longleftarrow": {
     "alternative": [ "<--" ],
@@ -2157,7 +2157,7 @@ var dictionary = {
     },
     "ruleML": {
       "2,3": "#1<mo intent=\"identical\">≡</mo>#3"
-    } 
+    }
   },
   ":=": {
     "alternative": ["coloneq", "coloneqq" ],
@@ -2449,7 +2449,7 @@ var dictionary = {
   }
 }
 
-var integrals = {
+export var integrals = {
     "iiint": "∭",
     "iint": "∬",
     "int": "∫",
@@ -2458,7 +2458,7 @@ var integrals = {
     "oint": "∮"
 }
 
-var symbolswithlimits = {
+export var symbolswithlimits = {
     "sum": "∑",
     "union": "⋃",
     "intersection": "⋂",
@@ -2468,22 +2468,22 @@ var symbolswithlimits = {
     "prod": "∏"
 }
 
-var charactersymbols = [
+export var charactersymbols = [
     ["cent", "¢"],
     ["dollar", "$"],
     ["pound", "£"],
     ["euro", "€"]
 ]
 
-var particulargreedyfunctions = ["log", "llog", "lllog","ln", "lg",
+export var particulargreedyfunctions = ["log", "llog", "lllog","ln", "lg",
                        "vec", "hat", "bar",
                        "abs", "det", "order", "card", "len", "length", "norm",
                        "floor", "ceil", "ceiling"];
 
 // need to generate this automatically from: integrals, symbolswithlimits, ???
-var operatorsymbols = [ "∑","⋃","⋂","⨁","⨂","∐","∏","∮","∭","∬","∫","∰","∯","∮"];
+export var operatorsymbols = [ "∑","⋃","⋂","⨁","⨂","∐","∏","∮","∭","∬","∫","∰","∯","∮"];
 
-var triglikefunctions = [["sin","sine"],
+export var triglikefunctions = [["sin","sine"],
 ["cos","cosine"],
 ["tan","tangent"],
 ["cot","cotgent"],
@@ -2500,14 +2500,15 @@ var triglikefunctions = [["sin","sine"],
 ["tanh","tanch"]
 ];
 
-var greedyfunctions = particulargreedyfunctions.slice();
-    for (const letterpair of triglikefunctions) { 
+export var greedyfunctions = particulargreedyfunctions.slice();
+    for (const letterpair of triglikefunctions) {
         greedyfunctions.push(letterpair[0])
     }
 
+console.debug("Do I see this?");
 console.debug("greedyfunctions", greedyfunctions);
 
-var greekletters = [["α","alpha"],
+export var greekletters = [["α","alpha"],
 ["β","beta"],
 ["γ","gamma"],
 ["δ","delta"],
@@ -2573,7 +2574,7 @@ for (const letterpair of triglikefunctions) {
     "ruleML": {
   //    "1,2": "<mi>" + letterpair[0] + "</mi><mo>&ApplyFunction;</mo><mrow>#2</mrow>"
       "1,2": "<mi>" + letterpair[0] + "</mi><mo>&ApplyFunction;</mo>#2"
-    } 
+    }
   };
 
   dictionary["base" + letterpair[0]] = {
@@ -2628,7 +2629,7 @@ for (const letterpair of charactersymbols) {
   }
 }
 
-var outputTagsOf = {
+export var outputTagsOf = {
   "text": {
     "LaTeX": ["",""],
     "MathML": ["",""],
@@ -2648,3 +2649,5 @@ var outputTagsOf = {
     "PTX": ["<md>","</md>"]
   }
 }
+
+console.debug("End of dictionary.js");

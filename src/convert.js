@@ -7,7 +7,14 @@ Description: the major abstract function which takes the user input and return t
 2022.10.25 refined to support MathJax
 2022.10.26 add conversiontarget to support both cases
 */
-function convert(str,conversiontarget) {
+import {hide_xml, unhide_xml, separatePieces, assemble, postprocess, preprocess, simplifyAnswer} from './conversion.js'
+import {M2LConvert} from './M2LConvert.js'
+import {TranslateTable} from './TranslateTable.js'
+
+
+export let translateTable = new TranslateTable();
+
+export function convert(str,conversiontarget) {
 
 console.debug("converting to target", conversiontarget);
   let str_no_xml = hide_xml(str);
@@ -37,7 +44,7 @@ console.debug(" ");
 }  // convert(str target)
 
 /*
-Input: 
+Input:
 str: user input after spaces are trimmed
 p: an integer indicating which deliminator should be check next
 
@@ -73,7 +80,7 @@ console.debug("starting conversiontarget", conversiontarget, p, "on", str);
       if (right > 0){
           let convertedStr = str.substring(counter+d[0].length,right); // the part that need to be converted (math)
           for (let j = p; j < deliminators.length; j++){
-            convertedStr = convertedStr.replaceAll(deliminators[j][0], ''); 
+            convertedStr = convertedStr.replaceAll(deliminators[j][0], '');
             convertedStr = convertedStr.replaceAll(deliminators[j][1], ''); // removed all lower priority deliminators
           }
           convertedStr = M2LConvert(convertedStr,d[0],d[1], conversiontarget);
@@ -85,7 +92,7 @@ console.debug("convertedStr", convertedStr);
           p += 1;
           return convert2(str,p, conversiontarget);
       }
-      
+
   }
 }
 
@@ -124,7 +131,7 @@ function convertPieces(pieces, conversiontarget) {
 
 
 // like convert2, except no delimiters because we have alread separated the math
-function convertMathSnippet(str, conversiontarget) {
+export function convertMathSnippet(str, conversiontarget) {
 console.debug("starting convertMathSnippet", conversiontarget, "on", str);
     let convertedStr = M2LConvert(str,"LBRACK","RBRACK", conversiontarget);
     convertedStr = simplifyAnswer(convertedStr);
@@ -132,7 +139,7 @@ console.debug("starting convertMathSnippet", conversiontarget, "on", str);
 }
 
 /*
-Input: 
+Input:
 str: a Latex string
 p: an integer indicating which deliminator should be check next
 
@@ -172,18 +179,18 @@ function convertLaTeX2MathJax(str,p) {
           p += 1;
           return convertLaTeX2MathJax(str,p);
       }
-      
+
   }
 }
 
 /*
 cited:https://codereview.stackexchange.com/questions/179471/find-the-corresponding-closing-parenthesis
 Description: given a string, a position of the left parenthese, the left and right parenthese, find the position of the paired up right parenthese.
-2022.10.14 created, 
+2022.10.14 created,
 2022.10.26 support multi digit search, moved to convert
 */
 
-function findPositionOfRightPairConvert(str, pos, lp, rp) {
+export function findPositionOfRightPairConvert(str, pos, lp, rp) {
   if (str.substring(pos,pos+lp.length) != lp) {
     throw new Error("No" + lp + " at index " + pos);
   }
